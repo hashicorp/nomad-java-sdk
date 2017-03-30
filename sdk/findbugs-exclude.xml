@@ -1,0 +1,32 @@
+<FindBugsFilter>
+
+    <!-- Project-wide -->
+
+    <Match> <!-- Disable "Class is Serializable, but doesn't define serialVersionUID" -->
+        <Bug code="SnVI"/>
+    </Match>
+    <!-- TODO: remove? -->
+    <Match>
+        <Bug code="EI,EI2"/>
+    </Match>
+    <!-- TODO: remove? -->
+    <Match>
+        <Bug code="SIC"/>
+    </Match>
+    <!-- TODO: remove? -->
+    <Match>
+        <Bug code="Nm"/>
+    </Match>
+
+    <!-- Instance-specific -->
+
+    <Match> <!-- Disable "Unread field": public final field on private class is read during JSON serialization -->
+        <class name="com.hashicorp.nomad.javasdk.JobsApi$JobPlanRequest"/>
+        <Bug code="UrF"/>
+    </Match>
+
+    <Match>
+        <Package name="~com\.hashicorp\.nomad\.javasdk\.guava.*"/>
+    </Match>
+
+</FindBugsFilter>

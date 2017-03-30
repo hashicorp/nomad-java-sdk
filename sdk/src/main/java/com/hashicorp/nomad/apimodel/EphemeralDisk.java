@@ -1,0 +1,61 @@
+package com.hashicorp.nomad.apimodel;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hashicorp.nomad.javasdk.NomadJson;
+
+import java.io.IOException;
+import java.util.List;
+
+/**
+ * This is a generated JavaBean representing a request or response structure.
+ *
+ * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
+ */
+public final class EphemeralDisk {
+    private Boolean sticky;
+    private Boolean migrate;
+    private Integer sizeMb;
+
+    @JsonProperty("Sticky")
+    public Boolean getSticky() {
+        return sticky;
+    }
+
+    public EphemeralDisk setSticky(Boolean sticky) {
+        this.sticky = sticky;
+        return this;
+    }
+
+    @JsonProperty("Migrate")
+    public Boolean getMigrate() {
+        return migrate;
+    }
+
+    public EphemeralDisk setMigrate(Boolean migrate) {
+        this.migrate = migrate;
+        return this;
+    }
+
+    @JsonProperty("SizeMB")
+    public Integer getSizeMb() {
+        return sizeMb;
+    }
+
+    public EphemeralDisk setSizeMb(Integer sizeMb) {
+        this.sizeMb = sizeMb;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return NomadJson.serialize(this);
+    }
+
+    public static EphemeralDisk fromJson(String json) throws IOException {
+        return NomadJson.deserialize(json, EphemeralDisk.class);
+    }
+
+    public static List<EphemeralDisk> fromJsonArray(String json) throws IOException {
+        return NomadJson.deserializeList(json, EphemeralDisk.class);
+    }
+}
