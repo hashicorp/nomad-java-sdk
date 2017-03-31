@@ -16,14 +16,19 @@ import org.junit.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
 public class ClientApiTest extends ApiTestBase {
@@ -177,25 +182,6 @@ public class ClientApiTest extends ApiTestBase {
             stream.close();
         }
         assertThat(out.toString("UTF-8"), is(expectedResult));
-    }
-
-    class TestStreamHandler extends OutputStreamHandler {
-        final PipedInputStream inputStream;
-        private volatile Throwable throwable;
-
-        TestStreamHandler() throws IOException {
-            this(new PipedInputStream());
-        }
-
-        TestStreamHandler(PipedInputStream inputStream) throws IOException {
-            super(new PipedOutputStream(inputStream));
-            this.inputStream = inputStream;
-        }
-
-        @Override
-        public void onThrowable(Throwable e) {
-            throwable = e;
-        }
     }
 
     @Test
