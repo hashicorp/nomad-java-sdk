@@ -1,6 +1,7 @@
 package com.hashicorp.nomad.apimodel;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hashicorp.nomad.javasdk.ApiObject;
 import com.hashicorp.nomad.javasdk.NomadJson;
 
 import java.io.IOException;
@@ -11,7 +12,7 @@ import java.util.List;
  *
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
-public final class ServerMembers {
+public final class ServerMembers extends ApiObject {
     private String serverName;
     private String serverRegion;
     private String serverDc;

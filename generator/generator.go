@@ -165,6 +165,7 @@ func (generator *Generator) generateClass(t reflect.Type) error {
 	fmt.Fprint(out, "package com.hashicorp.nomad.apimodel;\n\n")
 
 	fmt.Fprint(out, "import com.fasterxml.jackson.annotation.JsonProperty;\n")
+	fmt.Fprint(out, "import com.hashicorp.nomad.javasdk.ApiObject;\n")
 	fmt.Fprint(out, "import com.hashicorp.nomad.javasdk.NomadJson;\n\n")
 
 	imports := make([]string, 0, len(usedTypes))
@@ -185,7 +186,7 @@ func (generator *Generator) generateClass(t reflect.Type) error {
 	fmt.Fprintln(out, " *")
 	fmt.Fprintln(out, " * @see <a href=\"https://www.nomadproject.io/docs/http/index.html\">Nomad HTTP API</a> documentation associated with the endpoint you are using.")
 	fmt.Fprintln(out, " */")
-	fmt.Fprintln(out, "public final class", className, "{")
+	fmt.Fprintln(out, "public final class", className, "extends ApiObject {")
 	for _, p := range properties {
 		p.DeclareField(out)
 	}

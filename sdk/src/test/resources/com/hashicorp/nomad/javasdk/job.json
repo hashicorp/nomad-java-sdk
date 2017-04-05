@@ -1,0 +1,23 @@
+{
+  "Job": {
+    "ID": "Job-ID",
+    "Priority": 7,
+    "AllAtOnce": true,
+    "JobModifyIndex": 13,
+
+    "Unknown Job String": "Hi",
+    "Unknown Job Object": {
+      "Foo": "Bar"
+    },
+
+    "Update": {
+      "Stagger": 42,
+
+      "Unknown Update String": "here too",
+      "Unknown Update Object": {
+        "anything": "goes"
+      }
+    }
+
+  }
+}
