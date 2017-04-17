@@ -1,4 +1,4 @@
-Nomad Java SDK
+Nomad Java SDK [![Build Status](https://travis-ci.org/hashicorp/nomad-java-sdk.svg?branch=master)](https://travis-ci.org/hashicorp/nomad-java-sdk)
 ==============
 
 <!-- TODO once published to maven: add version badge -->
