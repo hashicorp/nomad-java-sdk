@@ -2,7 +2,7 @@ language: java
 
 before_script:
   - |
-    if [[ ! -f cache/nomad ]] then
+    if [[ ! -f cache/nomad ]]; then
       export GOPATH="$PWD/gopath"
       go get github.com/hashicorp/nomad
       cd "$GOPATH/src/github.com/hashicorp/nomad"
