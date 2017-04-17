@@ -1,7 +1,17 @@
 language: java
 
 before_script:
-  - if [[ ! -f cache/nomad ]]; then mkdir -p cache; cd cache; export GOPATH="$PWD/gopath"; go get github.com/hashicorp/nomad; go build -tags nomad_test github.com/hashicorp/nomad; fi
+  - |
+    if [[ ! -f cache/nomad ]] then
+      export GOPATH="$PWD/gopath"
+      go get github.com/hashicorp/nomad
+      cd "$GOPATH/src/github.com/hashicorp/nomad"
+      make generate
+
+      mkdir -p cache
+      cd cache
+      go build -tags nomad_test github.com/hashicorp/nomad
+    fi
 
 cache:
   directories:
