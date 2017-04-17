@@ -34,7 +34,7 @@ public class AgentApiTest extends ApiTestBase {
             try (TestAgent secondServer = newAgent(new NomadAgentConfiguration.Builder().setServerBootstrapExpect(0))) {
                 final AgentApi agentApiForSecondServer = secondServer.getApiClient().getAgentApi();
 
-                new ErrorResponseAssertion("Failed to resolve nope") {
+                new ErrorResponseAssertion("Failed") {
                     @Override
                     protected NomadResponse<?> performRequest() throws IOException, NomadException {
                         return agentApiForSecondServer.join("nope");
