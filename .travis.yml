@@ -9,10 +9,12 @@ before_script:
       go get github.com/hashicorp/nomad
       cd "$GOPATH/src/github.com/hashicorp/nomad"
       make bootstrap generate
+      cd -
 
       mkdir -p cache
       cd cache
       go build -tags nomad_test github.com/hashicorp/nomad
+      cd -
     fi
 
 cache:
