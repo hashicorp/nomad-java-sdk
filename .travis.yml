@@ -4,6 +4,7 @@ before_script:
   - |
     if [[ ! -f cache/nomad ]]; then
       export GOPATH="$PWD/gopath"
+      gimme stable
       go get github.com/hashicorp/nomad
       cd "$GOPATH/src/github.com/hashicorp/nomad"
       make bootstrap generate
