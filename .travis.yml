@@ -5,6 +5,7 @@ before_script:
     if [[ ! -f cache/nomad ]]; then
       export GOPATH="$PWD/gopath"
       eval "$(curl -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme | GIMME_GO_VERSION=1.8.1 bash)"
+      export PATH="$PATH:$GOPATH/bin"
       go get github.com/hashicorp/nomad
       cd "$GOPATH/src/github.com/hashicorp/nomad"
       make bootstrap generate
