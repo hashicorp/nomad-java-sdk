@@ -211,7 +211,7 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
                 return getNodesApi().list(
                         QueryOptions
                                 .pollRepeatedlyUntil(predicate, waitStrategy)
-                                .setAllowStale(!shouldHaveLeader)
+                                .setAllowStale(true)
                 );
             } catch (ConnectException e) {
                 // we'll try again
