@@ -1,8 +1,10 @@
 language: java
 
+env:
+
 before_script:
   - |
-    if [[ ! -f cache/nomad ]]; then
+    if [[ ! -f cache/bin/nomad ]]; then
       export GOPATH="$PWD/gopath"
       eval "$(curl -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme | GIMME_GO_VERSION=1.8.1 bash)"
       export PATH="$PATH:$GOPATH/bin"
@@ -11,11 +13,12 @@ before_script:
       make bootstrap generate
       cd -
 
-      mkdir -p cache
-      cd cache
+      mkdir -p cache/bin
+      cd cache/bin
       go build -tags nomad_test github.com/hashicorp/nomad
       cd -
     fi
+  - export PATH="cache/bin:$PATH"
 
 cache:
   directories:
