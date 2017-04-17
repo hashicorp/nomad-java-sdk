@@ -4,6 +4,7 @@ before_script:
   - |
     if [[ ! -f cache/nomad ]]; then
       export GOPATH="$PWD/gopath"
+      eval "$(gimme 1.8.x)"
       go get github.com/hashicorp/nomad
       cd "$GOPATH/src/github.com/hashicorp/nomad"
       make bootstrap generate
@@ -12,9 +13,6 @@ before_script:
       cd cache
       go build -tags nomad_test github.com/hashicorp/nomad
     fi
-
-go:
-  - 1.8.x
 
 cache:
   directories:
