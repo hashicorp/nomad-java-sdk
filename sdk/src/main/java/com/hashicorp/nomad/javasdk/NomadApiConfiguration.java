@@ -207,8 +207,8 @@ public class NomadApiConfiguration {
          * {@code NOMAD_ADDR} provides the agent's HTTP address.
          *
          * @return this builder object, to allow method chaining
-         * @throws URISyntaxException if the @{code NOMAD_ADDR} environment variable is non-empty
-         *                            but doesn't represent a valid URL
+         * @throws IllegalArgumentException if the @{code NOMAD_ADDR} environment variable is non-empty
+         *                                  but doesn't represent a valid host URL
          */
         public Builder setFromEnvironmentVariables(final Map<String, String> environment) {
             if (environment.containsKey("NOMAD_ADDR")) {
