@@ -132,7 +132,7 @@ public class NomadAgentProcess implements AutoCloseable {
             NomadApiClient apiClient,
             WaitStrategy waitStrategy) throws IOException, NomadException, InterruptedException {
 
-        if (getConfig().getServer().getEnabled() || getConfig().getServer().getStartJoin().length > 0) {
+        if (getConfig().getServer().getEnabled() || !getConfig().getServer().getStartJoin().isEmpty()) {
             boolean shouldHaveLeader = config.getServer().getEnabled() && config.getServer().getBootstrapExpect() == 1;
             String clientName = getConfig().getClient().getEnabled() ? getConfig().getName() : null;
             return apiClient.pollUntilServerIsReady(

@@ -6,9 +6,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static java.util.Arrays.asList;
+import static java.util.Collections.unmodifiableList;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * A partial representation of the configuration of a Nomad agent,
@@ -147,7 +153,7 @@ public class NomadAgentConfiguration {
         try {
             return CONFIG_MAPPER.writeValueAsString(this);
         } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error trying to serialize Nomad agent configuration to JSON");
+            throw new RuntimeException("Error trying to serialize Nomad agent configuration to JSON", e);
         }
     }
 
@@ -245,15 +251,15 @@ public class NomadAgentConfiguration {
         @JsonProperty("bootstrap_expect")
         private final int bootstrapExpect;
         @JsonProperty("start_join")
-        private final String[] startJoin;
+        private final List<String> startJoin;
 
         /**
          * Creates a new Server configuration.
          */
-        public Server(boolean enabled, int bootstrapExpect, String[] startJoin) {
+        public Server(boolean enabled, int bootstrapExpect, List<String> startJoin) {
             this.enabled = enabled;
             this.bootstrapExpect = bootstrapExpect;
-            this.startJoin = startJoin;
+            this.startJoin = startJoin == null ? null : unmodifiableList(new ArrayList<>(startJoin));
         }
 
         /**
@@ -273,7 +279,7 @@ public class NomadAgentConfiguration {
         /**
          * Returns the servers to try joining when starting.
          */
-        public String[] getStartJoin() {
+        public List<String> getStartJoin() {
             return startJoin;
         }
     }
@@ -290,7 +296,7 @@ public class NomadAgentConfiguration {
          */
         public Client(boolean enabled, Map<String, String> options) {
             this.enabled = enabled;
-            this.options = options;
+            this.options = options == null ? null : unmodifiableMap(new HashMap<>(options));
         }
 
         /**
@@ -420,7 +426,7 @@ public class NomadAgentConfiguration {
         private int serfPort;
         private boolean serverEnabled = true;
         private int serverBootstrapExpect = 1;
-        private String[] serverStartJoin;
+        private List<String> serverStartJoin;
         private boolean clientEnabled = false;
         private HashMap<String, String> clientOptions;
         private boolean consulAutoAdvertise = false;
@@ -562,7 +568,7 @@ public class NomadAgentConfiguration {
          * Sets the servers to try joining when starting.
          */
         public Builder setServerStartJoin(String... serverStartJoin) {
-            this.serverStartJoin = serverStartJoin;
+            this.serverStartJoin = asList(serverStartJoin);
             return this;
         }
 
