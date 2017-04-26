@@ -1,28 +1,2 @@
 <FindBugsFilter>
-
-    <!-- Project-wide -->
-
-    <Match> <!-- Disable "Class is Serializable, but doesn't define serialVersionUID" -->
-        <Bug code="SnVI"/>
-    </Match>
-    <!-- TODO: remove? -->
-    <Match>
-        <Bug code="EI,EI2"/>
-    </Match>
-    <!-- TODO: remove? -->
-    <Match>
-        <Bug code="SIC"/>
-    </Match>
-    <!-- TODO: remove? -->
-    <Match>
-        <Bug code="Nm"/>
-    </Match>
-
-    <!-- Instance-specific -->
-
-    <Match>
-        <Class name="com.hashicorp.nomad.testutils.AugmentedProcess"/>
-        <Bug code="SC"/>
-    </Match>
-
 </FindBugsFilter>
