@@ -87,9 +87,9 @@ hand, is the API for interacting with Nomad client agents.
 Building
 --------
 
-The SDK is built with Maven. A JAR can be with `mvn package`, provided
-an appropriate Nomad executable is available for tests as described
-below.
+The SDK is built with Maven. A JAR can be build with `mvn package`,
+provided an appropriate Nomad executable is available for tests
+as described below.
 
 ### Testing
 
