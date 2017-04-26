@@ -52,7 +52,9 @@
         <property name="checkFormat" value="$1"/>
         <property name="influenceFormat" value="0"/>
     </module>
-    <module name="SuppressionCommentFilter"><!-- TODO -->
+
+    <!-- Allow auto-generated bean properties named things like "new" and "public" -->
+    <module name="SuppressionCommentFilter">
         <property name="offCommentFormat" value="This is a generated JavaBean"/>
         <property name="checkFormat" value="ParameterName"/>
     </module>
@@ -104,7 +106,7 @@
         <module name="JavadocMethod">
             <property name="allowMissingReturnTag" value="true"/>
             <property name="allowMissingParamTags" value="true"/>
-            <property name="scope" value="protected"/> <!-- TODO: remove -->
+            <property name="scope" value="protected"/>
         </module>
         <module name="JavadocType">
             <property name="scope" value="protected"/> <!-- TODO: remove -->
