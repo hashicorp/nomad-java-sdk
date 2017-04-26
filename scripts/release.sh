@@ -19,7 +19,7 @@ next_working_version="$2"
 
 mvn versions:set -DgenerateBackupPoms=false -DnewVersion="${release_version}"
 git add -u
-mvn deploy -Dgpg.skip=false
+mvn clean deploy -Dgpg.skip=false
 git commit -m "Setting version to ${release_version}"
 [ -z "$(git status --porcelain)" ] || {
   echo "Your working directory is not pristine after deploying"
