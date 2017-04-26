@@ -9,7 +9,10 @@ import com.hashicorp.nomad.apimodel.JobListStub;
 import com.hashicorp.nomad.apimodel.JobPlanResponse;
 import com.hashicorp.nomad.apimodel.JobSummary;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.RequestBuilder;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -498,6 +501,25 @@ public class JobsApi extends ApiBase {
                 NomadJson.parserFor(JobSummary.class));
     }
 
+    private EvaluationResponse executeEvaluationCreatingRequest(RequestBuilder request)
+            throws IOException, NomadException {
+        return apiClient.execute(request, new ResponseAdapter<String, EvaluationResponse>(new ValueExtractor<String>() {
+            private final JsonParser<EvalIdResponse> evalIdParser = NomadJson.parserFor(EvalIdResponse.class);
+
+            @Override
+            public String extractValue(String json) throws ResponseParsingException {
+                return evalIdParser.extractValue(json).evalID;
+            }
+        }) {
+            @Override
+            protected EvaluationResponse buildResponse(HttpResponse httpResponse,
+                                                       String rawEntity,
+                                                       @Nonnull String value) {
+                return new EvaluationResponse(httpResponse, rawEntity, value);
+            }
+        });
+    }
+
     /**
      * Class matching the JSON request entity for job dispatch requests.
      */
@@ -544,6 +566,13 @@ public class JobsApi extends ApiBase {
             this.enforceIndex = jobModifyIndex != null;
             this.jobModifyIndex = jobModifyIndex;
         }
+    }
+
+    /**
+     * Class matching the JSON that wraps evaluation IDs in responses to evaluation-creating requests.
+     */
+    private static class EvalIdResponse {
+        public String evalID; // Checkstyle suppress VisibilityModifier
     }
 
 }
