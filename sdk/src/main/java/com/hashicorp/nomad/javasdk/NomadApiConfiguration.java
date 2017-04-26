@@ -10,7 +10,6 @@ import java.util.Map;
  * <p>
  * This class is immutable. Use the {#Builder} inner class to conveniently build a configuration.
  */
-// TODO complete
 public class NomadApiConfiguration {
 
     static final HttpHost DEFAULT_NOMAD_ADDR = new HttpHost("127.0.0.1", 4646);

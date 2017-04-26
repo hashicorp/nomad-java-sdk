@@ -188,7 +188,6 @@ public class ClientApi extends ApiBase {
                         .addParameter("task", taskName)
                         .addParameter("plain", "true")
                         .addParameter("follow", Boolean.toString(follow))
-                        // TODO HTTP API docs claim optional, but seems to be required by Nomad
                         .addParameter("type", logType)
         ));
     }
@@ -219,7 +218,6 @@ public class ClientApi extends ApiBase {
                 uri(address, "/v1/client/fs/logs/" + allocationId)
                         .addParameter("task", taskName)
                         .addParameter("follow", Boolean.toString(follow))
-                        // TODO HTTP API docs claim optional, but seems to be required by Nomad
                         .addParameter("type", logType)
         ));
     }
