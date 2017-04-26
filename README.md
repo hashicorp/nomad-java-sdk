@@ -1,7 +1,5 @@
-Nomad Java SDK [![Build Status](https://travis-ci.org/hashicorp/nomad-java-sdk.svg?branch=master)](https://travis-ci.org/hashicorp/nomad-java-sdk)
+Nomad Java SDK [![Build Status](https://travis-ci.org/hashicorp/nomad-java-sdk.svg?branch=master)](https://travis-ci.org/hashicorp/nomad-java-sdk) [![Maven Central](https://img.shields.io/maven-central/v/com.hashicorp.nomad/nomad-sdk.svg)](https://mvnrepository.com/artifact/com.hashicorp.nomad/nomad-sdk)
 ==============
-
-<!-- TODO once published to maven: add version badge -->
 
 A Java SDK for interacting with [HashiCorp's Nomad] through its [HTTP API].
 
