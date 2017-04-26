@@ -58,11 +58,14 @@ public class NomadAgentProcess implements AutoCloseable {
             output.println("Running: " + StringUtils.join(command.iterator(), " "));
             process = new AugmentedProcess(command, output);
         } catch (Throwable t) {
+            final RuntimeException wrapped =
+                    new RuntimeException("Error during test agent initialization: " + t.getMessage(), t);
             try {
                 close();
-            } finally {
-                throw new RuntimeException("Error during test agent initialization: " + t.getMessage(), t);
+            } catch (Throwable t2) {
+                wrapped.addSuppressed(t2);
             }
+            throw wrapped;
         }
     }
 
