@@ -50,7 +50,8 @@
                     <target>${java.version}</target>
                     <showDeprecation>true</showDeprecation>
                     <compilerArgs>
-                        <arg>-Xlint:all,-serial</arg>
+                        <arg>-Xlint:all,-serial,-options</arg>
+                        <arg>-Werror</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
