@@ -7,6 +7,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.net.URI;
@@ -134,6 +135,25 @@ abstract class ApiBase {
         return executeServerQuery(uri, options, valueExtractor);
     }
 
+    protected EvaluationResponse executeEvaluationCreatingRequest(RequestBuilder request)
+            throws IOException, NomadException {
+        return apiClient.execute(request, new ResponseAdapter<String, EvaluationResponse>(new ValueExtractor<String>() {
+            private final JsonParser<EvalIdResponse> evalIdParser = NomadJson.parserFor(EvalIdResponse.class);
+
+            @Override
+            public String extractValue(String json) throws ResponseParsingException {
+                return evalIdParser.extractValue(json).evalID;
+            }
+        }) {
+            @Override
+            protected EvaluationResponse buildResponse(HttpResponse httpResponse,
+                                                       String rawEntity,
+                                                       @Nonnull String value) {
+                return new EvaluationResponse(httpResponse, rawEntity, value);
+            }
+        });
+    }
+
     private URI build(URIBuilder uriBuilder) {
         try {
             return uriBuilder.build();
@@ -197,6 +217,13 @@ abstract class ApiBase {
             uri.addParameter("region", region);
 
         return builder.setUri(build(uri));
+    }
+
+    /**
+     * Class matching the JSON that wraps evaluation IDs in responses to evaluation-creating requests.
+     */
+    private static class EvalIdResponse {
+        public String evalID; // Checkstyle suppress VisibilityModifier
     }
 
     /**

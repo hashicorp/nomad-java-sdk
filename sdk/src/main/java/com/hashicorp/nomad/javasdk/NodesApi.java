@@ -173,7 +173,7 @@ public class NodesApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/node.html#put-post">{@code PUT /v1/node/{ID}/drain}</a>
      */
-    public ServerResponse<Void> toggleDrain(String nodeId, boolean enabled) throws IOException, NomadException {
+    public EvaluationResponse toggleDrain(String nodeId, boolean enabled) throws IOException, NomadException {
         return toggleDrain(nodeId, enabled, null);
     }
 
@@ -189,14 +189,15 @@ public class NodesApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/node.html#put-post">{@code PUT /v1/node/{ID}/drain}</a>
      */
-    // TODO EvaluationResponse
-    public ServerResponse<Void> toggleDrain(String nodeId,
-                                            boolean enabled,
-                                            @Nullable WriteOptions options) throws IOException, NomadException {
-        return executeServerAction(
-                put(uri("/v1/node/" + nodeId + "/drain")
-                                .addParameter("enable", Boolean.toString(enabled)),
-                        options),
-                null);
+    public EvaluationResponse toggleDrain(
+            String nodeId,
+            boolean enabled,
+            @Nullable WriteOptions options
+    ) throws IOException, NomadException {
+        return executeEvaluationCreatingRequest(put(
+                uri("/v1/node/" + nodeId + "/drain")
+                        .addParameter("enable", Boolean.toString(enabled)),
+                options
+        ));
     }
 }
