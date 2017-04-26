@@ -124,6 +124,9 @@ public class AgentApi extends ApiBase {
         return executePlain(put(uri, null), new JoinResponseValueExtractor());
     }
 
+    /**
+     * Private type representing raw responses from the /v1/agent/join endpoint.
+     */
     private static final class JoinResponse {
         @JsonProperty("error")
         private String error;
@@ -131,6 +134,10 @@ public class AgentApi extends ApiBase {
         private int numberJoined;
     }
 
+    /**
+     * A value extractor that converts a @{link JoinResponse} into an Integer,
+     * or throwing an exception if it signals an error.
+     */
     private class JoinResponseValueExtractor implements ValueExtractor<Integer> {
         private final JsonParser<JoinResponse> parser = NomadJson.parserFor(JoinResponse.class);
 

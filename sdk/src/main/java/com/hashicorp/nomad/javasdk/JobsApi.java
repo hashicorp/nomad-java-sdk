@@ -519,6 +519,9 @@ public class JobsApi extends ApiBase {
         });
     }
 
+    /**
+     * Class matching the JSON request entity for job dispatch requests.
+     */
     private static class JobDispatchRequest {
         @JsonProperty("JobID")
         public final String jobId; // Checkstyle suppress VisibilityModifier
@@ -532,6 +535,9 @@ public class JobsApi extends ApiBase {
         }
     }
 
+    /**
+     * Class matching the JSON request entity for job plan requests.
+     */
     private static class JobPlanRequest {
         public Job job; // Checkstyle suppress VisibilityModifier
         public final boolean diff; // Checkstyle suppress VisibilityModifier
@@ -542,6 +548,9 @@ public class JobsApi extends ApiBase {
         }
     }
 
+    /**
+     * Class matching the JSON request entity for job registration requests.
+     */
     private static class JobRegistrationRequest {
         public final Job job; // Checkstyle suppress VisibilityModifier
         public final Boolean enforceIndex; // Checkstyle suppress VisibilityModifier
@@ -554,6 +563,9 @@ public class JobsApi extends ApiBase {
         }
     }
 
+    /**
+     * Class matching the JSON that wraps evaluation IDs in responses to evaluation-creating requests.
+     */
     private static class EvalIdResponse {
         public String evalID; // Checkstyle suppress VisibilityModifier
     }

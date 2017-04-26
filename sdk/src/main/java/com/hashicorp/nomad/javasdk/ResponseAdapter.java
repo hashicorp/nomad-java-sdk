@@ -10,6 +10,10 @@ import java.io.IOException;
  * Creates a specific type of {@link NomadResponse}
  * from an async-http-client response.
  *
+ * This abstract class is used by package-private methods that allow endpoint implementations to be
+ * consistent and concise.
+ *
+ * @param <T> type extracted from response bodies
  * @param <R> type of response created
  */
 abstract class ResponseAdapter<T, R extends NomadResponse<T>> {

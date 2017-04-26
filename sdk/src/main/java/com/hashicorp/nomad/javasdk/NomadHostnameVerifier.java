@@ -11,6 +11,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * A hostname verifier that accepts certificates of the form expected from Nomad,
+ * i.e. with alternative names of the form {@code server.*.nomad} or {@code server.*.nomad},
+ * in addition to the usual HTTPS behaviour of accepting alt names matching the host being connected to.
+ */
 class NomadHostnameVerifier implements HostnameVerifier {
 
     private static final Pattern NOMAD_ALT_NAME_PATTERN =

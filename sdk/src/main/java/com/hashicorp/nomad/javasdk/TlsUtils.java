@@ -21,6 +21,9 @@ import java.security.cert.X509Certificate;
 
 import static java.nio.charset.StandardCharsets.US_ASCII;
 
+/**
+ * Utilities for loading PEM files into the types expected by {@link javax.net.ssl.SSLContext}.
+ */
 final class TlsUtils {
 
     private TlsUtils() { }

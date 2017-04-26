@@ -108,9 +108,7 @@
             <property name="allowMissingParamTags" value="true"/>
             <property name="scope" value="protected"/>
         </module>
-        <module name="JavadocType">
-            <property name="scope" value="protected"/> <!-- TODO: remove -->
-        </module>
+        <module name="JavadocType"/>
         <!--<module name="JavadocVariable"/>-->
         <module name="JavadocStyle"/>
         <module name="AtclauseOrder"/>

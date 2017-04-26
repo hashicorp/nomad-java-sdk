@@ -199,6 +199,11 @@ abstract class ApiBase {
         return builder.setUri(build(uri));
     }
 
+    /**
+     * Builds a @{link NomadResponse} from an HTTP response.
+     *
+     * @param <T> type that is extracted from the response body
+     */
     private static class NomadResponseAdapter<T> extends ResponseAdapter<T, NomadResponse<T>> {
         NomadResponseAdapter(final ValueExtractor<T> valueExtractor) {
             super(valueExtractor);
@@ -214,6 +219,11 @@ abstract class ApiBase {
         }
     }
 
+    /**
+     * Builds a @{link ServerResponse} from an HTTP response.
+     *
+     * @param <T> type that is extracted from the response body
+     */
     private static class ServerResponseAdapter<T> extends ResponseAdapter<T, ServerResponse<T>> {
         ServerResponseAdapter(@Nullable final ValueExtractor<T> valueExtractor) {
             super(valueExtractor);
@@ -229,6 +239,11 @@ abstract class ApiBase {
         }
     }
 
+    /**
+     * Builds a @{link ServerQueryResponse} from an HTTP response.
+     *
+     * @param <T> type that is extracted from the response body
+     */
     private static class ServerQueryResponseAdapter<T> extends ResponseAdapter<T, ServerQueryResponse<T>> {
         ServerQueryResponseAdapter(@Nullable final ValueExtractor<T> valueExtractor) {
             super(valueExtractor);

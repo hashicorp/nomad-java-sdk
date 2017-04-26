@@ -111,6 +111,10 @@ public abstract class NomadJson {
         };
     }
 
+    /**
+     * A Job wrapper to produce or parse the
+     * <a href="https://www.nomadproject.io/docs/http/json-jobs.html">JSON job spec</a> representation.
+     */
     private static class JobSpec {
         @JsonProperty("Job")
         public final Job job; // Checkstyle suppress VisibilityModifier
