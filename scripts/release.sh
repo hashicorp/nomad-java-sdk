@@ -4,9 +4,9 @@ set -euo pipefail
 [ $# -eq 2 ] || {
   echo "usage: $0 <release-version> <next-working-version>"
   echo
-  echo 'E.g: $0 0.0.1 0.0.2-SNAPSHOT'
+  echo "E.g: $0 0.0.1 0.0.2-SNAPSHOT"
   exit 2
-} &>2
+} >&2
 release_version="$1"
 next_working_version="$2"
 
@@ -15,7 +15,7 @@ next_working_version="$2"
   echo
   git status
   exit 1
-} &>2
+} >&2
 
 mvn versions:set -DgenerateBackupPoms=false -DnewVersion="${release_version}"
 git add -u
