@@ -138,7 +138,7 @@ public class AgentApi extends ApiBase {
      * A value extractor that converts a @{link JoinResponse} into an Integer,
      * or throwing an exception if it signals an error.
      */
-    private class JoinResponseValueExtractor implements ValueExtractor<Integer> {
+    private static class JoinResponseValueExtractor implements ValueExtractor<Integer> {
         private final JsonParser<JoinResponse> parser = NomadJson.parserFor(JoinResponse.class);
 
         @Override
