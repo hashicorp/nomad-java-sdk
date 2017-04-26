@@ -4,6 +4,8 @@ import com.hashicorp.nomad.javasdk.NomadApiClient;
 import com.hashicorp.nomad.javasdk.NomadApiConfiguration;
 import org.apache.http.HttpHost;
 
+import java.io.IOException;
+
 import static com.hashicorp.nomad.javasdk.WaitStrategy.waitForMilliseconds;
 
 /**
@@ -81,7 +83,7 @@ public class TestAgent implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close() throws IOException {
         try {
             agentProcess.close();
         } finally {
