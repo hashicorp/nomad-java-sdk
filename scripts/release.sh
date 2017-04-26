@@ -8,7 +8,7 @@ set -euo pipefail
   exit 2
 } >&2
 release_version="$1"
-next_working_version="$2"
+  next_working_version="$2"
 
 [ -z "$(git status --porcelain)" ] || {
   echo "Your working directoy is not pristine"
