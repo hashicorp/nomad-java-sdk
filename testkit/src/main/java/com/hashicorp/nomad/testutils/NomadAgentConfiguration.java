@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.nio.file.Path;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +31,7 @@ public class NomadAgentConfiguration {
     private final String region;
     private final String name;
     @JsonProperty("data_dir")
-    private final Path dataDir;
+    private final File dataDir;
     @JsonProperty("log_level")
     private final String logLevel;
     @JsonProperty("bind_addr")
@@ -45,7 +45,7 @@ public class NomadAgentConfiguration {
     private final Consul consul;
     private final Tls tls;
 
-    NomadAgentConfiguration(String region, String name, Path dataDir, String logLevel, String bindAddr,
+    NomadAgentConfiguration(String region, String name, File dataDir, String logLevel, String bindAddr,
                             AdvertiseAddrs advertise, Ports ports, Server server, Client client,
                             boolean disableCheckpoint, Consul consul, Tls tls) {
         this.region = region;
@@ -79,7 +79,7 @@ public class NomadAgentConfiguration {
     /**
      * Returns the data directory.
      */
-    public Path getDataDir() {
+    public File getDataDir() {
         return dataDir;
     }
 
@@ -416,7 +416,7 @@ public class NomadAgentConfiguration {
 
         private String region;
         private String name;
-        private Path dataDir;
+        private File dataDir;
         private String bindAddr = "127.0.0.1";
         private String httpAdvertiseAddr;
         private String rpcAdvertiseAddr;
@@ -487,7 +487,7 @@ public class NomadAgentConfiguration {
         /**
          * Sets the data directory.
          */
-        public Builder setDataDir(Path dataDir) {
+        public Builder setDataDir(File dataDir) {
             this.dataDir = dataDir;
             return this;
         }
