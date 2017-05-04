@@ -34,6 +34,17 @@ public class NomadAgentProcess implements AutoCloseable {
      * @param config the configuration to use to run the agent
      */
     public NomadAgentProcess(PrintWriter output, NomadAgentConfiguration config) {
+        this(output, config, "nomad");
+    }
+
+    /**
+     * Runs a new Nomad agent.
+     *
+     * @param output a PrintWriter to which the process output is written
+     * @param config the configuration to use to run the agent
+     * @param executable the Nomad executable to run
+     */
+    public NomadAgentProcess(PrintWriter output, NomadAgentConfiguration config, String executable) {
         try {
             this.config = config;
 
@@ -42,7 +53,7 @@ public class NomadAgentProcess implements AutoCloseable {
 
             List<String> command = new ArrayList<>();
 
-            command.add("nomad");
+            command.add(executable);
             command.add("agent");
             command.add("-config");
             command.add(configFile.toString());
