@@ -67,11 +67,13 @@ class LinePump extends Thread {
                 line = in.readLine();
             } catch (IOException e) {
                 out.println("<<<POTENTIALLY TRUNCATED: error while reading from " + inputName + ": " + e + ">>>");
+                out.flush();
                 return;
             }
             if (line == null)
                 return;
             out.println(line);
+            out.flush();
         }
     }
 
