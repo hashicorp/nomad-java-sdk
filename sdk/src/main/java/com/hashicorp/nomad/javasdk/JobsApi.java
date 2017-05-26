@@ -8,7 +8,6 @@ import com.hashicorp.nomad.apimodel.JobDispatchResponse;
 import com.hashicorp.nomad.apimodel.JobListStub;
 import com.hashicorp.nomad.apimodel.JobPlanResponse;
 import com.hashicorp.nomad.apimodel.JobSummary;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 
@@ -539,17 +538,21 @@ public class JobsApi extends ApiBase {
     /**
      * Class matching the JSON request entity for job plan requests.
      */
-    @SuppressFBWarnings(
-            value = "URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD",
-            justification = "The fields are read via reflection during JSON serialization"
-    )
     private static class JobPlanRequest {
-        public Job job; // Checkstyle suppress VisibilityModifier
-        public final boolean diff; // Checkstyle suppress VisibilityModifier
+        private Job job;
+        private final boolean diff;
 
         JobPlanRequest(Job job, boolean diff) {
             this.job = job;
             this.diff = diff;
+        }
+
+        public Job getJob() {
+            return job;
+        }
+
+        public boolean isDiff() {
+            return diff;
         }
     }
 

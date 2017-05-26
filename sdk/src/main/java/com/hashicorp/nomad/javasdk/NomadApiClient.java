@@ -2,7 +2,6 @@ package com.hashicorp.nomad.javasdk;
 
 import com.hashicorp.nomad.apimodel.Node;
 import com.hashicorp.nomad.apimodel.NodeListStub;
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
@@ -304,10 +303,6 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
 
         return HttpClientBuilder.create()
                 .setRetryHandler(new DefaultHttpRequestRetryHandler() {
-                    @SuppressFBWarnings(
-                            value = "UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS",
-                            justification = "This protected method is called by public methods of the handler"
-                    )
                     @Override
                     protected boolean handleAsIdempotent(HttpRequest request) {
                         return true;

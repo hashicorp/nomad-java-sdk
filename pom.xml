@@ -80,8 +80,8 @@
             <!-- Dependencies not needed at runtime -->
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
-                <artifactId>annotations</artifactId>
-                <version>3.0.1</version>
+                <artifactId>jsr305</artifactId>
+                <version>3.0.2</version>
                 <optional>true</optional>
             </dependency>
 
