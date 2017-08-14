@@ -5,6 +5,8 @@ import com.hashicorp.nomad.apimodel.NodeListStub;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
@@ -305,7 +307,16 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
                 .setRetryHandler(new DefaultHttpRequestRetryHandler() {
                     @Override
                     protected boolean handleAsIdempotent(HttpRequest request) {
+                        return false;
+                    }
+                    @Override
+                    public boolean retryRequest(final IOException exception,
+                                                   final int executionCount,
+                                                   final HttpContext context) {
                         return true;
+                        final HttpClientContext clientContext = HttpClientContext.adapt(context);
+                        final HttpRequest request = clientContext.getRequest();
+                        return handleAsIdempotent(request);
                     }
                 })
                 .setSSLContext(buildSslContext(config.getTls()))
