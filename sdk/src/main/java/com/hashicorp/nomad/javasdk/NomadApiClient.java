@@ -307,13 +307,12 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
                 .setRetryHandler(new DefaultHttpRequestRetryHandler() {
                     @Override
                     protected boolean handleAsIdempotent(HttpRequest request) {
-                        return false;
+                        return true;
                     }
                     @Override
                     public boolean retryRequest(final IOException exception,
                                                    final int executionCount,
                                                    final HttpContext context) {
-                        return true;
                         final HttpClientContext clientContext = HttpClientContext.adapt(context);
                         final HttpRequest request = clientContext.getRequest();
                         return handleAsIdempotent(request);
