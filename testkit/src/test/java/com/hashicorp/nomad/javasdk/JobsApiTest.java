@@ -230,6 +230,12 @@ public class JobsApiTest extends ApiTestBase {
             Evaluation evaluation = agent.getApiClient().getEvaluationsApi().pollForCompletion(deregisterResponse, waitStrategyForTest()).getValue();
             assertThat(evaluation.getNextEval(), emptyOrNullString());
 
+            assertThat("job ID", jobsApi.info(job.getId()).getValue().getId(), nonEmptyString());
+
+            EvaluationResponse deregisterAndPurgeResponse = jobsApi.deregister(job.getId(), true);
+            assertUpdatedServerResponse(deregisterAndPurgeResponse);
+            assertThat("evaluation ID", deregisterAndPurgeResponse.getValue(), nonEmptyString());
+
             new ErrorResponseAssertion("job not found") {
                 @Override
                 protected NomadResponse<?> performRequest() throws IOException, NomadException {

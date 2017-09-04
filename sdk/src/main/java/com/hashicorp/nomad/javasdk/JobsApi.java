@@ -72,10 +72,24 @@ public class JobsApi extends ApiBase {
      * @param jobId ID of the job to deregister
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/job.html#delete">{@code DELETE /v1/job/<ID>}</a>
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#stop-a-job">{@code DELETE /v1/job/<ID>}</a>
      */
     public EvaluationResponse deregister(final String jobId) throws IOException, NomadException {
-        return deregister(jobId, null);
+        return deregister(jobId, false, null);
+    }
+
+    /**
+     * Deregisters a job in the active region, and stops all allocations that are part of it.
+     *
+     * @param jobId ID of the job to deregister
+     * @param purge specifies that the job should stopped and purged immediately
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#stop-a-job">{@code DELETE /v1/job/<ID>}</a>
+     */
+    public EvaluationResponse deregister(final String jobId, @Nullable Boolean purge)
+        throws IOException, NomadException {
+        return deregister(jobId, purge, null);
     }
 
     /**
@@ -84,14 +98,21 @@ public class JobsApi extends ApiBase {
      *
      * @param jobId   the ID of the job to deregister
      * @param options options controlling how the request is performed
+     * @param purge specifies that the job should stopped and purged immediately
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/job.html#delete">{@code DELETE /v1/job/<ID>}</a>
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#stop-a-job">{@code DELETE /v1/job/<ID>}</a>
      */
-    public EvaluationResponse deregister(final String jobId, @Nullable final WriteOptions options)
+    public EvaluationResponse deregister(final String jobId,
+                                         @Nullable Boolean purge,
+                                         @Nullable final WriteOptions options)
             throws IOException, NomadException {
+        RequestBuilder builder = delete("/v1/job/" + jobId, options);
+        if (purge != null) {
+          builder.addParameter("purge", purge.toString());
+        }
+        return executeEvaluationCreatingRequest(builder);
 
-        return executeEvaluationCreatingRequest(delete("/v1/job/" + jobId, options));
     }
 
     /**
