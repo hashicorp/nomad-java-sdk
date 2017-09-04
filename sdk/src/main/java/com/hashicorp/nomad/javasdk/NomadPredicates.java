@@ -127,6 +127,52 @@ public abstract class NomadPredicates {
     }
 
     /**
+     * Regates the check result of a given Predicate.
+     */
+    public static <T> Predicate<T> not(final Predicate<T> a) {
+        return new Predicate<T>() {
+            @Override
+            public boolean apply(T value) {
+                return !a.apply(value);
+            }
+        };
+    }
+
+    /**
+     * Returns a Predicate that checks if any of the Predicates of a given list evaluate to true.
+     */
+    public static <T> Predicate<T> any(final List<Predicate<T>> as) {
+        return new Predicate<T>() {
+            @Override
+            public boolean apply(T value) {
+                for (Predicate<? super T> a : as) {
+                    if (a.apply(value)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
+    }
+
+    /**
+     * Returns a Predicate that checks if all of the Predicates of a given list evaluate to true.
+     */
+    public static <T> Predicate<T> all(final List<Predicate<T>> as) {
+        return new Predicate<T>() {
+            @Override
+            public boolean apply(T value) {
+                for (Predicate<? super T> a : as) {
+                    if (!a.apply(value)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        };
+    }
+
+    /**
      * Returns a predicate that checks if allocation has the given client status.
      */
     public static Predicate<AllocationListStub> allocationHasClientStatus(final String status) {
@@ -172,26 +218,6 @@ public abstract class NomadPredicates {
                     }
                 }
                 return true;
-            }
-        };
-    }
-
-    /**
-     * Returns a predicate that checks if more than a given percentage of allocations finished with status "failed".
-     */
-    public static Predicate<List<AllocationListStub>> failedAllocationsOver(final Long threshold) {
-        return new Predicate<List<AllocationListStub>>() {
-            @Override
-            public boolean apply(List<AllocationListStub> allocs) {
-                long failed = 0;
-                for (AllocationListStub alloc : allocs) {
-                    if (allocationHasFailed().apply(alloc)) {
-                        failed++;
-                    }
-                }
-                long total = allocs.size();
-                long failPct = (long) ((float) failed / total * 100);
-                return failPct > threshold;
             }
         };
     }
