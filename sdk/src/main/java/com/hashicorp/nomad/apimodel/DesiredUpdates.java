@@ -20,6 +20,7 @@ public final class DesiredUpdates extends ApiObject {
     private BigInteger stop;
     private BigInteger inPlaceUpdate;
     private BigInteger destructiveUpdate;
+    private BigInteger canary;
 
     @JsonProperty("Ignore")
     public BigInteger getIgnore() {
@@ -78,6 +79,16 @@ public final class DesiredUpdates extends ApiObject {
 
     public DesiredUpdates setDestructiveUpdate(BigInteger destructiveUpdate) {
         this.destructiveUpdate = destructiveUpdate;
+        return this;
+    }
+
+    @JsonProperty("Canary")
+    public BigInteger getCanary() {
+        return canary;
+    }
+
+    public DesiredUpdates setCanary(BigInteger canary) {
+        this.canary = canary;
         return this;
     }
 

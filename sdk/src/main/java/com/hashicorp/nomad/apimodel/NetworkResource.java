@@ -13,20 +13,20 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class NetworkResource extends ApiObject {
-    private boolean Public;
+    private String device;
     private String cidr;
-    private List<Port> reservedPorts;
-    private List<Port> dynamicPorts;
     private String ip;
     private Integer mBits;
+    private List<Port> reservedPorts;
+    private List<Port> dynamicPorts;
 
-    @JsonProperty("Public")
-    public boolean getPublic() {
-        return Public;
+    @JsonProperty("Device")
+    public String getDevice() {
+        return device;
     }
 
-    public NetworkResource setPublic(boolean Public) {
-        this.Public = Public;
+    public NetworkResource setDevice(String device) {
+        this.device = device;
         return this;
     }
 
@@ -37,6 +37,26 @@ public final class NetworkResource extends ApiObject {
 
     public NetworkResource setCidr(String cidr) {
         this.cidr = cidr;
+        return this;
+    }
+
+    @JsonProperty("IP")
+    public String getIp() {
+        return ip;
+    }
+
+    public NetworkResource setIp(String ip) {
+        this.ip = ip;
+        return this;
+    }
+
+    @JsonProperty("MBits")
+    public Integer getMBits() {
+        return mBits;
+    }
+
+    public NetworkResource setMBits(Integer mBits) {
+        this.mBits = mBits;
         return this;
     }
 
@@ -73,26 +93,6 @@ public final class NetworkResource extends ApiObject {
             this.dynamicPorts = new java.util.ArrayList<>();
         for (Port item : dynamicPorts)
             this.dynamicPorts.add(item);
-        return this;
-    }
-
-    @JsonProperty("IP")
-    public String getIp() {
-        return ip;
-    }
-
-    public NetworkResource setIp(String ip) {
-        this.ip = ip;
-        return this;
-    }
-
-    @JsonProperty("MBits")
-    public Integer getMBits() {
-        return mBits;
-    }
-
-    public NetworkResource setMBits(Integer mBits) {
-        this.mBits = mBits;
         return this;
     }
 

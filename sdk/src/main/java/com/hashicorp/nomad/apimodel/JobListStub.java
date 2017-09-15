@@ -19,12 +19,16 @@ public final class JobListStub extends ApiObject {
     private String name;
     private String type;
     private int priority;
+    private boolean periodic;
+    private boolean parameterizedJob;
+    private boolean stop;
     private String status;
     private String statusDescription;
     private JobSummary jobSummary;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
     private BigInteger jobModifyIndex;
+    private long submitTime;
 
     @JsonProperty("ID")
     public String getId() {
@@ -73,6 +77,36 @@ public final class JobListStub extends ApiObject {
 
     public JobListStub setPriority(int priority) {
         this.priority = priority;
+        return this;
+    }
+
+    @JsonProperty("Periodic")
+    public boolean getPeriodic() {
+        return periodic;
+    }
+
+    public JobListStub setPeriodic(boolean periodic) {
+        this.periodic = periodic;
+        return this;
+    }
+
+    @JsonProperty("ParameterizedJob")
+    public boolean getParameterizedJob() {
+        return parameterizedJob;
+    }
+
+    public JobListStub setParameterizedJob(boolean parameterizedJob) {
+        this.parameterizedJob = parameterizedJob;
+        return this;
+    }
+
+    @JsonProperty("Stop")
+    public boolean getStop() {
+        return stop;
+    }
+
+    public JobListStub setStop(boolean stop) {
+        this.stop = stop;
         return this;
     }
 
@@ -133,6 +167,16 @@ public final class JobListStub extends ApiObject {
 
     public JobListStub setJobModifyIndex(BigInteger jobModifyIndex) {
         this.jobModifyIndex = jobModifyIndex;
+        return this;
+    }
+
+    @JsonProperty("SubmitTime")
+    public long getSubmitTime() {
+        return submitTime;
+    }
+
+    public JobListStub setSubmitTime(long submitTime) {
+        this.submitTime = submitTime;
         return this;
     }
 

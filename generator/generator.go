@@ -341,6 +341,8 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 		case reflect.Struct:
 			generator.structs <- t
 			return java.NewReferenceType(t.Name())
+		case reflect.String:  // This probably indicates an enumeration type; unfortunately we can't capture the values with reflection :(
+			return java.String
 		default:
 			panic("Unknown kind " + t.Kind().String() + " for " + t.String() + " in package " + t.PkgPath())
 		}

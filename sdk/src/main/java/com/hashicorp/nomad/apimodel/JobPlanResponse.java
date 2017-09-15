@@ -22,6 +22,7 @@ public final class JobPlanResponse extends ApiObject {
     private PlanAnnotations annotations;
     private Map<String, AllocationMetric> failedTgAllocs;
     private Date nextPeriodicLaunch;
+    private String warnings;
 
     @JsonProperty("JobModifyIndex")
     public BigInteger getJobModifyIndex() {
@@ -95,6 +96,16 @@ public final class JobPlanResponse extends ApiObject {
 
     public JobPlanResponse setNextPeriodicLaunch(Date nextPeriodicLaunch) {
         this.nextPeriodicLaunch = nextPeriodicLaunch;
+        return this;
+    }
+
+    @JsonProperty("Warnings")
+    public String getWarnings() {
+        return warnings;
+    }
+
+    public JobPlanResponse setWarnings(String warnings) {
+        this.warnings = warnings;
         return this;
     }
 

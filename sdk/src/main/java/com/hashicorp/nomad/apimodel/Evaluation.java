@@ -23,6 +23,7 @@ public final class Evaluation extends ApiObject {
     private BigInteger jobModifyIndex;
     private String nodeId;
     private BigInteger nodeModifyIndex;
+    private String deploymentId;
     private String status;
     private String statusDescription;
     private long wait;
@@ -115,6 +116,16 @@ public final class Evaluation extends ApiObject {
 
     public Evaluation setNodeModifyIndex(BigInteger nodeModifyIndex) {
         this.nodeModifyIndex = nodeModifyIndex;
+        return this;
+    }
+
+    @JsonProperty("DeploymentID")
+    public String getDeploymentId() {
+        return deploymentId;
+    }
+
+    public Evaluation setDeploymentId(String deploymentId) {
+        this.deploymentId = deploymentId;
         return this;
     }
 

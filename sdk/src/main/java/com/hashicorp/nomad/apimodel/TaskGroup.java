@@ -20,6 +20,7 @@ public final class TaskGroup extends ApiObject {
     private List<Task> tasks;
     private RestartPolicy restartPolicy;
     private EphemeralDisk ephemeralDisk;
+    private UpdateStrategy update;
     private Map<String, String> meta;
 
     @JsonProperty("Name")
@@ -95,6 +96,16 @@ public final class TaskGroup extends ApiObject {
 
     public TaskGroup setEphemeralDisk(EphemeralDisk ephemeralDisk) {
         this.ephemeralDisk = ephemeralDisk;
+        return this;
+    }
+
+    @JsonProperty("Update")
+    public UpdateStrategy getUpdate() {
+        return update;
+    }
+
+    public TaskGroup setUpdate(UpdateStrategy update) {
+        this.update = update;
         return this;
     }
 

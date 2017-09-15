@@ -16,6 +16,7 @@ import java.util.Map;
 public final class TaskArtifact extends ApiObject {
     private String getterSource;
     private Map<String, String> getterOptions;
+    private String getterMode;
     private String relativeDest;
 
     @JsonProperty("GetterSource")
@@ -42,6 +43,16 @@ public final class TaskArtifact extends ApiObject {
         if (this.getterOptions == null)
             this.getterOptions = new java.util.HashMap<>();
         this.getterOptions.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("GetterMode")
+    public String getGetterMode() {
+        return getterMode;
+    }
+
+    public TaskArtifact setGetterMode(String getterMode) {
+        this.getterMode = getterMode;
         return this;
     }
 

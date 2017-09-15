@@ -13,26 +13,81 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class UpdateStrategy extends ApiObject {
-    private long stagger;
-    private int maxParallel;
+    private Long stagger;
+    private Integer maxParallel;
+    private String healthCheck;
+    private Long minHealthyTime;
+    private Long healthyDeadline;
+    private Boolean autoRevert;
+    private Integer canary;
 
     @JsonProperty("Stagger")
-    public long getStagger() {
+    public Long getStagger() {
         return stagger;
     }
 
-    public UpdateStrategy setStagger(long stagger) {
+    public UpdateStrategy setStagger(Long stagger) {
         this.stagger = stagger;
         return this;
     }
 
     @JsonProperty("MaxParallel")
-    public int getMaxParallel() {
+    public Integer getMaxParallel() {
         return maxParallel;
     }
 
-    public UpdateStrategy setMaxParallel(int maxParallel) {
+    public UpdateStrategy setMaxParallel(Integer maxParallel) {
         this.maxParallel = maxParallel;
+        return this;
+    }
+
+    @JsonProperty("HealthCheck")
+    public String getHealthCheck() {
+        return healthCheck;
+    }
+
+    public UpdateStrategy setHealthCheck(String healthCheck) {
+        this.healthCheck = healthCheck;
+        return this;
+    }
+
+    @JsonProperty("MinHealthyTime")
+    public Long getMinHealthyTime() {
+        return minHealthyTime;
+    }
+
+    public UpdateStrategy setMinHealthyTime(Long minHealthyTime) {
+        this.minHealthyTime = minHealthyTime;
+        return this;
+    }
+
+    @JsonProperty("HealthyDeadline")
+    public Long getHealthyDeadline() {
+        return healthyDeadline;
+    }
+
+    public UpdateStrategy setHealthyDeadline(Long healthyDeadline) {
+        this.healthyDeadline = healthyDeadline;
+        return this;
+    }
+
+    @JsonProperty("AutoRevert")
+    public Boolean getAutoRevert() {
+        return autoRevert;
+    }
+
+    public UpdateStrategy setAutoRevert(Boolean autoRevert) {
+        this.autoRevert = autoRevert;
+        return this;
+    }
+
+    @JsonProperty("Canary")
+    public Integer getCanary() {
+        return canary;
+    }
+
+    public UpdateStrategy setCanary(Integer canary) {
+        this.canary = canary;
         return this;
     }
 

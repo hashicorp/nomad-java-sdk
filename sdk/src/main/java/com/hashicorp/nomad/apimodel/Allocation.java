@@ -31,6 +31,8 @@ public final class Allocation extends ApiObject {
     private String clientStatus;
     private String clientDescription;
     private Map<String, TaskState> taskStates;
+    private String deploymentId;
+    private AllocDeploymentStatus deploymentStatus;
     private String previousAllocation;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
@@ -215,6 +217,26 @@ public final class Allocation extends ApiObject {
         if (this.taskStates == null)
             this.taskStates = new java.util.HashMap<>();
         this.taskStates.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("DeploymentID")
+    public String getDeploymentId() {
+        return deploymentId;
+    }
+
+    public Allocation setDeploymentId(String deploymentId) {
+        this.deploymentId = deploymentId;
+        return this;
+    }
+
+    @JsonProperty("DeploymentStatus")
+    public AllocDeploymentStatus getDeploymentStatus() {
+        return deploymentStatus;
+    }
+
+    public Allocation setDeploymentStatus(AllocDeploymentStatus deploymentStatus) {
+        this.deploymentStatus = deploymentStatus;
         return this;
     }
 

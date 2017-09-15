@@ -22,6 +22,8 @@ public final class Template extends ApiObject {
     private String perms;
     private String leftDelim;
     private String rightDelim;
+    private Boolean envvars;
+    private Long vaultGrace;
 
     @JsonProperty("SourcePath")
     public String getSourcePath() {
@@ -110,6 +112,26 @@ public final class Template extends ApiObject {
 
     public Template setRightDelim(String rightDelim) {
         this.rightDelim = rightDelim;
+        return this;
+    }
+
+    @JsonProperty("Envvars")
+    public Boolean getEnvvars() {
+        return envvars;
+    }
+
+    public Template setEnvvars(Boolean envvars) {
+        this.envvars = envvars;
+        return this;
+    }
+
+    @JsonProperty("VaultGrace")
+    public Long getVaultGrace() {
+        return vaultGrace;
+    }
+
+    public Template setVaultGrace(Long vaultGrace) {
+        this.vaultGrace = vaultGrace;
         return this;
     }
 

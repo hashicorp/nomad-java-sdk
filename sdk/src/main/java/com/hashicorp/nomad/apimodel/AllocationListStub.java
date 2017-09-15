@@ -20,12 +20,14 @@ public final class AllocationListStub extends ApiObject {
     private String name;
     private String nodeId;
     private String jobId;
+    private BigInteger jobVersion;
     private String taskGroup;
     private String desiredStatus;
     private String desiredDescription;
     private String clientStatus;
     private String clientDescription;
     private Map<String, TaskState> taskStates;
+    private AllocDeploymentStatus deploymentStatus;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
     private long createTime;
@@ -77,6 +79,16 @@ public final class AllocationListStub extends ApiObject {
 
     public AllocationListStub setJobId(String jobId) {
         this.jobId = jobId;
+        return this;
+    }
+
+    @JsonProperty("JobVersion")
+    public BigInteger getJobVersion() {
+        return jobVersion;
+    }
+
+    public AllocationListStub setJobVersion(BigInteger jobVersion) {
+        this.jobVersion = jobVersion;
         return this;
     }
 
@@ -144,6 +156,16 @@ public final class AllocationListStub extends ApiObject {
         if (this.taskStates == null)
             this.taskStates = new java.util.HashMap<>();
         this.taskStates.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("DeploymentStatus")
+    public AllocDeploymentStatus getDeploymentStatus() {
+        return deploymentStatus;
+    }
+
+    public AllocationListStub setDeploymentStatus(AllocDeploymentStatus deploymentStatus) {
+        this.deploymentStatus = deploymentStatus;
         return this;
     }
 

@@ -5,6 +5,8 @@ import com.hashicorp.nomad.javasdk.ApiObject;
 import com.hashicorp.nomad.javasdk.NomadJson;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,6 +17,10 @@ import java.util.List;
 public final class TaskState extends ApiObject {
     private String state;
     private boolean failed;
+    private BigInteger restarts;
+    private Date lastRestart;
+    private Date startedAt;
+    private Date finishedAt;
     private List<TaskEvent> events;
 
     @JsonProperty("State")
@@ -34,6 +40,46 @@ public final class TaskState extends ApiObject {
 
     public TaskState setFailed(boolean failed) {
         this.failed = failed;
+        return this;
+    }
+
+    @JsonProperty("Restarts")
+    public BigInteger getRestarts() {
+        return restarts;
+    }
+
+    public TaskState setRestarts(BigInteger restarts) {
+        this.restarts = restarts;
+        return this;
+    }
+
+    @JsonProperty("LastRestart")
+    public Date getLastRestart() {
+        return lastRestart;
+    }
+
+    public TaskState setLastRestart(Date lastRestart) {
+        this.lastRestart = lastRestart;
+        return this;
+    }
+
+    @JsonProperty("StartedAt")
+    public Date getStartedAt() {
+        return startedAt;
+    }
+
+    public TaskState setStartedAt(Date startedAt) {
+        this.startedAt = startedAt;
+        return this;
+    }
+
+    @JsonProperty("FinishedAt")
+    public Date getFinishedAt() {
+        return finishedAt;
+    }
+
+    public TaskState setFinishedAt(Date finishedAt) {
+        this.finishedAt = finishedAt;
         return this;
     }
 

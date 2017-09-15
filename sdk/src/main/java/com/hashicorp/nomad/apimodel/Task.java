@@ -30,6 +30,7 @@ public final class Task extends ApiObject {
     private List<Template> templates;
     private DispatchPayloadConfig dispatchPayload;
     private boolean leader;
+    private long shutdownDelay;
 
     @JsonProperty("Name")
     public String getName() {
@@ -241,6 +242,16 @@ public final class Task extends ApiObject {
 
     public Task setLeader(boolean leader) {
         this.leader = leader;
+        return this;
+    }
+
+    @JsonProperty("ShutdownDelay")
+    public long getShutdownDelay() {
+        return shutdownDelay;
+    }
+
+    public Task setShutdownDelay(long shutdownDelay) {
+        this.shutdownDelay = shutdownDelay;
         return this;
     }
 

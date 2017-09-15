@@ -6,6 +6,7 @@ import com.hashicorp.nomad.javasdk.NomadJson;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a generated JavaBean representing a request or response structure.
@@ -24,6 +25,9 @@ public final class ServiceCheck extends ApiObject {
     private long interval;
     private long timeout;
     private String initialStatus;
+    private boolean tlsSkipVerify;
+    private Map<String, List<String>> header;
+    private String method;
 
     @JsonProperty("Id")
     public String getId() {
@@ -140,6 +144,43 @@ public final class ServiceCheck extends ApiObject {
 
     public ServiceCheck setInitialStatus(String initialStatus) {
         this.initialStatus = initialStatus;
+        return this;
+    }
+
+    @JsonProperty("TLSSkipVerify")
+    public boolean getTlsSkipVerify() {
+        return tlsSkipVerify;
+    }
+
+    public ServiceCheck setTlsSkipVerify(boolean tlsSkipVerify) {
+        this.tlsSkipVerify = tlsSkipVerify;
+        return this;
+    }
+
+    @JsonProperty("Header")
+    public Map<String, List<String>> getHeader() {
+        return header;
+    }
+
+    public ServiceCheck setHeader(Map<String, List<String>> header) {
+        this.header = header;
+        return this;
+    }
+
+    public ServiceCheck addHeader(String key, List<String> value) {
+        if (this.header == null)
+            this.header = new java.util.HashMap<>();
+        this.header.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("Method")
+    public String getMethod() {
+        return method;
+    }
+
+    public ServiceCheck setMethod(String method) {
+        this.method = method;
         return this;
     }
 

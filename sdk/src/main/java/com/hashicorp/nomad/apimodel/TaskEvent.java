@@ -35,6 +35,7 @@ public final class TaskEvent extends ApiObject {
     private String vaultError;
     private String taskSignalReason;
     private String taskSignal;
+    private String genericSource;
 
     @JsonProperty("Type")
     public String getType() {
@@ -253,6 +254,16 @@ public final class TaskEvent extends ApiObject {
 
     public TaskEvent setTaskSignal(String taskSignal) {
         this.taskSignal = taskSignal;
+        return this;
+    }
+
+    @JsonProperty("GenericSource")
+    public String getGenericSource() {
+        return genericSource;
+    }
+
+    public TaskEvent setGenericSource(String genericSource) {
+        this.genericSource = genericSource;
         return this;
     }
 

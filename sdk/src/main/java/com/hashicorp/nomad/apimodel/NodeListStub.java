@@ -18,6 +18,7 @@ public final class NodeListStub extends ApiObject {
     private String datacenter;
     private String name;
     private String nodeClass;
+    private String version;
     private boolean drain;
     private String status;
     private String statusDescription;
@@ -61,6 +62,16 @@ public final class NodeListStub extends ApiObject {
 
     public NodeListStub setNodeClass(String nodeClass) {
         this.nodeClass = nodeClass;
+        return this;
+    }
+
+    @JsonProperty("Version")
+    public String getVersion() {
+        return version;
+    }
+
+    public NodeListStub setVersion(String version) {
+        this.version = version;
         return this;
     }
 

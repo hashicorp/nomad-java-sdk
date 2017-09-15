@@ -17,6 +17,7 @@ public final class Service extends ApiObject {
     private String name;
     private List<String> tags;
     private String portLabel;
+    private String addressMode;
     private List<ServiceCheck> checks;
 
     @JsonProperty("Id")
@@ -64,6 +65,16 @@ public final class Service extends ApiObject {
 
     public Service setPortLabel(String portLabel) {
         this.portLabel = portLabel;
+        return this;
+    }
+
+    @JsonProperty("AddressMode")
+    public String getAddressMode() {
+        return addressMode;
+    }
+
+    public Service setAddressMode(String addressMode) {
+        this.addressMode = addressMode;
         return this;
     }
 
