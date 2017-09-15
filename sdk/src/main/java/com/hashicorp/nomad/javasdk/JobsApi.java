@@ -2,12 +2,14 @@ package com.hashicorp.nomad.javasdk;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hashicorp.nomad.apimodel.AllocationListStub;
+import com.hashicorp.nomad.apimodel.Deployment;
 import com.hashicorp.nomad.apimodel.Evaluation;
 import com.hashicorp.nomad.apimodel.Job;
 import com.hashicorp.nomad.apimodel.JobDispatchResponse;
 import com.hashicorp.nomad.apimodel.JobListStub;
 import com.hashicorp.nomad.apimodel.JobPlanResponse;
 import com.hashicorp.nomad.apimodel.JobSummary;
+import com.hashicorp.nomad.apimodel.JobValidateResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 
@@ -75,7 +77,23 @@ public class JobsApi extends ApiBase {
      * @see <a href="https://www.nomadproject.io/docs/http/job.html#delete">{@code DELETE /v1/job/<ID>}</a>
      */
     public EvaluationResponse deregister(final String jobId) throws IOException, NomadException {
-        return deregister(jobId, null);
+        return deregister(jobId, false);
+    }
+
+    /**
+     * Deregisters a job in the active region, and stops all allocations that are part of it.
+     *
+     * @param jobId the ID of the job to deregister
+     * @param purge If true, the job is deregistered and purged from the system versus still being queryable and
+     *              eventually GC'ed from the system. Most callers should not specify purge.
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/job.html#delete">{@code DELETE /v1/job/<ID>}</a>
+     */
+    public EvaluationResponse deregister(final String jobId, final boolean purge)
+            throws IOException, NomadException {
+
+        return deregister(jobId, purge, null);
     }
 
     /**
@@ -91,16 +109,37 @@ public class JobsApi extends ApiBase {
     public EvaluationResponse deregister(final String jobId, @Nullable final WriteOptions options)
             throws IOException, NomadException {
 
-        return executeEvaluationCreatingRequest(delete("/v1/job/" + jobId, options));
+        return deregister(jobId, false, null);
+    }
+
+    /**
+     * Deregisters a job in the active region,
+     * and stops all allocations that are part of it.
+     *
+     * @param jobId   the ID of the job to deregister
+     * @param purge   If true, the job is deregistered and purged from the system versus still being queryable and
+     *                eventually GC'ed from the system. Most callers should not specify purge.
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/job.html#delete">{@code DELETE /v1/job/<ID>}</a>
+     */
+    public EvaluationResponse deregister(final String jobId, final boolean purge, @Nullable final WriteOptions options)
+            throws IOException, NomadException {
+
+        return executeEvaluationCreatingRequest(delete(
+                uri("/v1/job/" + jobId).addParameter("purge", Boolean.toString(purge)),
+                options
+        ));
     }
 
     /**
      * Dispatches a new instance of a parameterized job in the active region.
      *
-     * @param jobId   id of the parameterized job to instantiate
+     * @param jobId id of the parameterized job to instantiate
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#dispatch-job">{@code PUT /v1/job/<ID>/dispatch}</a>
      */
     public ServerResponse<JobDispatchResponse> dispatch(final String jobId) throws IOException, NomadException {
         return dispatch(jobId, null, null);
@@ -113,7 +152,7 @@ public class JobsApi extends ApiBase {
      * @param payload payload for the instantiated job
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#dispatch-job">{@code PUT /v1/job/<ID>/dispatch}</a>
      */
     public ServerResponse<JobDispatchResponse> dispatch(
             final String jobId,
@@ -125,11 +164,11 @@ public class JobsApi extends ApiBase {
     /**
      * Dispatches a new instance of a parameterized job in the active region.
      *
-     * @param jobId   id of the parameterized job to instantiate
-     * @param meta    metadata for the instantiated job
+     * @param jobId id of the parameterized job to instantiate
+     * @param meta  metadata for the instantiated job
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#dispatch-job">{@code PUT /v1/job/<ID>/dispatch}</a>
      */
     public ServerResponse<JobDispatchResponse> dispatch(
             final String jobId,
@@ -140,7 +179,7 @@ public class JobsApi extends ApiBase {
 
     /**
      * Registers or updates a job in the active region.
-     *
+     * <p>
      * Dispatches a new instance of a parameterized job in the active region.
      *
      * @param jobId   id of the parameterized job to instantiate
@@ -148,7 +187,7 @@ public class JobsApi extends ApiBase {
      * @param payload payload for the instantiated job
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#dispatch-job">{@code PUT /v1/job/<ID>/dispatch}</a>
      */
     public ServerResponse<JobDispatchResponse> dispatch(
             final String jobId,
@@ -167,7 +206,7 @@ public class JobsApi extends ApiBase {
      * @param options options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#dispatch-job">{@code PUT /v1/job/<ID>/dispatch}</a>
      */
     public ServerResponse<JobDispatchResponse> dispatch(
             final String jobId,
@@ -176,7 +215,7 @@ public class JobsApi extends ApiBase {
             @Nullable WriteOptions options
     ) throws IOException, NomadException {
         return executeServerAction(
-                put("/v1/job/" + jobId + "/evaluate", new JobDispatchRequest(jobId, meta, payload), options),
+                put("/v1/job/" + jobId + "/dispatch", new JobDispatchRequest(jobId, meta, payload), options),
                 NomadJson.parserFor(JobDispatchResponse.class));
     }
 
@@ -272,6 +311,40 @@ public class JobsApi extends ApiBase {
             @Nullable final QueryOptions<Job> options
     ) throws IOException, NomadException {
         return executeServerQuery("/v1/job/" + jobId, options, NomadJson.parserFor(Job.class));
+    }
+
+    /**
+     * Gets the latest deployment belonging to a job.
+     *
+     * @param jobId the ID of the job
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#read-job-39-s-most-recent-deployment">{@code GET /v1/job/<ID>/deployment}</a>
+     */
+    public ServerQueryResponse<Deployment> latestDeployment(final String jobId)
+            throws IOException, NomadException {
+
+        return latestDeployment(jobId, null);
+    }
+
+    /**
+     * Gets the latest deployment belonging to a job.
+     *
+     * @param jobId   the ID of the job
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#read-job-39-s-most-recent-deployment">{@code GET /v1/job/<ID>/deployment}</a>
+     */
+    public ServerQueryResponse<Deployment> latestDeployment(
+            final String jobId,
+            @Nullable final QueryOptions<Deployment> options
+    ) throws IOException, NomadException {
+
+        return executeServerQuery(
+                "/v1/job/" + jobId + "/deployment",
+                options,
+                NomadJson.parserFor(Deployment.class));
     }
 
     /**
@@ -472,6 +545,84 @@ public class JobsApi extends ApiBase {
     }
 
     /**
+     * Reverts to a prior version of a job.
+     *
+     * @param jobId        ID of the job
+     * @param version      the version to revert to
+     * @param priorVersion when set, the job is only reverted if the job's current version matches this prior version
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#revert-to-older-job-version">{@code PUT /v1/job/{ID}/revert}</a>
+     */
+    public EvaluationResponse revert(
+            String jobId,
+            BigInteger version,
+            @Nullable BigInteger priorVersion
+    ) throws IOException, NomadException {
+        return revert(jobId, version, priorVersion, null);
+    }
+
+    /**
+     * Reverts to a prior version of a job.
+     *
+     * @param jobId        ID of the job
+     * @param version      the version to revert to
+     * @param priorVersion when set, the job is only reverted if the job's current version matches this prior version
+     * @param options      options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#revert-to-older-job-version">{@code PUT /v1/job/{ID}/revert}</a>
+     */
+    public EvaluationResponse revert(
+            String jobId,
+            BigInteger version,
+            @Nullable BigInteger priorVersion,
+            @Nullable WriteOptions options
+    ) throws IOException, NomadException {
+        return executeEvaluationCreatingRequest(
+                put("/v1/job/" + jobId + "/revert", new JobRevertRequest(jobId, version, priorVersion), options));
+    }
+
+    /**
+     * Marks a version of a job as stable or unstable.
+     *
+     * @param jobId   ID of the job
+     * @param version the job version to affect
+     * @param stable  whether the job is stable or unstable
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#set-job-stability">{@code PUT /v1/job/{ID}/stable}</a>
+     */
+    public EvaluationResponse stable(
+            String jobId,
+            BigInteger version,
+            boolean stable
+    ) throws IOException, NomadException {
+        return stable(jobId, version, stable, null);
+    }
+
+    /**
+     * Marks a version of a job as stable or unstable.
+     *
+     * @param jobId   ID of the job
+     * @param version the job version to affect
+     * @param stable  whether the job is stable or unstable
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#set-job-stability">{@code PUT /v1/job/{ID}/stable}</a>
+     */
+    public EvaluationResponse stable(
+            String jobId,
+            BigInteger version,
+            boolean stable,
+            @Nullable WriteOptions options
+    ) throws IOException, NomadException {
+        return executeEvaluationCreatingRequest(
+                put("/v1/job/" + jobId + "/stable", new JobStabilityRequest(jobId, version, stable), options));
+    }
+
+    /**
      * Queries the summary of a job in the active region.
      *
      * @param jobId ID of the job to get a summary for
@@ -498,6 +649,101 @@ public class JobsApi extends ApiBase {
                 "/v1/job/" + jobId + "/summary",
                 options,
                 NomadJson.parserFor(JobSummary.class));
+    }
+
+    /**
+     * Validates a job.
+     *
+     * @param job the job to validate
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/validate.html#validate-job">{@code PUT /v1/validate/job}</a>
+     */
+    public ServerResponse<JobValidateResponse> validate(Job job) throws IOException, NomadException {
+        return validate(job, null);
+    }
+
+    /**
+     * Validates a job.
+     *
+     * @param job     the job to validate
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/validate.html#validate-job">{@code PUT /v1/validate/job}</a>
+     */
+    public ServerResponse<JobValidateResponse> validate(Job job, @Nullable WriteOptions options)
+            throws IOException, NomadException {
+        return executeServerAction(
+                put("/v1/job/validate", new JobValidationRequest(job), options),
+                NomadJson.parserFor(JobValidateResponse.class));
+    }
+
+    /**
+     * Lists the versions of a job.
+     *
+     * @param jobId ID of the job
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#list-job-versions">{@code GET /v1/job/{ID}/versions}</a>
+     */
+    public ServerQueryResponse<JobVersionsResponseData> versions(
+            String jobId
+    ) throws IOException, NomadException {
+        return versions(jobId, null);
+    }
+
+    /**
+     * Lists the versions of a job.
+     *
+     * @param jobId   ID of the job
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#list-job-versions">{@code GET /v1/job/{ID}/versions}</a>
+     */
+    public ServerQueryResponse<JobVersionsResponseData> versions(
+            String jobId,
+            @Nullable QueryOptions<JobVersionsResponseData> options
+    ) throws IOException, NomadException {
+        return versions(jobId, false, options);
+    }
+
+    /**
+     * Lists the versions of a job.
+     *
+     * @param jobId ID of the job
+     * @param diffs when true, diffs are returned in addition the the job versions
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#list-job-versions">{@code GET /v1/job/{ID}/versions}</a>
+     */
+    public ServerQueryResponse<JobVersionsResponseData> versions(
+            String jobId,
+            boolean diffs
+    ) throws IOException, NomadException {
+        return versions(jobId, diffs, null);
+    }
+
+    /**
+     * Lists the versions of a job.
+     *
+     * @param jobId   ID of the job
+     * @param diffs   when true, diffs are returned in addition the the job versions
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/jobs.html#list-job-versions">{@code GET /v1/job/{ID}/versions}</a>
+     */
+    public ServerQueryResponse<JobVersionsResponseData> versions(
+            String jobId,
+            boolean diffs,
+            @Nullable QueryOptions<JobVersionsResponseData> options
+    ) throws IOException, NomadException {
+        return executeServerQuery(
+                uri("/v1/job/" + jobId + "/versions").addParameter("diffs", Boolean.toString(diffs)),
+                options,
+                NomadJson.parserFor(JobVersionsResponseData.class));
     }
 
     private EvaluationResponse executeEvaluationCreatingRequest(RequestBuilder request)
@@ -568,6 +814,49 @@ public class JobsApi extends ApiBase {
             this.job = job;
             this.enforceIndex = jobModifyIndex != null;
             this.jobModifyIndex = jobModifyIndex;
+        }
+    }
+
+    /**
+     * Class matching the JSON request entity for job revert requests.
+     */
+    private static class JobRevertRequest {
+        @JsonProperty("JobID")
+        public final String jobId; // Checkstyle suppress VisibilityModifier
+        public final BigInteger jobVersion; // Checkstyle suppress VisibilityModifier
+        public final BigInteger enforcePriorVersion; // Checkstyle suppress VisibilityModifier
+
+        JobRevertRequest(String jobId, BigInteger jobVersion, @Nullable BigInteger enforcePriorVersion) {
+            this.jobId = jobId;
+            this.jobVersion = jobVersion;
+            this.enforcePriorVersion = enforcePriorVersion;
+        }
+    }
+
+    /**
+     * Class matching the JSON request entity for job revert requests.
+     */
+    private static class JobStabilityRequest {
+        @JsonProperty("JobID")
+        public final String jobId; // Checkstyle suppress VisibilityModifier
+        public final BigInteger jobVersion; // Checkstyle suppress VisibilityModifier
+        public final boolean stable; // Checkstyle suppress VisibilityModifier
+
+        JobStabilityRequest(String jobId, BigInteger jobVersion, boolean stable) {
+            this.jobId = jobId;
+            this.jobVersion = jobVersion;
+            this.stable = stable;
+        }
+    }
+
+    /**
+     * Class matching the JSON request entity for job validation requests.
+     */
+    private static class JobValidationRequest {
+        public final Job job; // Checkstyle suppress VisibilityModifier
+
+        JobValidationRequest(Job job) {
+            this.job = job;
         }
     }
 

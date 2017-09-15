@@ -6,6 +6,7 @@ import com.hashicorp.nomad.apimodel.Allocation;
 import com.hashicorp.nomad.apimodel.AllocationListStub;
 import com.hashicorp.nomad.apimodel.HostStats;
 import com.hashicorp.nomad.apimodel.Job;
+import com.hashicorp.nomad.apimodel.Task;
 import com.hashicorp.nomad.apimodel.TaskState;
 import com.hashicorp.nomad.testutils.TestAgent;
 import org.hamcrest.Description;
@@ -32,6 +33,29 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
 public class ClientApiTest extends ApiTestBase {
+
+//    @Test
+//    public void shouldGarbageCollectAGivenAllocation() throws Exception {
+//        try (TestAgent agent = newClientServer()) {
+//            final NomadApiClient apiClient = agent.getApiClient();
+//
+//            final Job job = createTestJob();
+//            job.getTaskGroups().get(0).getTasks().get(0).addConfig("run_for", "0s");
+//            final String evalId = registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent, job).getId();
+//
+//            final AllocationListStub allocation = apiClient.getEvaluationsApi().allocations(evalId).getValue().get(0);
+//            final ClientApi clientApi = apiClient.lookupClientApiByNodeId(allocation.getNodeId());
+//
+//            NomadResponse<Void> gcResponse = clientApi.garbageCollect(allocation.getId());
+//
+//            new ErrorResponseAssertion("alloc not found") {
+//                @Override
+//                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+//                    return apiClient.getAllocationsApi().info(allocation.getId());
+//                }
+//            };
+//        }
+//    }
 
     @Test
     public void shouldGetClientStatistics() throws Exception {

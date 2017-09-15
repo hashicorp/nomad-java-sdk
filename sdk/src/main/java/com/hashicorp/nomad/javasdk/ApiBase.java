@@ -71,8 +71,8 @@ abstract class ApiBase {
                 .setEntity(new StringEntity(NomadJson.serialize(requestEntity), ContentType.APPLICATION_JSON));
     }
 
-    protected RequestBuilder delete(final String path, @Nullable final WriteOptions options) {
-        return prepareWrite(RequestBuilder.delete(), uri(path), options);
+    protected RequestBuilder delete(final URIBuilder uri, @Nullable final WriteOptions options) {
+        return prepareWrite(RequestBuilder.delete(), uri, options);
     }
 
 
@@ -112,7 +112,30 @@ abstract class ApiBase {
 
         ServerQueryResponse<T> response = null;
         while (true) {
-            response = executeServerQueryRaw(uri, options, getWait(waitStrategy, response), valueExtractor);
+            response = executeServerQueryRaw(
+                    options, getWait(waitStrategy, response), valueExtractor, RequestBuilder.get(uri));
+
+            if (predicate == null || predicate.apply(response))
+                return response;
+
+            options.setIndex(response.getIndex());
+        }
+    }
+
+    protected <T> ServerQueryResponse<T> executeServerQueryPut(
+            final URIBuilder uriBuilder,
+            Object entity,
+            @Nullable final QueryOptions<T> options,
+            @Nullable final ValueExtractor<T> valueExtractor
+    ) throws IOException, NomadException {
+
+        final WaitStrategy waitStrategy = options == null ? null : options.getWaitStrategy();
+        final Predicate<ServerQueryResponse<T>> predicate = options == null ? null : options.getRepeatedPollPredicate();
+
+        ServerQueryResponse<T> response = null;
+        while (true) {
+            response = executeServerQueryRaw(options, getWait(waitStrategy, response), valueExtractor,
+                    put(uriBuilder, entity, null));
 
             if (predicate == null || predicate.apply(response))
                 return response;
@@ -159,28 +182,27 @@ abstract class ApiBase {
     }
 
     private <T> ServerQueryResponse<T> executeServerQueryRaw(
-            final URI uri,
             @Nullable final QueryOptions<T> options,
             @Nullable final String wait,
-            final ValueExtractor<T> valueExtractor
+            final ValueExtractor<T> valueExtractor,
+            RequestBuilder requestBuilder
     ) throws IOException, NomadException {
-        final RequestBuilder request = RequestBuilder.get(uri);
         String region = null;
         if (options != null) {
             region = options.getRegion();
             if (options.getIndex() != null)
-                request.addParameter("index", options.getIndex().toString());
+                requestBuilder.addParameter("index", options.getIndex().toString());
             if (wait != null)
-                request.addParameter("wait", wait);
+                requestBuilder.addParameter("wait", wait);
             if (options.isAllowStale())
-                request.addParameter("stale", null);
+                requestBuilder.addParameter("stale", null);
         }
         if (region == null)
             region = apiClient.getConfig().getRegion();
         if (region != null)
-            request.addParameter("region", region);
+            requestBuilder.addParameter("region", region);
 
-        return apiClient.execute(request, new ServerQueryResponseAdapter<>(valueExtractor));
+        return apiClient.execute(requestBuilder, new ServerQueryResponseAdapter<>(valueExtractor));
     }
 
     private RequestBuilder prepareWrite(

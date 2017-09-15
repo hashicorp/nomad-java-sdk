@@ -24,6 +24,19 @@ public class ClientApi extends ApiBase {
         this.address = address;
     }
 
+    /*
+    +func (a *Allocations) GC(alloc *Allocation, q *QueryOptions) error {
++       nodeClient, err := a.client.GetNodeClient(alloc.NodeID, q)
++       if err != nil {
++               return err
++       }
++
++       var resp struct{}
++       _, err = nodeClient.query("/v1/client/allocation/"+alloc.ID+"/gc", &resp, nil)
++       return err
++}
+     */
+
     /**
      * Queries the actual resource usage of the client node.
      *
@@ -159,6 +172,32 @@ public class ClientApi extends ApiBase {
         if (origin != null)
             uri.addParameter("origin", origin);
         return apiClient.executeFramedStream(get(uri));
+    }
+
+    /**
+     * Initiates garbage collection of an allocation.
+     *
+     * @param allocId ID of the allocation
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/system.html">{@code PUT /v1/system/gc}</a>
+     */
+    public NomadResponse<Void> garbageCollect(String allocId) throws IOException, NomadException {
+        return garbageCollect(allocId, null);
+    }
+
+    /**
+     * Initiates garbage collection of an allocation.
+     *
+     * @param allocId ID of the allocation
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/system.html">{@code PUT /v1/system/gc}</a>
+     */
+    public NomadResponse<Void> garbageCollect(String allocId, @Nullable QueryOptions<Void> options)
+            throws IOException, NomadException {
+        return executeServerQuery("/v1/client/allocation/" + allocId + "/gc", null, null);
     }
 
     /**

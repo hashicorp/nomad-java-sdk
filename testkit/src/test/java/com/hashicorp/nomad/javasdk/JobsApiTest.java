@@ -95,6 +95,50 @@ public class JobsApiTest extends ApiTestBase {
         }
     }
 
+//    @Test
+//    public void shouldValidateJob() throws Exception {
+//        try (TestAgent agent = newServer()) {
+//            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
+//
+//            final Job job = createTestJob();
+//
+//            ServerResponse<JobValidateResponse> response = jobsApi.validate(job);
+//            assertUpdatedServerResponse(response);
+//            assertThat("errors", response.getValue().getValidationErrors(), empty());
+//
+//            job.setId(null);
+//
+//            response = jobsApi.validate(job);
+//            assertUpdatedServerResponse(response);
+//            assertThat("errors", response.getValue().getValidationErrors(), not(empty()));
+//        }
+//    }
+
+    @Test
+    public void shouldRevertJob() throws Exception {
+        try (TestAgent agent = newClientServer()) {
+            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
+
+            final Job job = createTestJob();
+            registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent, job);
+
+            job.addMeta("foo", "bar");
+            registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent, job);
+
+            // Fails at incorrect index
+            new ErrorResponseAssertion("enforcing version") {
+                @Override
+                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+                    return jobsApi.revert(job.getId(), new BigInteger("0"), new BigInteger("10"), null);
+                }
+            };
+
+            final EvaluationResponse response = jobsApi.revert(job.getId(), new BigInteger("0"), new BigInteger("1"), null);
+
+            assertThat(response.getValue(), nonEmptyString());
+        }
+    }
+
     @Test
     public void shouldGetJobInfo() throws Exception {
         try (TestAgent agent = newServer()) {
@@ -114,6 +158,30 @@ public class JobsApiTest extends ApiTestBase {
             ServerQueryResponse<Job> infoResponse = jobsApi.info(job.getId());
             assertUpdatedServerQueryResponse(infoResponse);
             assertThat("id", infoResponse.getValue().getId(), is(job.getId()));
+        }
+    }
+
+    @Test
+    public void shouldGetJobVersions() throws Exception {
+        try (TestAgent agent = newServer()) {
+            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
+
+            new ErrorResponseAssertion("not found") {
+                @Override
+                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+                    return jobsApi.versions("job1");
+                }
+            };
+
+            final Job job = createTestJob();
+            jobsApi.register(job);
+
+            ServerQueryResponse<JobVersionsResponseData> response = jobsApi.versions(job.getId());
+            assertUpdatedServerQueryResponse(response);
+            final List<Job> versions = response.getValue().getVersions();
+
+            assertThat("number of versions", versions.size(), greaterThan(0));
+            assertThat("job id", versions.get(0).getId(), is(job.getId()));
         }
     }
 
@@ -228,6 +296,15 @@ public class JobsApiTest extends ApiTestBase {
             assertThat("evaluation ID", deregisterResponse.getValue(), nonEmptyString());
 
             Evaluation evaluation = agent.getApiClient().getEvaluationsApi().pollForCompletion(deregisterResponse, waitStrategyForTest()).getValue();
+            assertThat(evaluation.getNextEval(), emptyOrNullString());
+
+            retrievedJob = jobsApi.info(job.getId()).getValue();
+            assertThat(retrievedJob.getStop(), is(true));
+            assertThat(retrievedJob.getStatus(), is("dead"));
+
+            deregisterResponse = jobsApi.deregister(job.getId(), true);
+            assertUpdatedServerResponse(deregisterResponse);
+            agent.getApiClient().getEvaluationsApi().pollForCompletion(deregisterResponse, waitStrategyForTest()).getValue();
             assertThat(evaluation.getNextEval(), emptyOrNullString());
 
             new ErrorResponseAssertion("job not found") {

@@ -15,6 +15,7 @@ import java.util.Map;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class Job extends ApiObject {
+    private Boolean stop;
     private String region;
     private String id;
     private String parentId;
@@ -33,9 +34,22 @@ public final class Job extends ApiObject {
     private String vaultToken;
     private String status;
     private String statusDescription;
+    private Boolean stable;
+    private BigInteger version;
+    private Long submitTime;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
     private BigInteger jobModifyIndex;
+
+    @JsonProperty("Stop")
+    public Boolean getStop() {
+        return stop;
+    }
+
+    public Job setStop(Boolean stop) {
+        this.stop = stop;
+        return this;
+    }
 
     @JsonProperty("Region")
     public String getRegion() {
@@ -245,6 +259,36 @@ public final class Job extends ApiObject {
 
     public Job setStatusDescription(String statusDescription) {
         this.statusDescription = statusDescription;
+        return this;
+    }
+
+    @JsonProperty("Stable")
+    public Boolean getStable() {
+        return stable;
+    }
+
+    public Job setStable(Boolean stable) {
+        this.stable = stable;
+        return this;
+    }
+
+    @JsonProperty("Version")
+    public BigInteger getVersion() {
+        return version;
+    }
+
+    public Job setVersion(BigInteger version) {
+        this.version = version;
+        return this;
+    }
+
+    @JsonProperty("SubmitTime")
+    public Long getSubmitTime() {
+        return submitTime;
+    }
+
+    public Job setSubmitTime(Long submitTime) {
+        this.submitTime = submitTime;
         return this;
     }
 

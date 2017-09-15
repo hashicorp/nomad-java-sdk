@@ -135,6 +135,13 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     }
 
     /**
+     * Returns an API for managing deployments.
+     */
+    public DeploymentsApi getDeploymentsApi() {
+        return new DeploymentsApi(this);
+    }
+
+    /**
      * Returns an API for querying information about evaluations.
      */
     public EvaluationsApi getEvaluationsApi() {
@@ -156,10 +163,24 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     }
 
     /**
+     * Returns an API for operating the Nomad cluster.
+     */
+    public OperatorApi getOperatorApi() {
+        return new OperatorApi(this);
+    }
+
+    /**
      * Returns an API for listing the regions in the Nomad cluster.
      */
     public RegionsApi getRegionsApi() {
         return new RegionsApi(this);
+    }
+
+    /**
+     * Returns an API for searching for items in Nomad cluster.
+     */
+    public SearchApi getSearchApi() {
+        return new SearchApi(this);
     }
 
     /**
