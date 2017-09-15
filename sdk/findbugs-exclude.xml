@@ -6,4 +6,14 @@
         <Bug code="EI,EI2"/>
     </Match>
 
+    <!--
+       protected methods annotated with @Override are not uncallable: they can be called by a superclass (as in this case)
+       (Would fix in FindBugs, but it looks like FindBugs is being replaced by SpotBugs, which doesn't yet have an
+        officially released Maven plugin, so ignoring for now.)
+    -->
+    <Match>
+        <Class name="com.hashicorp.nomad.javasdk.NomadApiClient$1"/>
+        <Bug code="UMAC"/>
+    </Match>
+
 </FindBugsFilter>
