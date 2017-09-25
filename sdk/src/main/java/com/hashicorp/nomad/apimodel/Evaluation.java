@@ -19,6 +19,7 @@ public final class Evaluation extends ApiObject {
     private int priority;
     private String type;
     private String triggeredBy;
+    private String namespace;
     private String jobId;
     private BigInteger jobModifyIndex;
     private String nodeId;
@@ -76,6 +77,16 @@ public final class Evaluation extends ApiObject {
 
     public Evaluation setTriggeredBy(String triggeredBy) {
         this.triggeredBy = triggeredBy;
+        return this;
+    }
+
+    @JsonProperty("Namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public Evaluation setNamespace(String namespace) {
+        this.namespace = namespace;
         return this;
     }
 

@@ -2,7 +2,6 @@ package com.hashicorp.nomad.testutils;
 
 import com.hashicorp.nomad.javasdk.NomadApiClient;
 import com.hashicorp.nomad.javasdk.NomadException;
-import com.hashicorp.nomad.javasdk.NomadResponse;
 import com.hashicorp.nomad.javasdk.WaitStrategy;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -144,19 +143,19 @@ public class NomadAgentProcess implements AutoCloseable {
      * @throws NomadException       if the response signals an error or cannot be deserialized
      * @throws InterruptedException if the thread is interrupted while sleeping before retrying
      */
-    public NomadResponse<?> pollUntilReady(
+    public void pollUntilReady(
             NomadApiClient apiClient,
             WaitStrategy waitStrategy) throws IOException, NomadException, InterruptedException {
 
         if (getConfig().getServer().getEnabled() || !getConfig().getServer().getStartJoin().isEmpty()) {
             boolean shouldHaveLeader = config.getServer().getEnabled() && config.getServer().getBootstrapExpect() == 1;
             String clientName = getConfig().getClient().getEnabled() ? getConfig().getName() : null;
-            return apiClient.pollUntilServerIsReady(
+            apiClient.pollUntilServerIsReady(
                     shouldHaveLeader,
                     clientName,
                     whileProcessIsRunning(process.getProcess(), waitStrategy));
         } else {
-            return apiClient.pollUntilAgentIsReady(waitStrategy);
+            apiClient.pollUntilAgentIsReady(waitStrategy);
         }
     }
 }

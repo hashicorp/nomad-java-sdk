@@ -2,6 +2,7 @@ package com.hashicorp.nomad.testutils;
 
 import com.hashicorp.nomad.javasdk.NomadApiClient;
 import com.hashicorp.nomad.javasdk.NomadApiConfiguration;
+import com.hashicorp.nomad.javasdk.NomadException;
 import org.apache.http.HttpHost;
 
 import java.io.IOException;
@@ -23,20 +24,18 @@ public class TestAgent implements AutoCloseable {
      * @param apiClient    the API client to use
      * @throws Exception if there is a problem while waiting for the agent to be ready
      */
-    public TestAgent(NomadAgentProcess agentProcess, NomadApiClient apiClient) throws Exception {
+    public TestAgent(NomadAgentProcess agentProcess, NomadApiClient apiClient) {
         this.agentProcess = agentProcess;
         this.apiClient = apiClient;
-
-        agentProcess.pollUntilReady(apiClient, waitForMilliseconds(20000, 200));
     }
 
     /**
-     * Creates a new TestAgent and waits until the agent is ready.
+     * Creates a new TestAgent.
      *
      * @param agentProcess the agent process
      * @throws Exception if there is a problem while waiting for the agent to be ready
      */
-    public TestAgent(NomadAgentProcess agentProcess) throws Exception {
+    public TestAgent(NomadAgentProcess agentProcess) {
         this(agentProcess, new NomadApiClient(agentProcess.getHttpAddress()));
     }
 
@@ -48,8 +47,19 @@ public class TestAgent implements AutoCloseable {
      * @throws Exception if there is a problem while waiting for the agent to be ready
      */
     public TestAgent(NomadAgentProcess agentProcess,
-                     NomadApiConfiguration.Builder apiConfigBuilder) throws Exception {
+                     NomadApiConfiguration.Builder apiConfigBuilder) {
         this(agentProcess, new NomadApiClient(apiConfigBuilder.setAddress(agentProcess.getHttpAddress()).build()));
+    }
+
+    /**
+     * Polls untill the agent is ready.
+     *
+     * @throws IOException          if there is an IO problem
+     * @throws NomadException       if something is wrong with Nomad
+     * @throws InterruptedException if interrupted
+     */
+    public void pollUntilReady() throws IOException, NomadException, InterruptedException {
+        agentProcess.pollUntilReady(apiClient, waitForMilliseconds(20000, 200));
     }
 
     /**

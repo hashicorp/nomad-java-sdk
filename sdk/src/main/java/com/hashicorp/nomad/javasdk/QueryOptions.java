@@ -9,15 +9,13 @@ import java.math.BigInteger;
  * @param <T> the response value type of the request these options will be used with
  */
 public class QueryOptions<T> {
-    @Nullable
-    private String region;
-    @Nullable
-    private BigInteger index;
-    @Nullable
-    private WaitStrategy waitStrategy;
+    @Nullable private String region;
+    @Nullable private String namespace;
+    @Nullable private BigInteger index;
+    @Nullable private WaitStrategy waitStrategy;
     private boolean allowStale;
-    @Nullable
-    private Predicate<ServerQueryResponse<T>> repeatedPollPredicate;
+    @Nullable private Predicate<ServerQueryResponse<T>> repeatedPollPredicate;
+    @Nullable private String secretId;
 
     /**
      * Gets the region to which requests should be forwarded.
@@ -41,6 +39,28 @@ public class QueryOptions<T> {
      */
     public QueryOptions<T> setRegion(@Nullable String region) {
         this.region = region;
+        return this;
+    }
+
+    /**
+     * Gets the namespace for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's namespace.
+     */
+    @Nullable
+    public String getNamespace() {
+        return namespace;
+    }
+
+    /**
+     * Sets the namespace for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's namespace.
+     *
+     * @param namespace the namespace to use
+     */
+    public QueryOptions<T> setNamespace(@Nullable String namespace) {
+        this.namespace = namespace;
         return this;
     }
 
@@ -169,4 +189,27 @@ public class QueryOptions<T> {
                 .setRepeatedPollPredicate(predicate)
                 .setWaitStrategy(waitStrategy);
     }
+
+    /**
+     * Gets the secret ID of the ACL token to use for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's secret ID.
+     */
+    @Nullable
+    public String getSecretId() {
+        return secretId;
+    }
+
+    /**
+     * Sets the secret ID of the ACL token to use for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's secret ID.
+     *
+     * @param secretId the secret ID
+     */
+    public QueryOptions<T> setSecretId(@Nullable String secretId) {
+        this.secretId = secretId;
+        return this;
+    }
+
 }

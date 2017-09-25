@@ -35,24 +35,33 @@ public class NomadApiConfigurationTest {
     @Test
     public void shouldCorrectlyDefaultConfigurationFromEnvironment() throws Exception {
         String address = "http://a.nomad.addr:1234";
+        String region = "test-region";
+        String namespace = "dev";
         String caCertPath = "path/to/ca.pem";
         String clientCertPath = "path/to/cert.pem";
         String keyPath = "path/to/key.pem";
+        String token = "secret-id-token-123";
 
         HashMap<String, String> environment = new HashMap<>();
         environment.put("NOMAD_ADDR", address);
+        environment.put("NOMAD_REGION", region);
+        environment.put("NOMAD_NAMESPACE", namespace);
         environment.put("NOMAD_CA_CERT", caCertPath);
         environment.put("NOMAD_CLIENT_CERT", clientCertPath);
         environment.put("NOMAD_CLIENT_KEY", keyPath);
+        environment.put("NOMAD_TOKEN", token);
 
         NomadApiConfiguration config = new NomadApiConfiguration.Builder()
                 .setFromEnvironmentVariables(environment)
                 .build();
 
         assertThat(config.getAddress(), is(new HttpHost("a.nomad.addr", 1234, "http")));
+        assertThat(config.getRegion(), is(region));
+        assertThat(config.getNamespace(), is(namespace));
         assertThat(config.getTls().getCaCertificateFile(), is(caCertPath));
         assertThat(config.getTls().getClientCertificateFile(), is(clientCertPath));
         assertThat(config.getTls().getClientKeyFile(), is(keyPath));
+        assertThat(config.getSecretId(), is(token));
     }
 
     @Test

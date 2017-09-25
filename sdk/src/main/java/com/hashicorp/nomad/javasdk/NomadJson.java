@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hashicorp.nomad.apimodel.Job;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -26,6 +27,13 @@ public abstract class NomadJson {
     static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             .setPropertyNamingStrategy(UPPER_CAMEL_CASE)
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+    static {
+        OBJECT_MAPPER.setConfig(
+                OBJECT_MAPPER.getSerializationConfig()
+                        .with(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))
+        );
+    }
 
     /**
      * Reads a <a href="https://www.nomadproject.io/docs/http/json-jobs.html">JSON job spec</a>.

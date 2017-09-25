@@ -16,6 +16,7 @@ import java.util.Map;
  */
 public final class JobSummary extends ApiObject {
     private String jobId;
+    private String namespace;
     private Map<String, TaskGroupSummary> summary;
     private JobChildrenSummary children;
     private BigInteger createIndex;
@@ -28,6 +29,16 @@ public final class JobSummary extends ApiObject {
 
     public JobSummary setJobId(String jobId) {
         this.jobId = jobId;
+        return this;
+    }
+
+    @JsonProperty("Namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public JobSummary setNamespace(String namespace) {
+        this.namespace = namespace;
         return this;
     }
 

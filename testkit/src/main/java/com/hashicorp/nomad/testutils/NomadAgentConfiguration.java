@@ -40,6 +40,7 @@ public class NomadAgentConfiguration {
     private final Ports ports;
     private final Server server;
     private final Client client;
+    private final NomadAgentConfiguration.Acl acl;
     @JsonProperty("disable_update_check")
     private final boolean disableCheckpoint;
     private final Consul consul;
@@ -47,7 +48,7 @@ public class NomadAgentConfiguration {
 
     NomadAgentConfiguration(String region, String name, File dataDir, String logLevel, String bindAddr,
                             AdvertiseAddrs advertise, Ports ports, Server server, Client client,
-                            boolean disableCheckpoint, Consul consul, Tls tls) {
+                            Acl acl, boolean disableCheckpoint, Consul consul, Tls tls) {
         this.region = region;
         this.name = name;
         this.dataDir = dataDir;
@@ -57,6 +58,7 @@ public class NomadAgentConfiguration {
         this.ports = ports;
         this.server = server;
         this.client = client;
+        this.acl = acl;
         this.disableCheckpoint = disableCheckpoint;
         this.consul = consul;
         this.tls = tls;
@@ -123,6 +125,13 @@ public class NomadAgentConfiguration {
      */
     public Client getClient() {
         return client;
+    }
+
+    /**
+     * Returns the ACL configuration.
+     */
+    public Acl getAcl() {
+        return acl;
     }
 
     /**
@@ -330,6 +339,29 @@ public class NomadAgentConfiguration {
     }
 
     /**
+     * ACL configuration.
+     */
+    public static class Acl {
+        private final boolean enabled;
+
+        /**
+         * Creates a new ACL configuration.
+         *
+         * @param enabled true to enforce ACLs, false to not enforce ALCs
+         */
+        public Acl(boolean enabled) {
+            this.enabled = enabled;
+        }
+
+        /**
+         * Gets whether ACL enforcement and management are enabled.
+         */
+        public boolean isEnabled() {
+            return enabled;
+        }
+    }
+
+    /**
      * Consul configuration.
      */
     public static class Consul {
@@ -453,6 +485,7 @@ public class NomadAgentConfiguration {
         private List<String> serverStartJoin;
         private boolean clientEnabled = false;
         private HashMap<String, String> clientOptions;
+        private boolean aclEnabled;
         private boolean consulAutoAdvertise = false;
         private boolean consulServerAutoJoin = false;
         private boolean consulClientAutoJoin = false;
@@ -489,7 +522,7 @@ public class NomadAgentConfiguration {
             Tls tls = new Tls(tlsHttp, tlsCaFile, tlsCertFile, tlsKeyFile);
 
             return new NomadAgentConfiguration(region, name, dataDir, "DEBUG", bindAddr, advertise, ports, server,
-                    new Client(clientEnabled, clientOptions), true, consul, tls);
+                    new Client(clientEnabled, clientOptions), new Acl(aclEnabled), true, consul, tls);
         }
 
         /**
@@ -642,6 +675,16 @@ public class NomadAgentConfiguration {
             if (clientOptions == null)
                 clientOptions = new HashMap<>();
             clientOptions.put(key, value);
+            return this;
+        }
+
+        /**
+         * Sets whether ACL enforcement and management is enabled.
+         *
+         * @param aclEnabled true to enforce ACLs, false to not enforce ALCs
+         */
+        public Builder setAclEnabled(boolean aclEnabled) {
+            this.aclEnabled = aclEnabled;
             return this;
         }
 

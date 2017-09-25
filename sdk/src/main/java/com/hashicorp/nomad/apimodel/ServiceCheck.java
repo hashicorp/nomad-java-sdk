@@ -28,6 +28,7 @@ public final class ServiceCheck extends ApiObject {
     private boolean tlsSkipVerify;
     private Map<String, List<String>> header;
     private String method;
+    private CheckRestart checkRestart;
 
     @JsonProperty("Id")
     public String getId() {
@@ -181,6 +182,16 @@ public final class ServiceCheck extends ApiObject {
 
     public ServiceCheck setMethod(String method) {
         this.method = method;
+        return this;
+    }
+
+    @JsonProperty("CheckRestart")
+    public CheckRestart getCheckRestart() {
+        return checkRestart;
+    }
+
+    public ServiceCheck setCheckRestart(CheckRestart checkRestart) {
+        this.checkRestart = checkRestart;
         return this;
     }
 

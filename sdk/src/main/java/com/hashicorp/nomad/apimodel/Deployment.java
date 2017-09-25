@@ -16,6 +16,7 @@ import java.util.Map;
  */
 public final class Deployment extends ApiObject {
     private String id;
+    private String namespace;
     private String jobId;
     private BigInteger jobVersion;
     private BigInteger jobModifyIndex;
@@ -33,6 +34,16 @@ public final class Deployment extends ApiObject {
 
     public Deployment setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    @JsonProperty("Namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public Deployment setNamespace(String namespace) {
+        this.namespace = namespace;
         return this;
     }
 

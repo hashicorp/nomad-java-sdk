@@ -117,7 +117,7 @@ func (g *Generator) Close() {
 }
 
 func (generator *Generator) generateClass(t reflect.Type) error {
-	className := t.Name()
+	className := className(t)
 
 	usedTypes := make(map[string]string)
 	var usingType = func(name java.TypeName) {
@@ -149,7 +149,7 @@ func (generator *Generator) generateClass(t reflect.Type) error {
 	numProperties := t.NumField()
 	properties := make([]java.BeanProperty, 0, numProperties)
 	for i := 0; i < numProperties; i++ {
-		if t.Field(i).Name == "WriteMeta" {
+		if t.Field(i).Name == "WriteMeta" || t.Field(i).Name == "QueryMeta" {
 			continue
 		}
 		property := generator.javaBeanProperty(t.Field(i))
@@ -231,19 +231,33 @@ func (g *Generator) javaBeanProperty(f reflect.StructField) java.BeanProperty {
 	}
 }
 
+func className(t reflect.Type) string {
+	return javaName(t.Name(), true);
+}
+
 // To meet JavaBean conventions, lowercase the first letter of the name
 // and lowercase the non-first letters of multi-letter acronyms
 func propertyName(nameInJson string) string {
+	return javaName(nameInJson, false);
+}
+
+func javaName(nameInJson string, firstCharacterUppercase bool) string {
 	jsonRunes := []rune(nameInJson)
 	buffer := bytes.NewBuffer(make([]byte, 0, len(nameInJson)))
-	var previousIsUpper bool
+	var previousWasUpper bool
 	for i, ch := range jsonRunes {
 		isUpper := unicode.IsUpper(ch)
-		if isUpper && (i == 0 || (previousIsUpper && !(i+1 < len(jsonRunes) && unicode.IsLower(jsonRunes[i+1])))) {
+		if (i == 0) {
+			if (firstCharacterUppercase && !isUpper) {
+				ch = unicode.ToUpper(ch)
+			} else if (!firstCharacterUppercase && isUpper) {
+				ch = unicode.ToLower(ch)
+			}
+		} else if isUpper && (previousWasUpper && !(i+1 < len(jsonRunes) && unicode.IsLower(jsonRunes[i+1]))) {
 			ch = unicode.ToLower(ch)
 		}
 		buffer.WriteRune(ch)
-		previousIsUpper = isUpper
+		previousWasUpper = isUpper
 	}
 	variableName := buffer.String()
 	if java.IsKeyword(variableName) {
@@ -340,7 +354,7 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 		switch t.Kind() {
 		case reflect.Struct:
 			generator.structs <- t
-			return java.NewReferenceType(t.Name())
+			return java.NewReferenceType(className(t))
 		case reflect.String:  // This probably indicates an enumeration type; unfortunately we can't capture the values with reflection :(
 			return java.String
 		default:

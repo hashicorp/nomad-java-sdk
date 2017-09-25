@@ -17,6 +17,7 @@ import java.util.Map;
 public final class Job extends ApiObject {
     private Boolean stop;
     private String region;
+    private String namespace;
     private String id;
     private String parentId;
     private String name;
@@ -58,6 +59,16 @@ public final class Job extends ApiObject {
 
     public Job setRegion(String region) {
         this.region = region;
+        return this;
+    }
+
+    @JsonProperty("Namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public Job setNamespace(String namespace) {
+        this.namespace = namespace;
         return this;
     }
 

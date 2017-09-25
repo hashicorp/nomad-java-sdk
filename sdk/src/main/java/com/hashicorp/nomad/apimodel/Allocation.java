@@ -16,6 +16,7 @@ import java.util.Map;
  */
 public final class Allocation extends ApiObject {
     private String id;
+    private String namespace;
     private String evalId;
     private String name;
     private String nodeId;
@@ -46,6 +47,16 @@ public final class Allocation extends ApiObject {
 
     public Allocation setId(String id) {
         this.id = id;
+        return this;
+    }
+
+    @JsonProperty("Namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public Allocation setNamespace(String namespace) {
+        this.namespace = namespace;
         return this;
     }
 

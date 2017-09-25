@@ -187,9 +187,17 @@ abstract class ApiBase {
             final ValueExtractor<T> valueExtractor,
             RequestBuilder requestBuilder
     ) throws IOException, NomadException {
-        String region = null;
+        String region = apiClient.getConfig().getRegion();
+        String namespace = apiClient.getConfig().getNamespace();
+        String secretId = apiClient.getConfig().getSecretId();
+
         if (options != null) {
-            region = options.getRegion();
+            if (options.getRegion() != null)
+                region = options.getRegion();
+            if (options.getNamespace() != null)
+                namespace = options.getNamespace();
+            if (options.getSecretId() != null)
+                secretId = options.getSecretId();
             if (options.getIndex() != null)
                 requestBuilder.addParameter("index", options.getIndex().toString());
             if (wait != null)
@@ -197,10 +205,13 @@ abstract class ApiBase {
             if (options.isAllowStale())
                 requestBuilder.addParameter("stale", null);
         }
-        if (region == null)
-            region = apiClient.getConfig().getRegion();
+
         if (region != null)
             requestBuilder.addParameter("region", region);
+        if (namespace != null)
+            requestBuilder.addParameter("namespace", namespace);
+        if (secretId != null)
+            requestBuilder.addHeader("X-Nomad-Token", secretId);
 
         return apiClient.execute(requestBuilder, new ServerQueryResponseAdapter<>(valueExtractor));
     }
@@ -210,13 +221,25 @@ abstract class ApiBase {
             final URIBuilder uri,
             @Nullable final WriteOptions options
     ) {
-        String region = null;
-        if (options != null)
-            region = options.getRegion();
-        if (region == null)
-            region = apiClient.getConfig().getRegion();
+        String region = apiClient.getConfig().getRegion();
+        String namespace = apiClient.getConfig().getNamespace();
+        String secretId = apiClient.getConfig().getSecretId();
+
+        if (options != null) {
+            if (options.getRegion() != null)
+                region = options.getRegion();
+            if (options.getNamespace() != null)
+                namespace = options.getNamespace();
+            if (options.getSecretId() != null)
+                secretId = options.getSecretId();
+        }
+
         if (region != null)
             uri.addParameter("region", region);
+        if (namespace != null)
+            uri.addParameter("namespace", namespace);
+        if (secretId != null)
+            builder.addHeader("X-Nomad-Token", secretId);
 
         return builder.setUri(build(uri));
     }

@@ -30,7 +30,7 @@ import static com.hashicorp.nomad.javasdk.NomadPredicates.responseValue;
  * <a href="https://www.nomadproject.io/docs/http">Nomad HTTP API</a>.
  */
 public final class NomadApiClient implements Closeable, AutoCloseable {
-    private final NomadApiConfiguration config;
+    private NomadApiConfiguration config;
     private final CloseableHttpClient httpClient;
 
     /**
@@ -125,6 +125,24 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     }
 
     /**
+     * Sets the active namespace of this API client.
+     *
+     * @param namespace the namespace to use
+     */
+    public void setNamespace(String namespace) {
+        config = config.withNamespace(namespace);
+    }
+
+    /**
+     * Sets the active ACL token secret ID that this client passes to the server.
+     *
+     * @param secretId the secret ID to use
+     */
+    public void setSecretId(String secretId) {
+        config = config.withSecretId(secretId);
+    }
+
+    /**
      * Returns an API for interacting directly with a client node after looking up its address.
      *
      * @param nodeId the nodeId of the client node to connect to
@@ -133,6 +151,20 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
      */
     public ClientApi lookupClientApiByNodeId(String nodeId) throws IOException, NomadException {
         return getClientApi(getNodesApi().info(nodeId).getValue());
+    }
+
+    /**
+     * Returns an API for managing ACL policies.
+     */
+    public AclPoliciesApi getAclPoliciesApi() {
+        return new AclPoliciesApi(this);
+    }
+
+    /**
+     * Returns an API for managing ACL tokens.
+     */
+    public AclTokensApi getAclTokensApi() {
+        return new AclTokensApi(this);
     }
 
     /**
@@ -154,6 +186,13 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
      */
     public JobsApi getJobsApi() {
         return new JobsApi(this);
+    }
+
+    /**
+     * Returns an API for managing namespaces.
+     */
+    public NamespacesApi getNamespacesApi() {
+        return new NamespacesApi(this);
     }
 
     /**
@@ -182,6 +221,13 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
      */
     public SearchApi getSearchApi() {
         return new SearchApi(this);
+    }
+
+    /**
+     * Returns an API for managing ACL policies.
+     */
+    public SentinelPoliciesApi getSentinelPoliciesApi() {
+        return new SentinelPoliciesApi(this);
     }
 
     /**
@@ -273,7 +319,7 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
             final RequestBuilder requestBuilder,
             final ResponseAdapter<?, R> responseAdapter
     ) throws IOException, NomadException {
-        final HttpUriRequest request = requestBuilder.build();
+        final HttpUriRequest request = buildRequest(requestBuilder);
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw ErrorResponseException.signaledInStatus(request, response);
@@ -286,14 +332,10 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
         }
     }
 
-    HttpHost getAddress() {
-        return config.getAddress();
-    }
-
     InputStream executeRawStream(final RequestBuilder requestBuilder)
             throws IOException, NomadException {
 
-        final HttpUriRequest request = requestBuilder.build();
+        final HttpUriRequest request = buildRequest(requestBuilder);
         CloseableHttpResponse response = httpClient.execute(request);
         try {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
@@ -309,7 +351,7 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     FramedStream executeFramedStream(final RequestBuilder requestBuilder)
             throws IOException, NomadException {
 
-        final HttpUriRequest request = requestBuilder.build();
+        final HttpUriRequest request = buildRequest(requestBuilder);
         CloseableHttpResponse response = httpClient.execute(request);
         try {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
@@ -320,6 +362,16 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
             response.close();
             throw e;
         }
+    }
+
+    HttpHost getAddress() {
+        return config.getAddress();
+    }
+
+    private HttpUriRequest buildRequest(RequestBuilder requestBuilder) {
+        return requestBuilder
+                .addHeader("X-Nomad-Token", config.getSecretId())
+                .build();
     }
 
     private CloseableHttpClient buildHttpClient(NomadApiConfiguration config) {

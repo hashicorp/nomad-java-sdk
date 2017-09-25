@@ -16,6 +16,8 @@ public class NomadApiConfiguration {
 
     private final HttpHost address;
     private final String region;
+    private final String namespace;
+    private final String secretId;
     private final Tls tls;
 
     /**
@@ -23,17 +25,27 @@ public class NomadApiConfiguration {
      * <p>
      * Consider using the {#Builder} inner class to conveniently build a configuration.
      *
-     * @param address HTTP address of the agent to connect to
-     * @param region  default region to forward requests to, or null to use the region of the agent we connect to
-     * @param tls     TLS configuration to use
+     * @param address   HTTP address of the agent to connect to
+     * @param region    default region to forward requests to, or null to use the region of the agent we connect to
+     * @param namespace the namespace to use in requests by default, or null to use Nomad's default namespace
+     * @param secretId  the secret ID for the API client to use
+     * @param tls       TLS configuration to use
      */
-    public NomadApiConfiguration(final HttpHost address, @Nullable final String region, final Tls tls) {
+    public NomadApiConfiguration(
+            final HttpHost address,
+            @Nullable final String region,
+            final String namespace,
+            final String secretId,
+            final Tls tls
+    ) {
         if (address == null) {
             throw new IllegalArgumentException("address cannot be null");
         }
 
         this.address = address;
         this.region = region;
+        this.namespace = namespace;
+        this.secretId = secretId;
         this.tls = tls;
     }
 
@@ -47,11 +59,47 @@ public class NomadApiConfiguration {
     /**
      * Returns the region to use by default.
      * <p>
-     * If null, the region of the server than receives the requests will be used.
+     * If null, the region of the server that receives the requests will be used.
      */
     @Nullable
     public String getRegion() {
         return region;
+    }
+
+    /**
+     * Returns the namespace to use in requests by default.
+     * <p>
+     * If null, the Nomad's default namespace will be used.
+     */
+    @Nullable
+    public String getNamespace() {
+        return namespace;
+    }
+
+    /**
+     * Creates a copy of this configuration with the given namespace.
+     *
+     * @param namespace the namespace to use in the new configuration.
+     */
+    public NomadApiConfiguration withNamespace(String namespace) {
+        return new NomadApiConfiguration(address, region, namespace, secretId, tls);
+    }
+
+    /**
+     * Returns the secret ID for the API client to use.
+     */
+    @Nullable
+    public String getSecretId() {
+        return secretId;
+    }
+
+    /**
+     * Creates a copy of this configuration with the given secret ID.
+     *
+     * @param secretId the secret ID to use in the new configuration.
+     */
+    public NomadApiConfiguration withSecretId(String secretId) {
+        return new NomadApiConfiguration(address, region, namespace, secretId, tls);
     }
 
     /**
@@ -154,6 +202,8 @@ public class NomadApiConfiguration {
     public static class Builder {
         private HttpHost address;
         private String region;
+        private String namespace;
+        private String secretId;
         private String tlsCaFile;
         private String tlsCertFile;
         private String tlsKeyFile;
@@ -188,6 +238,28 @@ public class NomadApiConfiguration {
          */
         public Builder setRegion(String region) {
             this.region = region;
+            return this;
+        }
+
+        /**
+         * Sets the namespace to use in requests by default.
+         * <p>
+         * If null, the defailt namespace will be used.
+         *
+         * @param namespace the namespace to use
+         */
+        public Builder setNamespace(String namespace) {
+            this.namespace = namespace;
+            return this;
+        }
+
+        /**
+         * Sets the secret ID for the client to use.
+         *
+         * @param secretId the secret ID
+         */
+        public Builder setSecretId(String secretId) {
+            this.secretId = secretId;
             return this;
         }
 
@@ -238,6 +310,18 @@ public class NomadApiConfiguration {
                     this.address = HttpHost.create(address);
             }
 
+            if (environment.containsKey("NOMAD_REGION")) {
+                String region = environment.get("NOMAD_REGION");
+                if (!region.isEmpty())
+                    this.region = region;
+            }
+
+            if (environment.containsKey("NOMAD_NAMESPACE")) {
+                String namespace = environment.get("NOMAD_NAMESPACE");
+                if (!namespace.isEmpty())
+                    this.namespace = namespace;
+            }
+
             if (environment.containsKey("NOMAD_CA_CERT")) {
                 String tlsCaFile = environment.get("NOMAD_CA_CERT");
                 if (!tlsCaFile.isEmpty())
@@ -256,6 +340,12 @@ public class NomadApiConfiguration {
                     this.tlsKeyFile = tlsKeyFile;
             }
 
+            if (environment.containsKey("NOMAD_TOKEN")) {
+                String token = environment.get("NOMAD_TOKEN");
+                if (!token.isEmpty())
+                    this.secretId = token;
+            }
+
             return this;
         }
 
@@ -271,7 +361,7 @@ public class NomadApiConfiguration {
                     tlsCertFile,
                     tlsKeyFile);
 
-            return new NomadApiConfiguration(address, region, tls);
+            return new NomadApiConfiguration(address, region, namespace, secretId, tls);
         }
     }
 }

@@ -480,8 +480,33 @@ public class JobsApi extends ApiBase {
             Job job,
             boolean diff,
             @Nullable WriteOptions options) throws IOException, NomadException {
+        return plan(job, diff, false, options);
+    }
+
+    /**
+     * Invokes a dry-run of the scheduler for a job in the active region.
+     * <p>
+     * Can be used together with the modifyIndex parameter of {@link #register(Job, BigInteger) register}
+     * to inspect what will happen before registering a job.
+     *
+     * @param job            detailed specification of the job to plan for
+     * @param diff           indicates whether a diff between the current and submitted versions of the job
+     *                       should be included in the response.
+     * @param policyOverride If set, any soft mandatory Sentinel policies will be overriden.
+     *                       This allows a job to be registered when it would be denied by policy.
+     * @param options        options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/intro/getting-started/jobs.html#modifying-a-job">Modifying a Job</a>
+     * @see <a href="https://www.nomadproject.io/docs/http/job.html">{@code PUT /v1/job/{ID}/periodic/force}</a>
+     */
+    public ServerResponse<JobPlanResponse> plan(
+            Job job,
+            boolean diff,
+            boolean policyOverride,
+            @Nullable WriteOptions options) throws IOException, NomadException {
         return executeServerAction(
-                put(uri("/v1/job/" + job.getId() + "/plan"), new JobPlanRequest(job, diff), options),
+                put(uri("/v1/job/" + job.getId() + "/plan"), new JobPlanRequest(job, diff, policyOverride), options),
                 NomadJson.parserFor(JobPlanResponse.class));
     }
 
@@ -540,8 +565,29 @@ public class JobsApi extends ApiBase {
     public EvaluationResponse register(Job job,
                                        @Nullable BigInteger modifyIndex,
                                        @Nullable WriteOptions options) throws IOException, NomadException {
+        return register(job, modifyIndex, false, options);
+    }
+
+    /**
+     * Registers or updates a job in the active region.
+     *
+     * @param job            detailed specification of the job to register
+     * @param modifyIndex    when specified, the registration is only performed if the job's modify index matches.
+     *                       This can be used to make sure the job hasn't changed since getting a
+     *                       {@link #plan(Job, boolean) plan}.
+     * @param policyOverride If true, any soft mandatory Sentinel policies will be overriden.
+     *                       This allows a job to be registered when it would be denied by policy.
+     * @param options        options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
+     */
+    public EvaluationResponse register(Job job,
+                                       @Nullable BigInteger modifyIndex,
+                                       boolean policyOverride,
+                                       @Nullable WriteOptions options) throws IOException, NomadException {
         return executeEvaluationCreatingRequest(
-                put("/v1/jobs", new JobRegistrationRequest(job, modifyIndex), options));
+                put("/v1/jobs", new JobRegistrationRequest(job, modifyIndex, policyOverride), options));
     }
 
     /**
@@ -787,10 +833,12 @@ public class JobsApi extends ApiBase {
     private static class JobPlanRequest {
         private Job job;
         private final boolean diff;
+        private final boolean policyOverride;
 
-        JobPlanRequest(Job job, boolean diff) {
+        JobPlanRequest(Job job, boolean diff, boolean policyOverride) {
             this.job = job;
             this.diff = diff;
+            this.policyOverride = policyOverride;
         }
 
         public Job getJob() {
@@ -799,6 +847,10 @@ public class JobsApi extends ApiBase {
 
         public boolean isDiff() {
             return diff;
+        }
+
+        public boolean isPolicyOverride() {
+            return policyOverride;
         }
     }
 
@@ -809,11 +861,13 @@ public class JobsApi extends ApiBase {
         public final Job job; // Checkstyle suppress VisibilityModifier
         public final Boolean enforceIndex; // Checkstyle suppress VisibilityModifier
         public final BigInteger jobModifyIndex; // Checkstyle suppress VisibilityModifier
+        public final boolean policyOverride; // Checkstyle suppress VisibilityModifier
 
-        JobRegistrationRequest(Job job, @Nullable BigInteger jobModifyIndex) {
+        JobRegistrationRequest(Job job, @Nullable BigInteger jobModifyIndex, boolean policyOverride) {
             this.job = job;
             this.enforceIndex = jobModifyIndex != null;
             this.jobModifyIndex = jobModifyIndex;
+            this.policyOverride = policyOverride;
         }
     }
 

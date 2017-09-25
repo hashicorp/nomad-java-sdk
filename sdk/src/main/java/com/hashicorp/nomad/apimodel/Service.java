@@ -19,6 +19,7 @@ public final class Service extends ApiObject {
     private String portLabel;
     private String addressMode;
     private List<ServiceCheck> checks;
+    private CheckRestart checkRestart;
 
     @JsonProperty("Id")
     public String getId() {
@@ -93,6 +94,16 @@ public final class Service extends ApiObject {
             this.checks = new java.util.ArrayList<>();
         for (ServiceCheck item : checks)
             this.checks.add(item);
+        return this;
+    }
+
+    @JsonProperty("CheckRestart")
+    public CheckRestart getCheckRestart() {
+        return checkRestart;
+    }
+
+    public Service setCheckRestart(CheckRestart checkRestart) {
+        this.checkRestart = checkRestart;
         return this;
     }
 

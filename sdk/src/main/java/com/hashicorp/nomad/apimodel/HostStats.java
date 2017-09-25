@@ -15,7 +15,7 @@ import java.util.List;
  */
 public final class HostStats extends ApiObject {
     private HostMemoryStats memory;
-    private List<HostCPUStats> cpu;
+    private List<HostCpuStats> cpu;
     private List<HostDiskStats> diskStats;
     private BigInteger uptime;
     private double cpuTicksConsumed;
@@ -31,19 +31,19 @@ public final class HostStats extends ApiObject {
     }
 
     @JsonProperty("CPU")
-    public List<HostCPUStats> getCpu() {
+    public List<HostCpuStats> getCpu() {
         return cpu;
     }
 
-    public HostStats setCpu(List<HostCPUStats> cpu) {
+    public HostStats setCpu(List<HostCpuStats> cpu) {
         this.cpu = cpu;
         return this;
     }
 
-    public HostStats addCpu(HostCPUStats... cpu) {
+    public HostStats addCpu(HostCpuStats... cpu) {
         if (this.cpu == null)
             this.cpu = new java.util.ArrayList<>();
-        for (HostCPUStats item : cpu)
+        for (HostCpuStats item : cpu)
             this.cpu.add(item);
         return this;
     }

@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
-public final class HostCPUStats extends ApiObject {
+public final class HostCpuStats extends ApiObject {
     private String cpu;
     private double user;
     private double system;
@@ -23,7 +23,7 @@ public final class HostCPUStats extends ApiObject {
         return cpu;
     }
 
-    public HostCPUStats setCpu(String cpu) {
+    public HostCpuStats setCpu(String cpu) {
         this.cpu = cpu;
         return this;
     }
@@ -33,7 +33,7 @@ public final class HostCPUStats extends ApiObject {
         return user;
     }
 
-    public HostCPUStats setUser(double user) {
+    public HostCpuStats setUser(double user) {
         this.user = user;
         return this;
     }
@@ -43,7 +43,7 @@ public final class HostCPUStats extends ApiObject {
         return system;
     }
 
-    public HostCPUStats setSystem(double system) {
+    public HostCpuStats setSystem(double system) {
         this.system = system;
         return this;
     }
@@ -53,7 +53,7 @@ public final class HostCPUStats extends ApiObject {
         return idle;
     }
 
-    public HostCPUStats setIdle(double idle) {
+    public HostCpuStats setIdle(double idle) {
         this.idle = idle;
         return this;
     }
@@ -63,11 +63,11 @@ public final class HostCPUStats extends ApiObject {
         return NomadJson.serialize(this);
     }
 
-    public static HostCPUStats fromJson(String json) throws IOException {
-        return NomadJson.deserialize(json, HostCPUStats.class);
+    public static HostCpuStats fromJson(String json) throws IOException {
+        return NomadJson.deserialize(json, HostCpuStats.class);
     }
 
-    public static List<HostCPUStats> fromJsonArray(String json) throws IOException {
-        return NomadJson.deserializeList(json, HostCPUStats.class);
+    public static List<HostCpuStats> fromJsonArray(String json) throws IOException {
+        return NomadJson.deserializeList(json, HostCpuStats.class);
     }
 }

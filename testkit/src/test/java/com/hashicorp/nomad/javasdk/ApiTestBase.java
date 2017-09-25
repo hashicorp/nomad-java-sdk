@@ -1,5 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
+import com.hashicorp.nomad.apimodel.AclToken;
 import com.hashicorp.nomad.apimodel.EphemeralDisk;
 import com.hashicorp.nomad.apimodel.Evaluation;
 import com.hashicorp.nomad.apimodel.Job;
@@ -13,9 +14,11 @@ import com.hashicorp.nomad.testutils.NomadAgentProcess;
 import com.hashicorp.nomad.testutils.TestMethodLogRule;
 import org.hamcrest.Matcher;
 import org.junit.Rule;
+import org.junit.runner.RunWith;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.net.ConnectException;
 
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,6 +30,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.fail;
 
+@RunWith(ApiTestRunner.class)
 public class ApiTestBase {
 
     protected static final int TEST_WAIT_SECONDS = 20;
@@ -60,8 +64,46 @@ public class ApiTestBase {
     protected TestAgent newAgent(NomadAgentConfiguration.Builder agentConfigBuilder, NomadApiConfiguration.Builder apiConfigBuilder) throws Exception {
         final NomadAgentConfiguration agentConfig = agentConfigBuilder.build();
         log.println("Configuration: " + agentConfig);
+        TestAgent agent = new TestAgent(new NomadAgentProcess(log, agentConfig), apiConfigBuilder);
+        try {
+            agent.pollUntilReady();
+            return agent;
+        } catch (Throwable e) {
+            try {
+                agent.close();
+            } catch (Throwable ee) {
+                // ignored
+            }
+            throw e;
+        }
+    }
 
-        return new TestAgent(new NomadAgentProcess(log, agentConfig), apiConfigBuilder);
+    protected TestAgent newAclBootstrappedServer() throws Exception {
+        final NomadAgentConfiguration agentConfig = new NomadAgentConfiguration.Builder().setAclEnabled(true).build();
+        log.println("Configuration: " + agentConfig);
+        TestAgent agent = new TestAgent(new NomadAgentProcess(log, agentConfig), new NomadApiConfiguration.Builder());
+        try {
+            final NomadApiClient apiClient = agent.getApiClient();
+
+            while (true) {
+                try {
+                    apiClient.getStatusApi().leader();
+                    break;
+                } catch (ConnectException ignored) {
+                }
+            }
+
+            ServerResponse<AclToken> bootstrapResponse = apiClient.getAclTokensApi().bootstrap();
+            apiClient.setSecretId(bootstrapResponse.getValue().getSecretId());
+        } catch (Throwable e) {
+            try {
+                agent.close();
+            } catch (Throwable ignored) {
+            }
+            throw e;
+        }
+
+        return agent;
     }
 
     protected static Matcher<String> nonEmptyString() {

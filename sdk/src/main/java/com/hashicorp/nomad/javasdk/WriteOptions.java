@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
  */
 public class WriteOptions {
     private final String region;
+    @Nullable private String namespace;
+    @Nullable private String secretId;
 
     /**
      * Creates a WriteOptions that controls which region a request is forwarded to.
@@ -29,4 +31,49 @@ public class WriteOptions {
     public String getRegion() {
         return region;
     }
+
+    /**
+     * Gets the namespace for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's namespace.
+     */
+    @Nullable
+    public String getNamespace() {
+        return namespace;
+    }
+
+    /**
+     * Sets the namespace for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's namespace.
+     *
+     * @param namespace the namespace to use
+     */
+    public WriteOptions setNamespace(@Nullable String namespace) {
+        this.namespace = namespace;
+        return this;
+    }
+
+    /**
+     * Gets the secret ID of the ACL token to use for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's secret ID.
+     */
+    @Nullable
+    public String getSecretId() {
+        return secretId;
+    }
+
+    /**
+     * Sets the secret ID of the ACL token to use for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's secret ID.
+     *
+     * @param secretId the secret ID
+     */
+    public WriteOptions setSecretId(@Nullable String secretId) {
+        this.secretId = secretId;
+        return this;
+    }
+
 }
