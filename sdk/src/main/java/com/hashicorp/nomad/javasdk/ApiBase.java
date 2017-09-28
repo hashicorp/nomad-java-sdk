@@ -9,6 +9,7 @@ import org.apache.http.entity.StringEntity;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -118,7 +119,11 @@ abstract class ApiBase {
             if (predicate == null || predicate.apply(response))
                 return response;
 
-            options.setIndex(response.getIndex());
+            final BigInteger targetIndex = BigInteger.ZERO.equals(response.getIndex())
+                    ? BigInteger.ONE
+                    : response.getIndex();
+            if (options.getIndex() == null || targetIndex.compareTo(options.getIndex()) < 0)
+                options.setIndex(targetIndex);
         }
     }
 
