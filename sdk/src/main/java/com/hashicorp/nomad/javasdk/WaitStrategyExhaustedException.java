@@ -24,12 +24,21 @@ import javax.annotation.Nullable;
  */
 public class WaitStrategyExhaustedException extends NomadException {
 
-    /** Creates a new WaitStrategy. */
+    /**
+     * Creates a new WaitStrategy.
+     *
+     * @param message the exception message
+     */
     public WaitStrategyExhaustedException(String message) {
         this(message, null);
     }
 
-    /** Creates a new WaitStrategy. */
+    /**
+     * Creates a new WaitStrategy.
+     *
+     * @param message the exception message
+     * @param cause   the underlying exception that caused this exception
+     */
     public WaitStrategyExhaustedException(String message, @Nullable Throwable cause) {
         super(message, cause);
     }

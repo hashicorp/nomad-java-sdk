@@ -14,7 +14,7 @@ public abstract class ApiObject {
 
     /**
      * Gets all properties that aren't mapped to Java bean properties.
-     *
+     * <p>
      * The primary purpose of this method is to provide a mechanism for unknown properties to remain intact after
      * a round-trip from JSON to this class and back again. If you find yourself needing to read or write a property
      * that is not yet modelled as a bean property, consider looking for a newer version of the SDK.
@@ -26,10 +26,13 @@ public abstract class ApiObject {
 
     /**
      * Sets a property that isn't mapped to a Java bean property.
-     *
+     * <p>
      * The primary purpose of this method is to provide a mechanism for unknown properties to remain intact after
      * a round-trip from JSON to this class and back again. If you find yourself needing to read or write a property
      * that is not yet modelled as a bean property, consider looking for a newer version of the SDK.
+     *
+     * @param name  name of the property
+     * @param value value of the property
      */
     @JsonAnySetter
     public void addUnmappedProperty(String name, Object value) {

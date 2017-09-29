@@ -39,10 +39,6 @@
         <property name="basedir" value="${basedir}"/>
     -->
 
-    <module name="SuppressionFilter">
-        <property name="file" value="checkstyle-suppressions.xml"/>
-    </module>
-
     <module name="SuppressionCommentFilter">
         <property name="offCommentFormat" value="This is a generated JavaBean"/>
         <property name="checkFormat" value="JavadocMethod|MemberName"/>
@@ -105,7 +101,6 @@
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
         <module name="JavadocMethod">
             <property name="allowMissingReturnTag" value="true"/>
-            <property name="allowMissingParamTags" value="true"/>
             <property name="scope" value="protected"/>
         </module>
         <module name="JavadocType"/>

@@ -19,6 +19,8 @@ public class TestAgent implements AutoCloseable {
     /**
      * Creates a new TestAgent and waits until the agent is ready.
      *
+     * @param agentProcess the agent process
+     * @param apiClient    the API client to use
      * @throws Exception if there is a problem while waiting for the agent to be ready
      */
     public TestAgent(NomadAgentProcess agentProcess, NomadApiClient apiClient) throws Exception {
@@ -31,6 +33,7 @@ public class TestAgent implements AutoCloseable {
     /**
      * Creates a new TestAgent and waits until the agent is ready.
      *
+     * @param agentProcess the agent process
      * @throws Exception if there is a problem while waiting for the agent to be ready
      */
     public TestAgent(NomadAgentProcess agentProcess) throws Exception {
@@ -40,6 +43,8 @@ public class TestAgent implements AutoCloseable {
     /**
      * Creates a new TestAgent and waits until the agent is ready.
      *
+     * @param agentProcess     the agent process
+     * @param apiConfigBuilder a partially-configured API config builder
      * @throws Exception if there is a problem while waiting for the agent to be ready
      */
     public TestAgent(NomadAgentProcess agentProcess,

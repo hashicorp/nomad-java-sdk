@@ -19,7 +19,7 @@ import static java.util.Collections.unmodifiableMap;
 /**
  * A partial representation of the configuration of a Nomad agent,
  * to create configurations for test purposes.
- *
+ * <p>
  * Configurations should be created using a {@link NomadAgentConfiguration.Builder}.
  */
 public class NomadAgentConfiguration {
@@ -173,6 +173,10 @@ public class NomadAgentConfiguration {
 
         /**
          * Creates a new advertised addresses configuration.
+         *
+         * @param http the advertised HTTP/HTTPS address
+         * @param rpc  the advertised RPC address
+         * @param serf the advertised Serf address.
          */
         public AdvertiseAddrs(String http, String rpc, String serf) {
 
@@ -214,6 +218,10 @@ public class NomadAgentConfiguration {
 
         /**
          * Creates a Ports configuration.
+         *
+         * @param http the HTTP/HTTPS port
+         * @param serf the RPC port
+         * @param rpc  the Serf port
          */
         public Ports(int http, int rpc, int serf) {
             this.http = http;
@@ -255,6 +263,10 @@ public class NomadAgentConfiguration {
 
         /**
          * Creates a new Server configuration.
+         *
+         * @param enabled         true iff the server is enabled
+         * @param bootstrapExpect the number of servers to expect for bootstrapping, or 0 if bootstrapping is disabled
+         * @param startJoin       the servers to try joining when starting.
          */
         public Server(boolean enabled, int bootstrapExpect, List<String> startJoin) {
             this.enabled = enabled;
@@ -293,6 +305,9 @@ public class NomadAgentConfiguration {
 
         /**
          * Creates a new Client configuration.
+         *
+         * @param enabled true iff the client is enabled
+         * @param options the client options map
          */
         public Client(boolean enabled, Map<String, String> options) {
             this.enabled = enabled;
@@ -327,6 +342,10 @@ public class NomadAgentConfiguration {
 
         /**
          * Creates a new Consul configuration.
+         *
+         * @param autoAdvertise  true iff the client should advertise services in Consul
+         * @param serverAutoJoin true iff the server should use Consul to find other servers
+         * @param clientAutoJoin true iff the client should use Consul to find servers
          */
         public Consul(boolean autoAdvertise, boolean serverAutoJoin, boolean clientAutoJoin) {
             this.autoAdvertise = autoAdvertise;
@@ -370,6 +389,11 @@ public class NomadAgentConfiguration {
 
         /**
          * Creates a new TLS configuration.
+         *
+         * @param http     true iff TLS is enabled for HTTP (HTTPS)
+         * @param caFile   the certificate authority file to use for TLS
+         * @param certFile the certificate file to use for TLS
+         * @param keyFile  the certificate key to use for TLS
          */
         public Tls(boolean http, String caFile, String certFile, String keyFile) {
             this.http = http;
@@ -439,7 +463,7 @@ public class NomadAgentConfiguration {
 
         /**
          * Builds a new configuration using the values in the builder.
-         *
+         * <p>
          * If the node name or port numbers haven't been explicitly set, they will be automatically assigned.
          */
         public NomadAgentConfiguration build() {
@@ -470,6 +494,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the agent's region.
+         *
+         * @param region the region to use
          */
         public Builder setRegion(String region) {
             this.region = region;
@@ -478,6 +504,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the agent's name.
+         *
+         * @param name the name to use
          */
         public Builder setName(String name) {
             this.name = name;
@@ -486,6 +514,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the data directory.
+         *
+         * @param dataDir path to the directory
          */
         public Builder setDataDir(File dataDir) {
             this.dataDir = dataDir;
@@ -494,6 +524,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the address Nomad should bind to.
+         *
+         * @param bindAddr the address to bind to
          */
         public Builder setBindAddr(String bindAddr) {
             this.bindAddr = bindAddr;
@@ -502,6 +534,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the HTTP port.
+         *
+         * @param httpPort the port to use
          */
         public Builder setHttpPort(int httpPort) {
             this.httpPort = httpPort;
@@ -510,6 +544,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the RPC port.
+         *
+         * @param rpcPort the port to use
          */
         public Builder setRpcPort(int rpcPort) {
             this.rpcPort = rpcPort;
@@ -518,6 +554,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the Serf port.
+         *
+         * @param serfPort the port to use
          */
         public Builder setSerfPort(int serfPort) {
             this.serfPort = serfPort;
@@ -526,6 +564,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the advertised HTTP address.
+         *
+         * @param httpAdvertiseAddr the address to advertise
          */
         public Builder setHttpAdvertiseAddr(String httpAdvertiseAddr) {
             this.httpAdvertiseAddr = httpAdvertiseAddr;
@@ -534,6 +574,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the advertised RPC address.
+         *
+         * @param rpcAdvertiseAddr the address to advertise
          */
         public Builder setRpcAdvertiseAddr(String rpcAdvertiseAddr) {
             this.rpcAdvertiseAddr = rpcAdvertiseAddr;
@@ -542,6 +584,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the advertised Serf address.
+         *
+         * @param serfAdvertiseAddr the address to advertise
          */
         public Builder setSerfAdvertiseAddr(String serfAdvertiseAddr) {
             this.serfAdvertiseAddr = serfAdvertiseAddr;
@@ -550,6 +594,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Enables or disables the Nomad server in the agent.
+         *
+         * @param serverEnabled true to enable, false to disable
          */
         public Builder setServerEnabled(boolean serverEnabled) {
             this.serverEnabled = serverEnabled;
@@ -558,6 +604,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the number of servers to expect for bootstrapping, or disables bootstrapping if 0 is specified.
+         *
+         * @param serverBootstrapExpect the number of servers to expect, or 0 to disable
          */
         public Builder setServerBootstrapExpect(int serverBootstrapExpect) {
             this.serverBootstrapExpect = serverBootstrapExpect;
@@ -566,6 +614,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the servers to try joining when starting.
+         *
+         * @param serverStartJoin addresses of the servers to join
          */
         public Builder setServerStartJoin(String... serverStartJoin) {
             this.serverStartJoin = asList(serverStartJoin);
@@ -574,6 +624,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Enables or disables the client.
+         *
+         * @param clientEnabled true to enable, false to disable
          */
         public Builder setClientEnabled(boolean clientEnabled) {
             this.clientEnabled = clientEnabled;
@@ -582,6 +634,9 @@ public class NomadAgentConfiguration {
 
         /**
          * Adds a client option.
+         *
+         * @param key   the option's name
+         * @param value the option's value
          */
         public Builder addClientOption(String key, String value) {
             if (clientOptions == null)
@@ -592,6 +647,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Enables or disables TLS for HTTP connections (HTTPS).
+         *
+         * @param tlsHttp true to enable, false to disable
          */
         public Builder setTlsHttp(boolean tlsHttp) {
             this.tlsHttp = tlsHttp;
@@ -600,6 +657,8 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the certificate authority file to use for TLS.
+         *
+         * @param tlsCaFile path to the file
          */
         public Builder setTlsCaFile(String tlsCaFile) {
             this.tlsCaFile = tlsCaFile;
@@ -608,6 +667,9 @@ public class NomadAgentConfiguration {
 
         /**
          * Sets the certificate file and and key to use for TLS.
+         *
+         * @param tlsCertFile path to the certificate file
+         * @param tlsKeyFile  path to the key file
          */
         public Builder setTlsCertAndKeyFiles(String tlsCertFile, String tlsKeyFile) {
             this.tlsCertFile = tlsCertFile;

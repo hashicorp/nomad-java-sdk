@@ -33,6 +33,8 @@ public abstract class WaitStrategy {
 
     /**
      * Creates a wait strategy that will wait until the given deadline and then timeout.
+     *
+     * @param deadline the time at which the wait strategy starts timing-out.
      */
     public static WaitStrategy until(final Date deadline) {
         return until(deadline, Long.MAX_VALUE);
@@ -41,6 +43,7 @@ public abstract class WaitStrategy {
     /**
      * Creates a wait strategy that will wait until the given deadline and then timeout.
      *
+     * @param deadline                  the time at which the wait strategy starts timing-out.
      * @param maximumPollDurationMillis maximum duration for each long-poll request to the server, in milliseconds
      */
     public static WaitStrategy until(final Date deadline, final long maximumPollDurationMillis) {
@@ -57,6 +60,8 @@ public abstract class WaitStrategy {
 
     /**
      * Creates a wait strategy that waits until the given number of seconds from now.
+     *
+     * @param seconds the number of seconds from now at which the wait strategy starts timing-out.
      */
     public static WaitStrategy waitForSeconds(int seconds) {
         return waitForMilliseconds(seconds * 1000L);
@@ -64,6 +69,8 @@ public abstract class WaitStrategy {
 
     /**
      * Creates a wait strategy that waits until the given number of seconds from now.
+     *
+     * @param waitMillis the number of milliseconds from now at which the wait strategy starts timing-out.
      */
     public static WaitStrategy waitForMilliseconds(long waitMillis) {
         return waitForMilliseconds(waitMillis, Long.MAX_VALUE);
@@ -71,14 +78,20 @@ public abstract class WaitStrategy {
 
     /**
      * Creates a wait strategy that waits until the given number of seconds from now.
+     *
+     * @param waitMillis                the number of milliseconds from now at which the wait strategy starts timing-out
+     * @param maximumPollDurationMillis maximum duration for each long-poll request to the server, in milliseconds
      */
     public static WaitStrategy waitForMilliseconds(long waitMillis, long maximumPollDurationMillis) {
         return until(new Date(System.currentTimeMillis() + waitMillis), maximumPollDurationMillis);
     }
 
     /**
-     * Creates a wait strategy that delegates to another strategy as long as the given process is running,
+     * Creates a wait strategy that delegates to another strategy as long as a specific process is running,
      * and times out if the process has terminated.
+     *
+     * @param process  the process whose termination causes the strategy to time out
+     * @param delegate the underlying WaitStrategy to use while the process is running
      */
     public static WaitStrategy whileProcessIsRunning(final Process process, final WaitStrategy delegate) {
         return new WaitStrategy() {

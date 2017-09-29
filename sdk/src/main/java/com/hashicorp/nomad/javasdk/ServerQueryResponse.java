@@ -15,6 +15,10 @@ public class ServerQueryResponse<T> extends ServerResponse<T> {
 
     /**
      * Creates a new ServerQueryResponse.
+     *
+     * @param httpResponse the underlying HTTP response
+     * @param rawEntity    the unparsed HTTP response entity (body)
+     * @param value        response value extracted from the response entity
      */
     public ServerQueryResponse(HttpResponse httpResponse, String rawEntity, @Nullable T value) {
         super(httpResponse, rawEntity, value);

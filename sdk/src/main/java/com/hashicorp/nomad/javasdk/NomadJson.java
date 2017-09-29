@@ -30,6 +30,7 @@ public abstract class NomadJson {
     /**
      * Reads a <a href="https://www.nomadproject.io/docs/http/json-jobs.html">JSON job spec</a>.
      *
+     * @param jobSpec a JSON-formatted job spec
      * @throws IOException if there the JSON ends unexpectedly
      */
     public static Job readJobSpec(String jobSpec) throws IOException {
@@ -38,6 +39,8 @@ public abstract class NomadJson {
 
     /**
      * Writes a <a href="https://www.nomadproject.io/docs/http/json-jobs.html">JSON job spec</a>.
+     *
+     * @param job the job to render as a JSON job spec
      * @throws JsonProcessingException if there is a problem with the JSON
      */
     public static String asJobSpec(Job job) throws JsonProcessingException {
@@ -49,6 +52,8 @@ public abstract class NomadJson {
      * <p>
      * You are encourage to use the {@code toString()} method on objects of the classes in
      * the {@code com.hashicorp.nomad.apimodel} package directly, rather than using this method.
+     *
+     * @param value the value to serialize
      */
     public static String serialize(Object value) {
         try {
@@ -64,6 +69,9 @@ public abstract class NomadJson {
      * You are encourage to use the {@code fromJson()} method on the classes in
      * the {@code com.hashicorp.nomad.apimodel} package directly, rather than using this method.
      *
+     * @param <T>   the type of the object
+     * @param json  the JSON representation of the object
+     * @param clazz the class of the object
      * @throws IOException if the JSON can't be deserialized
      */
     public static <T> T deserialize(String json, Class<T> clazz) throws IOException {
@@ -76,6 +84,9 @@ public abstract class NomadJson {
      * You are encourage to use the {@code fromJsonArray()} method on the classes in
      * the {@code com.hashicorp.nomad.apimodel} package directly, rather than using this method.
      *
+     * @param <T>   the type of the object
+     * @param json  the JSON representation of the list
+     * @param clazz the class of the list elements
      * @throws IOException if the JSON can't be deserialized
      */
     public static <T> List<T> deserializeList(String json, Class<T> clazz) throws IOException {

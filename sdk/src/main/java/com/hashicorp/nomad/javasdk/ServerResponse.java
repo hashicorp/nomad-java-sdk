@@ -21,9 +21,9 @@ public class ServerResponse<T> extends NomadResponse<T> {
     /**
      * Creates a new ServerResponse.
      *
-     * @param httpResponse  the HTTP response
-     * @param rawEntity raw HTTP response entity as a string
-     * @param value     response value extracted from the response entity
+     * @param httpResponse the underlying HTTP response
+     * @param rawEntity    the unparsed HTTP response entity (body)
+     * @param value        response value extracted from the response entity
      */
     public ServerResponse(HttpResponse httpResponse, String rawEntity, @Nullable T value) {
         super(rawEntity, value);

@@ -40,8 +40,8 @@ public class NomadAgentProcess implements AutoCloseable {
     /**
      * Runs a new Nomad agent.
      *
-     * @param output a PrintWriter to which the process output is written
-     * @param config the configuration to use to run the agent
+     * @param output     a PrintWriter to which the process output is written
+     * @param config     the configuration to use to run the agent
      * @param executable the Nomad executable to run
      */
     public NomadAgentProcess(PrintWriter output, NomadAgentConfiguration config, String executable) {
@@ -138,6 +138,8 @@ public class NomadAgentProcess implements AutoCloseable {
      * Additionally, if the agent is a server and bootstrap expect is 1, waits until the server has a leader.
      * Additionally, if the agent is a client, waits until the client is ready.
      *
+     * @param apiClient    the API client to use
+     * @param waitStrategy the wait strategy to use
      * @throws IOException          if there is an HTTP or lower-level problem
      * @throws NomadException       if the response signals an error or cannot be deserialized
      * @throws InterruptedException if the thread is interrupted while sleeping before retrying

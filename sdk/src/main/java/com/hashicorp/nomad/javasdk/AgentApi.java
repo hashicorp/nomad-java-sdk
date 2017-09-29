@@ -73,6 +73,7 @@ public class AgentApi extends ApiBase {
     /**
      * Updates the list of known servers to the given addresses, replacing all previous addresses.
      *
+     * @param addresses the server addresses
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/agent-servers.html#put-post">{@code PUT /v1/agent/servers}</a>
@@ -85,6 +86,7 @@ public class AgentApi extends ApiBase {
     /**
      * Updates the list of known servers to the given addresses, replacing all previous addresses.
      *
+     * @param addresses the server addresses
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/agent-servers.html#put-post">{@code PUT /v1/agent/servers}</a>
@@ -100,6 +102,7 @@ public class AgentApi extends ApiBase {
     /**
      * Causes the agent to join a cluster by joining the gossip pool at one of the given addresses.
      *
+     * @param addresses the addresses to try joining
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/agent-join.html">{@code PUT /v1/agent/join}</a>
@@ -112,6 +115,7 @@ public class AgentApi extends ApiBase {
     /**
      * Causes the agent to join a cluster by joining the gossip pool at one of the given addresses.
      *
+     * @param addresses the addresses to try joining
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/agent-join.html">{@code PUT /v1/agent/join}</a>

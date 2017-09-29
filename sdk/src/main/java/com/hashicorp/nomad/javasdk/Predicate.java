@@ -8,7 +8,10 @@ package com.hashicorp.nomad.javasdk;
 public interface Predicate<T> {
 
     /**
-     * Applies the predicate to the given value.
+     * Evaluates the predicate.
+     *
+     * @param value the value to check the predicate against
+     * @return true if the value satisfies the predicate, false if it does not
      */
     boolean apply(T value);
 }

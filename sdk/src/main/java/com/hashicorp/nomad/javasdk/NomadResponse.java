@@ -13,6 +13,9 @@ public class NomadResponse<T> {
 
     /**
      * Creates a new NomadResponse.
+     *
+     * @param rawEntity    the unparsed HTTP response entity (body)
+     * @param value        response value extracted from the response entity
      */
     public NomadResponse(String rawEntity, @Nullable T value) {
         this.rawEntity = rawEntity;

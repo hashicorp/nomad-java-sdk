@@ -22,6 +22,10 @@ public class NomadApiConfiguration {
      * Creates a new configuration with the given values.
      * <p>
      * Consider using the {#Builder} inner class to conveniently build a configuration.
+     *
+     * @param address HTTP address of the agent to connect to
+     * @param region  default region to forward requests to, or null to use the region of the agent we connect to
+     * @param tls     TLS configuration to use
      */
     public NomadApiConfiguration(final HttpHost address, @Nullable final String region, final Tls tls) {
         if (address == null) {
@@ -75,6 +79,8 @@ public class NomadApiConfiguration {
 
     /**
      * Validates a Nomad address and converts it to an HttpHost.
+     *
+     * @param address HTTP address of the agent to connect to, as an HTTP or HTTPS URL
      */
     public static HttpHost nomadAddressAsHttpHost(String address) {
         if (!address.startsWith("http:") && !address.startsWith("https:")) {
@@ -98,6 +104,10 @@ public class NomadApiConfiguration {
          * Creates a new TLS configuration with the given values.
          * <p>
          * Consider using the {#Builder} class to conveniently build a configuration.
+         *
+         * @param caCertificateFile     path to the CA certificate
+         * @param clientCertificateFile path to the client certificate
+         * @param clientKeyFile         path to the client key
          */
         public Tls(@Nullable String caCertificateFile,
                    @Nullable String clientCertificateFile,
@@ -151,7 +161,7 @@ public class NomadApiConfiguration {
         /**
          * Sets the HTTP address of the agent to connect to.
          *
-         * @param address
+         * @param address HTTP address of the agent to connect to, as an HTTP or HTTPS URL
          * @return this builder object, to allow method chaining
          */
         public Builder setAddress(final String address) {
@@ -161,7 +171,7 @@ public class NomadApiConfiguration {
         /**
          * Sets the HTTP address of the agent to connect to.
          *
-         * @param address
+         * @param address HTTP address of the agent to connect to
          * @return this builder object, to allow method chaining
          */
         public Builder setAddress(final HttpHost address) {
@@ -173,6 +183,8 @@ public class NomadApiConfiguration {
          * Sets the region to use by default.
          * <p>
          * If null, the region of the server than receives the requests will be used.
+         *
+         * @param region default region to forward requests to, or null to use the region of the agent we connect to
          */
         public Builder setRegion(String region) {
             this.region = region;
@@ -182,6 +194,8 @@ public class NomadApiConfiguration {
         /**
          * Sets the path of the CA certificate, containing the certificate authority certificate
          * to use to verify the agent's TLS certificate.
+         *
+         * @param tlsCaFile path to the CA certificate
          */
         public Builder setTlsCaFile(String tlsCaFile) {
             this.tlsCaFile = tlsCaFile;
@@ -191,6 +205,9 @@ public class NomadApiConfiguration {
         /**
          * Sets the path of the client's certificate and private key files,
          * used when communicating with an agent over TLS.
+         *
+         * @param tlsCertFile path to the client certificate
+         * @param tlsKeyFile  path to the client key
          */
         public Builder setTlsCertAndKeyFiles(String tlsCertFile, String tlsKeyFile) {
             this.tlsCertFile = tlsCertFile;
@@ -201,10 +218,15 @@ public class NomadApiConfiguration {
         /**
          * Looks for common Nomad environment variables in the given map, and sets any values found there.
          * <p>
-         * This can be used with result of {@link System#getenv()}.
-         * <p>
-         * {@code NOMAD_ADDR} provides the agent's HTTP address.
+         * The following variables are recognised:
+         * <ul>
+         * <li>{@code NOMAD_ADDR}</li>
+         * <li>{@code NOMAD_CA_CERT}</li>
+         * <li>{@code NOMAD_CLIENT_CERT}</li>
+         * <li>{@code NOMAD_CLIENT_KEY}</li>
+         * </ul>
          *
+         * @param environment environment variable map, as returned by {@link System#getenv()}.
          * @return this builder object, to allow method chaining
          * @throws IllegalArgumentException if the @{code NOMAD_ADDR} environment variable is non-empty
          *                                  but doesn't represent a valid host URL

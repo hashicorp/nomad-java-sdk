@@ -65,8 +65,9 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     /**
      * Creates an API client using the given configuration.
      *
+     * @param config     configuration for the API
      * @param httpClient the HTTP to client to use.
-     *                   If null, a client will be built using the provided configuration.
+     *                   If null, a client will be built using the provided API configuration.
      */
     public NomadApiClient(NomadApiConfiguration config, @Nullable CloseableHttpClient httpClient) {
         this.config = config;
@@ -246,6 +247,7 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
      * <p>
      * At a minimum, the API must be responding to API requests.
      *
+     * @param waitStrategy the wait strategy to use while polling
      * @return a future that completes successfully when the API is ready
      * @throws IOException          if there is an HTTP or lower-level problem
      * @throws NomadException       if the response signals an error or cannot be deserialized
