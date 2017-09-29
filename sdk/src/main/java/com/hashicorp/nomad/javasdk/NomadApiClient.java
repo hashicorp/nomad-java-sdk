@@ -5,12 +5,16 @@ import com.hashicorp.nomad.apimodel.NodeListStub;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpStatus;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.cache.CachingHttpClientBuilder;
+import org.apache.http.impl.client.cache.CacheConfig;
+import org.apache.http.impl.client.cache.ExponentialBackOffSchedulingStrategy;
 
 import javax.annotation.Nullable;
 import javax.net.ssl.SSLContext;
@@ -300,12 +304,21 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     }
 
     private CloseableHttpClient buildHttpClient(NomadApiConfiguration config) {
-
-        return HttpClientBuilder.create()
+        return CachingHttpClientBuilder
+                .create()
+                .setSchedulingStrategy(new ExponentialBackOffSchedulingStrategy(CacheConfig.DEFAULT))
                 .setRetryHandler(new DefaultHttpRequestRetryHandler() {
                     @Override
                     protected boolean handleAsIdempotent(HttpRequest request) {
                         return true;
+                    }
+                    @Override
+                    public boolean retryRequest(final IOException exception,
+                                                   final int executionCount,
+                                                   final HttpContext context) {
+                        final HttpClientContext clientContext = HttpClientContext.adapt(context);
+                        final HttpRequest request = clientContext.getRequest();
+                        return handleAsIdempotent(request);
                     }
                 })
                 .setSSLContext(buildSslContext(config.getTls()))
