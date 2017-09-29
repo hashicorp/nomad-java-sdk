@@ -6,7 +6,10 @@ import com.hashicorp.nomad.apimodel.NodeListStub;
 import com.hashicorp.nomad.apimodel.AllocationListStub;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 /**
  * Predicates for use with {@link QueryOptions} to poll until a condition is met.
@@ -127,26 +130,26 @@ public abstract class NomadPredicates {
     }
 
     /**
-     * Regates the check result of a given Predicate.
+     * Negates a predicate.
      */
-    public static <T> Predicate<T> not(final Predicate<T> a) {
+    public static <T> Predicate<T> not(final Predicate<T> predicate) {
         return new Predicate<T>() {
             @Override
             public boolean apply(T value) {
-                return !a.apply(value);
+                return !predicate.apply(value);
             }
         };
     }
 
     /**
-     * Returns a Predicate that checks if any of the Predicates of a given list evaluate to true.
+     * Returns a disjunction of several predicates.
      */
-    public static <T> Predicate<T> any(final List<Predicate<T>> as) {
+    public static <T> Predicate<T> anyOf(final List<? extends Predicate<? super T>> predicates) {
         return new Predicate<T>() {
             @Override
             public boolean apply(T value) {
-                for (Predicate<? super T> a : as) {
-                    if (a.apply(value)) {
+                for (Predicate<? super T> predicate : predicates) {
+                    if (predicate.apply(value)) {
                         return true;
                     }
                 }
@@ -156,14 +159,14 @@ public abstract class NomadPredicates {
     }
 
     /**
-     * Returns a Predicate that checks if all of the Predicates of a given list evaluate to true.
+     * Returns a conjunction of several predicates.
      */
-    public static <T> Predicate<T> all(final List<Predicate<T>> as) {
+    public static <T> Predicate<T> allOf(final List<? extends Predicate<? super T>> predicates) {
         return new Predicate<T>() {
             @Override
             public boolean apply(T value) {
-                for (Predicate<? super T> a : as) {
-                    if (!a.apply(value)) {
+                for (Predicate<? super T> predicate : predicates) {
+                    if (!predicate.apply(value)) {
                         return false;
                     }
                 }
