@@ -30,7 +30,7 @@ public abstract class NomadPredicates {
      * Transforms a predicate on a value of type T into a predicate on a {@code ServerQueryResponse<T>}.
      *
      * @param valuePredicate the predicate for the response value
-     * @param <T> the response value type of the request this predicate will be used with
+     * @param <T>            the response value type of the request this predicate will be used with
      */
     public static <T> Predicate<ServerQueryResponse<T>> responseValue(final Predicate<T> valuePredicate) {
         return new Predicate<ServerQueryResponse<T>>() {
