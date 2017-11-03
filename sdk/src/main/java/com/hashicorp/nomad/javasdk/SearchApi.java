@@ -20,7 +20,7 @@ public class SearchApi extends ApiBase {
      * Returns a list of matches for a particular context and prefix.
      *
      * @param prefix  items with this prefix are returned
-     * @param context one of the following: allocs, deployment, evals, jobs, nodes, namespaces, all
+     * @param context one of the following: allocs, deployment, evals, jobs, nodes, namespaces, quotas, all
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/api/search.html">{@code PUT /v1/search}</a>
@@ -36,7 +36,7 @@ public class SearchApi extends ApiBase {
      * Returns a list of matches for a particular context and prefix.
      *
      * @param prefix  items with this prefix are returned
-     * @param context one of the following: allocs, deployment, evals, jobs, nodes, namespaces, all
+     * @param context one of the following: allocs, deployment, evals, jobs, nodes, namespaces, quotas, all
      * @param options options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
