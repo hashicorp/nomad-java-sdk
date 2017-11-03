@@ -114,7 +114,7 @@ public class AclTokensApi extends ApiBase {
      * Retrieves an ACL token.
      *
      * @param accessorId accessor ID of the token.
-     * @param options options controlling how the request is performed
+     * @param options    options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
@@ -187,6 +187,31 @@ public class AclTokensApi extends ApiBase {
                 accessorIdPrefix,
                 options,
                 NomadJson.parserForListOf(AclTokenListStub.class));
+    }
+
+    /**
+     * Retrieves the ACL token currently being used.
+     *
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
+     */
+    public ServerQueryResponse<AclToken> self() throws IOException, NomadException {
+        return self(null);
+    }
+
+    /**
+     * Retrieves the ACL token currently being used.
+     *
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
+     */
+    public ServerQueryResponse<AclToken> self(
+            @Nullable final QueryOptions<AclToken> options
+    ) throws IOException, NomadException {
+        return executeServerQuery("/v1/acl/token/self", options, NomadJson.parserFor(AclToken.class));
     }
 
     /**

@@ -87,6 +87,27 @@ public class AclTokensApiTest extends ApiTestBase {
     }
 
     @Test
+    public void shouldBeAbleToListOwnTokens() throws Exception {
+        try (TestAgent agent = newAclBootstrappedServer()) {
+            final AclTokensApi aclTokensApi = agent.getApiClient().getAclTokensApi();
+
+            final AclToken token = new AclToken()
+                    .setName("test")
+                    .setType("client")
+                    .setPolicies(asList("foo-policy"));
+
+            final AclToken createdToken = aclTokensApi.create(token).getValue();
+
+            agent.getApiClient().setSecretId(createdToken.getSecretId());
+
+            final ServerQueryResponse<AclToken> selfResponse = aclTokensApi.self();
+            assertUpdatedServerResponse(selfResponse);
+
+            assertThat(selfResponse.getValue(), samePropertyValuesAs(createdToken));
+        }
+    }
+
+    @Test
     public void shouldBeAbleToDeleteAToken() throws Exception {
         try (TestAgent agent = newAclBootstrappedServer()) {
             final AclTokensApi aclTokensApi = agent.getApiClient().getAclTokensApi();
