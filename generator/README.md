@@ -10,9 +10,5 @@ Running
 -------
 
 If both the nomad and nomad-java-sdk repos are in /github.com/hashicorp under
-your `GOPATH`, you can run the generator from the root directory of the
-nomad-java-sdk repo with:
-
-```.sh
-go run generator/*.go sdk/src/main/java/com/hashicorp/nomad/apimodel/
-```
+your `GOPATH`, you can run the generator by running `./scripts/generate.sh`
+in the root directory of this repo.
