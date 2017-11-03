@@ -34,6 +34,7 @@ public final class Evaluation extends ApiObject {
     private Map<String, AllocationMetric> failedTgAllocs;
     private Map<String, Boolean> classEligibility;
     private boolean escapedComputedClass;
+    private String quotaLimitReached;
     private boolean annotatePlan;
     private Map<String, Integer> queuedAllocations;
     private BigInteger snapshotIndex;
@@ -241,6 +242,16 @@ public final class Evaluation extends ApiObject {
 
     public Evaluation setEscapedComputedClass(boolean escapedComputedClass) {
         this.escapedComputedClass = escapedComputedClass;
+        return this;
+    }
+
+    @JsonProperty("QuotaLimitReached")
+    public String getQuotaLimitReached() {
+        return quotaLimitReached;
+    }
+
+    public Evaluation setQuotaLimitReached(String quotaLimitReached) {
+        this.quotaLimitReached = quotaLimitReached;
         return this;
     }
 

@@ -22,6 +22,7 @@ public final class AllocationMetric extends ApiObject {
     private int nodesExhausted;
     private Map<String, Integer> classExhausted;
     private Map<String, Integer> dimensionExhausted;
+    private List<String> quotaExhausted;
     private Map<String, Double> scores;
     private long allocationTime;
     private int coalescedFailures;
@@ -138,6 +139,24 @@ public final class AllocationMetric extends ApiObject {
         if (this.dimensionExhausted == null)
             this.dimensionExhausted = new java.util.HashMap<>();
         this.dimensionExhausted.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("QuotaExhausted")
+    public List<String> getQuotaExhausted() {
+        return quotaExhausted;
+    }
+
+    public AllocationMetric setQuotaExhausted(List<String> quotaExhausted) {
+        this.quotaExhausted = quotaExhausted;
+        return this;
+    }
+
+    public AllocationMetric addQuotaExhausted(String... quotaExhausted) {
+        if (this.quotaExhausted == null)
+            this.quotaExhausted = new java.util.ArrayList<>();
+        for (String item : quotaExhausted)
+            this.quotaExhausted.add(item);
         return this;
     }
 

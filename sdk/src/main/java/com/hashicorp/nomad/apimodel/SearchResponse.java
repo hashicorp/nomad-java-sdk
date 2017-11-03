@@ -16,7 +16,6 @@ import java.util.Map;
 public final class SearchResponse extends ApiObject {
     private Map<String, List<String>> matches;
     private Map<String, Boolean> truncations;
-//    private QueryMeta queryMeta;
 
     @JsonProperty("Matches")
     public Map<String, List<String>> getMatches() {
@@ -51,16 +50,6 @@ public final class SearchResponse extends ApiObject {
         this.truncations.put(key, value);
         return this;
     }
-
-//    @JsonProperty("QueryMeta")
-//    public QueryMeta getQueryMeta() {
-//        return queryMeta;
-//    }
-//
-//    public SearchResponse setQueryMeta(QueryMeta queryMeta) {
-//        this.queryMeta = queryMeta;
-//        return this;
-//    }
 
     @Override
     public String toString() {

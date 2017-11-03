@@ -16,6 +16,7 @@ import java.util.List;
 public final class Namespace extends ApiObject {
     private String name;
     private String description;
+    private String quota;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
 
@@ -36,6 +37,16 @@ public final class Namespace extends ApiObject {
 
     public Namespace setDescription(String description) {
         this.description = description;
+        return this;
+    }
+
+    @JsonProperty("Quota")
+    public String getQuota() {
+        return quota;
+    }
+
+    public Namespace setQuota(String quota) {
+        this.quota = quota;
         return this;
     }
 
