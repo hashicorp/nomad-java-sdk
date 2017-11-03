@@ -136,10 +136,10 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     /**
      * Sets the active ACL token secret ID that this client passes to the server.
      *
-     * @param secretId the secret ID to use
+     * @param authToken the secret ID to use
      */
-    public void setSecretId(String secretId) {
-        config = config.withSecretId(secretId);
+    public void setAuthToken(String authToken) {
+        config = config.withAuthToken(authToken);
     }
 
     /**
@@ -370,7 +370,7 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
 
     private HttpUriRequest buildRequest(RequestBuilder requestBuilder) {
         return requestBuilder
-                .addHeader("X-Nomad-Token", config.getSecretId())
+                .addHeader("X-Nomad-Token", config.getAuthToken())
                 .build();
     }
 

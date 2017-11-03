@@ -61,7 +61,7 @@ public class NomadApiConfigurationTest {
         assertThat(config.getTls().getCaCertificateFile(), is(caCertPath));
         assertThat(config.getTls().getClientCertificateFile(), is(clientCertPath));
         assertThat(config.getTls().getClientKeyFile(), is(keyPath));
-        assertThat(config.getSecretId(), is(token));
+        assertThat(config.getAuthToken(), is(token));
     }
 
     @Test

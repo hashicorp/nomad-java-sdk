@@ -15,7 +15,7 @@ public class QueryOptions<T> {
     @Nullable private WaitStrategy waitStrategy;
     private boolean allowStale;
     @Nullable private Predicate<ServerQueryResponse<T>> repeatedPollPredicate;
-    @Nullable private String secretId;
+    @Nullable private String authToken;
 
     /**
      * Gets the region to which requests should be forwarded.
@@ -193,22 +193,22 @@ public class QueryOptions<T> {
     /**
      * Gets the secret ID of the ACL token to use for this request.
      * <p>
-     * When null, falls back to the NomadApiClient's secret ID.
+     * When null, falls back to the NomadApiClient's auth token.
      */
     @Nullable
-    public String getSecretId() {
-        return secretId;
+    public String getAuthToken() {
+        return authToken;
     }
 
     /**
      * Sets the secret ID of the ACL token to use for this request.
      * <p>
-     * When null, falls back to the NomadApiClient's secret ID.
+     * When null, falls back to the NomadApiClient's auth token.
      *
-     * @param secretId the secret ID
+     * @param authToken the secret ID
      */
-    public QueryOptions<T> setSecretId(@Nullable String secretId) {
-        this.secretId = secretId;
+    public QueryOptions<T> setAuthToken(@Nullable String authToken) {
+        this.authToken = authToken;
         return this;
     }
 

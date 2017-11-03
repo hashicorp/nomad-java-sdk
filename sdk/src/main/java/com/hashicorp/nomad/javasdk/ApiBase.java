@@ -194,15 +194,15 @@ abstract class ApiBase {
     ) throws IOException, NomadException {
         String region = apiClient.getConfig().getRegion();
         String namespace = apiClient.getConfig().getNamespace();
-        String secretId = apiClient.getConfig().getSecretId();
+        String authToken = apiClient.getConfig().getAuthToken();
 
         if (options != null) {
             if (options.getRegion() != null)
                 region = options.getRegion();
             if (options.getNamespace() != null)
                 namespace = options.getNamespace();
-            if (options.getSecretId() != null)
-                secretId = options.getSecretId();
+            if (options.getAuthToken() != null)
+                authToken = options.getAuthToken();
             if (options.getIndex() != null)
                 requestBuilder.addParameter("index", options.getIndex().toString());
             if (wait != null)
@@ -215,8 +215,8 @@ abstract class ApiBase {
             requestBuilder.addParameter("region", region);
         if (namespace != null)
             requestBuilder.addParameter("namespace", namespace);
-        if (secretId != null)
-            requestBuilder.addHeader("X-Nomad-Token", secretId);
+        if (authToken != null)
+            requestBuilder.addHeader("X-Nomad-Token", authToken);
 
         return apiClient.execute(requestBuilder, new ServerQueryResponseAdapter<>(valueExtractor));
     }
@@ -228,7 +228,7 @@ abstract class ApiBase {
     ) {
         String region = apiClient.getConfig().getRegion();
         String namespace = apiClient.getConfig().getNamespace();
-        String secretId = apiClient.getConfig().getSecretId();
+        String secretId = apiClient.getConfig().getAuthToken();
 
         if (options != null) {
             if (options.getRegion() != null)

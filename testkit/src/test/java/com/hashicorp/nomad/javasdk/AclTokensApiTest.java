@@ -98,7 +98,7 @@ public class AclTokensApiTest extends ApiTestBase {
 
             final AclToken createdToken = aclTokensApi.create(token).getValue();
 
-            agent.getApiClient().setSecretId(createdToken.getSecretId());
+            agent.getApiClient().setAuthToken(createdToken.getSecretId());
 
             final ServerQueryResponse<AclToken> selfResponse = aclTokensApi.self();
             assertUpdatedServerResponse(selfResponse);

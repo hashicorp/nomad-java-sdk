@@ -94,7 +94,7 @@ public class ApiTestBase {
             }
 
             ServerResponse<AclToken> bootstrapResponse = apiClient.getAclTokensApi().bootstrap();
-            apiClient.setSecretId(bootstrapResponse.getValue().getSecretId());
+            apiClient.setAuthToken(bootstrapResponse.getValue().getSecretId());
         } catch (Throwable e) {
             try {
                 agent.close();

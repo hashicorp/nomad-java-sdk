@@ -17,7 +17,7 @@ public class NomadApiConfiguration {
     private final HttpHost address;
     private final String region;
     private final String namespace;
-    private final String secretId;
+    private final String authToken;
     private final Tls tls;
 
     /**
@@ -28,14 +28,14 @@ public class NomadApiConfiguration {
      * @param address   HTTP address of the agent to connect to
      * @param region    default region to forward requests to, or null to use the region of the agent we connect to
      * @param namespace the namespace to use in requests by default, or null to use Nomad's default namespace
-     * @param secretId  the secret ID for the API client to use
+     * @param authToken  the secret ID for the API client to use
      * @param tls       TLS configuration to use
      */
     public NomadApiConfiguration(
             final HttpHost address,
             @Nullable final String region,
             final String namespace,
-            final String secretId,
+            final String authToken,
             final Tls tls
     ) {
         if (address == null) {
@@ -45,7 +45,7 @@ public class NomadApiConfiguration {
         this.address = address;
         this.region = region;
         this.namespace = namespace;
-        this.secretId = secretId;
+        this.authToken = authToken;
         this.tls = tls;
     }
 
@@ -82,24 +82,24 @@ public class NomadApiConfiguration {
      * @param namespace the namespace to use in the new configuration.
      */
     public NomadApiConfiguration withNamespace(String namespace) {
-        return new NomadApiConfiguration(address, region, namespace, secretId, tls);
+        return new NomadApiConfiguration(address, region, namespace, authToken, tls);
     }
 
     /**
      * Returns the secret ID for the API client to use.
      */
     @Nullable
-    public String getSecretId() {
-        return secretId;
+    public String getAuthToken() {
+        return authToken;
     }
 
     /**
      * Creates a copy of this configuration with the given secret ID.
      *
-     * @param secretId the secret ID to use in the new configuration.
+     * @param authToken the secret ID to use in the new configuration.
      */
-    public NomadApiConfiguration withSecretId(String secretId) {
-        return new NomadApiConfiguration(address, region, namespace, secretId, tls);
+    public NomadApiConfiguration withAuthToken(String authToken) {
+        return new NomadApiConfiguration(address, region, namespace, authToken, tls);
     }
 
     /**
@@ -203,7 +203,7 @@ public class NomadApiConfiguration {
         private HttpHost address;
         private String region;
         private String namespace;
-        private String secretId;
+        private String authToken;
         private String tlsCaFile;
         private String tlsCertFile;
         private String tlsKeyFile;
@@ -256,10 +256,10 @@ public class NomadApiConfiguration {
         /**
          * Sets the secret ID for the client to use.
          *
-         * @param secretId the secret ID
+         * @param authToken the secret ID
          */
-        public Builder setSecretId(String secretId) {
-            this.secretId = secretId;
+        public Builder setAuthToken(String authToken) {
+            this.authToken = authToken;
             return this;
         }
 
@@ -343,7 +343,7 @@ public class NomadApiConfiguration {
             if (environment.containsKey("NOMAD_TOKEN")) {
                 String token = environment.get("NOMAD_TOKEN");
                 if (!token.isEmpty())
-                    this.secretId = token;
+                    this.authToken = token;
             }
 
             return this;
@@ -361,7 +361,7 @@ public class NomadApiConfiguration {
                     tlsCertFile,
                     tlsKeyFile);
 
-            return new NomadApiConfiguration(address, region, namespace, secretId, tls);
+            return new NomadApiConfiguration(address, region, namespace, authToken, tls);
         }
     }
 }
