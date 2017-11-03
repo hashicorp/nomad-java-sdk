@@ -23,7 +23,7 @@ public class AclTokensApi extends ApiBase {
      *
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#bootstrap-token">{@code PUT /v1/acl/bootstrap}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#bootstrap-token">{@code PUT /v1/acl/bootstrap}</a>
      */
     public ServerResponse<AclToken> bootstrap() throws IOException, NomadException {
         return bootstrap(null);
@@ -35,7 +35,7 @@ public class AclTokensApi extends ApiBase {
      * @param options options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#bootstrap-token">{@code PUT /v1/acl/bootstrap}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#bootstrap-token">{@code PUT /v1/acl/bootstrap}</a>
      */
     public ServerResponse<AclToken> bootstrap(@Nullable WriteOptions options) throws IOException, NomadException {
         return executeServerAction(put("/v1/acl/bootstrap", options), NomadJson.parserFor(AclToken.class));
@@ -47,7 +47,7 @@ public class AclTokensApi extends ApiBase {
      * @param token a token with no accessor ID
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#create-token">{@code PUT /v1/acl/token}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#create-token">{@code PUT /v1/acl/token}</a>
      */
     public ServerResponse<AclToken> create(AclToken token)
             throws IOException, NomadException {
@@ -61,7 +61,7 @@ public class AclTokensApi extends ApiBase {
      * @param options options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#create-token">{@code PUT /v1/acl/token}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#create-token">{@code PUT /v1/acl/token}</a>
      */
     public ServerResponse<AclToken> create(AclToken token, @Nullable WriteOptions options)
             throws IOException, NomadException {
@@ -104,7 +104,7 @@ public class AclTokensApi extends ApiBase {
      * @param accessorId accessor ID of the token.
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
      */
     public ServerQueryResponse<AclToken> info(final String accessorId) throws IOException, NomadException {
         return info(accessorId, null);
@@ -117,7 +117,7 @@ public class AclTokensApi extends ApiBase {
      * @param options    options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
      */
     public ServerQueryResponse<AclToken> info(
             final String accessorId,
@@ -131,7 +131,7 @@ public class AclTokensApi extends ApiBase {
      *
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#list-tokens">{@code GET /v1/acl/tokens}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#list-tokens">{@code GET /v1/acl/tokens}</a>
      */
     public ServerQueryResponse<List<AclTokenListStub>> list() throws IOException, NomadException {
         return list(null, null);
@@ -143,7 +143,7 @@ public class AclTokensApi extends ApiBase {
      * @param options options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#list-tokens">{@code GET /v1/acl/tokens}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#list-tokens">{@code GET /v1/acl/tokens}</a>
      */
     public ServerQueryResponse<List<AclTokenListStub>> list(
             @Nullable final QueryOptions<List<AclTokenListStub>> options
@@ -159,7 +159,7 @@ public class AclTokensApi extends ApiBase {
      *                         restricts the results to only tokens having an accessor ID with this prefix
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#list-tokens">{@code GET /v1/acl/tokens}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#list-tokens">{@code GET /v1/acl/tokens}</a>
      */
     public ServerQueryResponse<List<AclTokenListStub>> list(@Nullable final String accessorIdPrefix)
             throws IOException, NomadException {
@@ -175,7 +175,7 @@ public class AclTokensApi extends ApiBase {
      * @param options          options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#list-tokens">{@code GET /v1/acl/tokens}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#list-tokens">{@code GET /v1/acl/tokens}</a>
      */
     public ServerQueryResponse<List<AclTokenListStub>> list(
             @Nullable final String accessorIdPrefix,
@@ -194,7 +194,7 @@ public class AclTokensApi extends ApiBase {
      *
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#read-self-token">{@code GET /v1/acl/token/self}</a>
      */
     public ServerQueryResponse<AclToken> self() throws IOException, NomadException {
         return self(null);
@@ -206,7 +206,7 @@ public class AclTokensApi extends ApiBase {
      * @param options options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#read-token">{@code GET /v1/acl/token/:accessor_id}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#read-self-token">{@code GET /v1/acl/token/self}</a>
      */
     public ServerQueryResponse<AclToken> self(
             @Nullable final QueryOptions<AclToken> options
@@ -220,7 +220,7 @@ public class AclTokensApi extends ApiBase {
      * @param token a token with with an accessor ID
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#update-token">{@code PUT /v1/acl/token/:accessor_id}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#update-token">{@code PUT /v1/acl/token/:accessor_id}</a>
      */
     public ServerResponse<AclToken> update(AclToken token)
             throws IOException, NomadException {
@@ -234,7 +234,7 @@ public class AclTokensApi extends ApiBase {
      * @param options options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/acl-tokens.html#update-token">{@code PUT /v1/acl/token/:accessor_id}</a>
+     * @see <a href="https://www.nomadproject.io/api/acl-tokens.html#update-token">{@code PUT /v1/acl/token/:accessor_id}</a>
      */
     public ServerResponse<AclToken> update(AclToken token, @Nullable WriteOptions options)
             throws IOException, NomadException {

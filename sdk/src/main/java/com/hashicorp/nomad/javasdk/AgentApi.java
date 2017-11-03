@@ -27,7 +27,7 @@ public class AgentApi extends ApiBase {
      *
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/docs/http/agent-self.html">{@code GET /v1/agent/self}</a>
+     * @see <a href="https://www.nomadproject.io/api/agent.html#health">{@code GET /v1/agent/health}</a>
      */
     @Nonnull
     public final NomadResponse<AgentHealthResponse> health() throws IOException, NomadException {

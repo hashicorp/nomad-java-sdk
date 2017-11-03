@@ -210,6 +210,13 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     }
 
     /**
+     * Returns an API for managing quotas.
+     */
+    public QuotasApi getQuotasApi() {
+        return new QuotasApi(this);
+    }
+
+    /**
      * Returns an API for listing the regions in the Nomad cluster.
      */
     public RegionsApi getRegionsApi() {
