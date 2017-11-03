@@ -120,3 +120,12 @@ You can then run the tests with this executable on the `PATH`, e.g.:
 ```.sh
 PATH="$GOPATH/bin:$PATH" mvn test
 ```
+
+Tests for Nomad Enterprise features don't run by default, but can be
+enabled by setting the `NomadEnterprise` property when running the tests
+(note that this requires an Enterprise `nomad` executable with
+`mock_driver` support:
+
+```.sh
+mvn test -DNomadEnterprise
+```
