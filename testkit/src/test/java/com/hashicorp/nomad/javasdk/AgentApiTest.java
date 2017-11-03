@@ -1,5 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
+import com.hashicorp.nomad.apimodel.AgentHealthResponse;
 import com.hashicorp.nomad.apimodel.AgentMember;
 import com.hashicorp.nomad.apimodel.AgentSelf;
 import com.hashicorp.nomad.apimodel.ServerMembers;
@@ -99,6 +100,18 @@ public class AgentApiTest extends ApiTestBase {
 
             List<String> updatedServers = agentApi.servers().getValue();
             assertThat(updatedServers, equalTo(servers));
+        }
+    }
+
+    @Test
+    public void shouldSupportHealthcheck() throws Exception {
+        try (TestAgent agent = newServer()) {
+            AgentApi agentApi = agent.getApiClient().getAgentApi();
+
+            AgentHealthResponse health = agentApi.health().getValue();
+
+            assertThat(health.getServer().getOk(), is(true));
+            assertThat(health.getClient(), is(nullValue()));
         }
     }
 

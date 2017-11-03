@@ -1,6 +1,7 @@
 package com.hashicorp.nomad.javasdk;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hashicorp.nomad.apimodel.AgentHealthResponse;
 import com.hashicorp.nomad.apimodel.AgentSelf;
 import com.hashicorp.nomad.apimodel.ServerMembers;
 import org.apache.http.client.utils.URIBuilder;
@@ -19,6 +20,18 @@ public class AgentApi extends ApiBase {
 
     AgentApi(final NomadApiClient apiClient) {
         super(apiClient);
+    }
+
+    /**
+     * Performs a basic healthcheck.
+     *
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/agent-self.html">{@code GET /v1/agent/self}</a>
+     */
+    @Nonnull
+    public final NomadResponse<AgentHealthResponse> health() throws IOException, NomadException {
+        return executePlain(get("/v1/agent/health"), NomadJson.parserFor(AgentHealthResponse.class));
     }
 
     /**
