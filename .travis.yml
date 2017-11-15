@@ -5,7 +5,7 @@ before_script:
     set -euo pipefail
     if [[ ! -f cache/bin/nomad ]]; then
       export GOPATH="$PWD/gopath"
-      eval "$(curl -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme | GIMME_GO_VERSION=1.8.1 bash)"
+      eval "$(curl -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme | GIMME_GO_VERSION=1.9.2 bash)"
       export PATH="$PATH:$GOPATH/bin"
       go get -u github.com/hashicorp/nomad
       cd "$GOPATH/src/github.com/hashicorp/nomad"
