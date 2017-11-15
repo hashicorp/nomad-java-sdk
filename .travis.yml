@@ -17,6 +17,7 @@ before_script:
       go build -tags nomad_test github.com/hashicorp/nomad
       cd -
     fi
+    set +euo pipefail  # restory options to work around https://github.com/travis-ci/travis-ci/issues/5434
   - export PATH="$PWD/cache/bin:$PATH"
 
 cache:
