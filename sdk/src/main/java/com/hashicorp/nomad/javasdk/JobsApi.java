@@ -721,7 +721,7 @@ public class JobsApi extends ApiBase {
     public ServerResponse<JobValidateResponse> validate(Job job, @Nullable WriteOptions options)
             throws IOException, NomadException {
         return executeServerAction(
-                put("/v1/job/validate", new JobValidationRequest(job), options),
+                put("/v1/validate/job", new JobValidationRequest(job), options),
                 NomadJson.parserFor(JobValidateResponse.class));
     }
 
