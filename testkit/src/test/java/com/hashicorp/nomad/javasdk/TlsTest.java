@@ -15,11 +15,11 @@ public class TlsTest extends ApiTestBase {
         try (TestAgent agent = newAgent(
                 new NomadAgentConfiguration.Builder()
                         .setTlsHttp(true)
-                        .setTlsCaFile(certPath("ca.pem"))
-                        .setTlsCertAndKeyFiles(certPath("nomad.pem"), certPath("nomad-key.pem")),
+                        .setTlsCaFile(certPath("nomad-ca.pem"))
+                        .setTlsCertAndKeyFiles(certPath("server.pem"), certPath("server-key.pem")),
                 new NomadApiConfiguration.Builder()
-                        .setTlsCaFile(certPath("ca.pem"))
-                        .setTlsCertAndKeyFiles(certPath("nomad.pem"), certPath("nomad-key.pem"))
+                        .setTlsCaFile(certPath("nomad-ca.pem"))
+                        .setTlsCertAndKeyFiles(certPath("sdk.pem"), certPath("sdk-key.pem"))
         )) {
             agent.getApiClient().getAgentApi().self();
         }
@@ -29,11 +29,11 @@ public class TlsTest extends ApiTestBase {
     public void shouldUseClientCertificateAgainstClient() throws Exception {
         NomadAgentConfiguration.Builder agentConfigBuilder = new NomadAgentConfiguration.Builder()
                 .setTlsHttp(true)
-                .setTlsCaFile(certPath("ca.pem"))
-                .setTlsCertAndKeyFiles(certPath("nomad.pem"), certPath("nomad-key.pem"));
+                .setTlsCaFile(certPath("nomad-ca.pem"))
+                .setTlsCertAndKeyFiles(certPath("client.pem"), certPath("client-key.pem"));
         NomadApiConfiguration.Builder apiConfigBuilder = new NomadApiConfiguration.Builder()
-                .setTlsCaFile(certPath("ca.pem"))
-                .setTlsCertAndKeyFiles(certPath("nomad.pem"), certPath("nomad-key.pem"));
+                .setTlsCaFile(certPath("nomad-ca.pem"))
+                .setTlsCertAndKeyFiles(certPath("sdk.pem"), certPath("sdk-key.pem"));
 
         try (TestAgent server = newAgent(agentConfigBuilder, apiConfigBuilder)) {
             try (TestAgent client = newAgent(

@@ -1,8 +1,0 @@
-{
-    "CN": "global.nomad",
-    "hosts": [
-        "server.global.nomad",
-        "client.global.nomad",
-        "localhost"
-    ]
-}
