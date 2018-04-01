@@ -10,12 +10,12 @@ Vagrant.configure("2") do |config|
     apt-get install -y git openjdk-7-jdk-headless maven
   SHELL
 
-  config.vm.provision "gopath", type: "shell", inline: <<-SHELL
+  config.vm.provision "environment", type: "shell", inline: <<-SHELL
     cat >/etc/environment <<'ENVIRONMENT'
 GOPATH=/usr/local/gopath
-PATH="$GOPATH/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+PATH=/usr/local/gopath/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ENVIRONMENT
   SHELL
 
-  config.vm.provision "nomad", type: "shell", run: "always", inline: "/vagrant/scripts/build-nomad.sh"
+  config.vm.provision "nomad", type: "shell", run: "always", inline: "source /etc/environment && /vagrant/scripts/build-nomad.sh"
 end
