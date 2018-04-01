@@ -7,15 +7,14 @@ before_script:
   - |
     set -euo pipefail
 
-    scripts/build-nomad.sh
+    GOPATH="$PWD/gopath"
+    PATH="$GOPATH/bin:$PATH"
 
-    nomad_path="$(which nomad)"
-    real_nomad_path="$(readlink "${nomad_path}")"
-    GOPATH_BIN="$(dirname "${real_nomad_path}")"
+    scripts/build-nomad.sh
 
     set +euo pipefail  # restore options to work around https://github.com/travis-ci/travis-ci/issues/5434
 
 cache:
   directories:
-    - $GOPATH_BIN
+    - $GOPATH/bin
     - $HOME/.m2

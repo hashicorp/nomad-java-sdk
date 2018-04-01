@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$(dirname "$0")/.."
-
 nomad_version=v0.7.0
 go_version=1.10
+
+cd "$(dirname "$0")/.."
+
+[ -n "${GOPATH:-}" ] || {
+    echo "$0: error: GOPATH must be set" >&2
+    exit 1
+}
 
 function expected_nomad_is_available {
     hash nomad 2>/dev/null && [[ "$(nomad version)" == Nomad\ *"${nomad_version}"* ]]
@@ -18,7 +23,6 @@ fi
 echo "Will clone Nomad ${nomad_version} and build it with Go ${go_version}"
 
 echo "Cloning Nomad ${nomad_version}…"
-export GOPATH=/usr/local/nomad-gopath
 import_path=github.com/hashicorp/nomad
 worktree="$GOPATH/src/${import_path}"
 rm -rf "${worktree}"
@@ -29,10 +33,9 @@ eval "$(curl -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme 
 
 echo "Building Nomad…"
 go install -tags nomad_test "${import_path}"
-ln -sf "$GOPATH/bin/nomad" /usr/local/bin/nomad
 
 expected_nomad_is_available || {
-    echo "error: Nomad ${nomad_version} is not available even after provisioning" >&2
+    echo "$0: error: Nomad ${nomad_version} is not available even after provisioning" >&2
     exit 1
 }
 
