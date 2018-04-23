@@ -21,7 +21,7 @@ Start by building a `NomadApiConfiguration` and creating an
 ```.java
 NomadApiClientConfiguration config =
         new NomadApiClientConfiguration.Builder()
-                .setAddress("192.168.0.1:4646")
+                .setAddress("http://192.168.100.100:4646")
                 .build();
 
 NomadApiClient apiClient = new NomadApiClient(config);
