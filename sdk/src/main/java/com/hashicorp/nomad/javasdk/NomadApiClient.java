@@ -4,13 +4,16 @@ import com.hashicorp.nomad.apimodel.Node;
 import com.hashicorp.nomad.apimodel.NodeListStub;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultConnectionKeepAliveStrategy;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HttpContext;
 
 import javax.annotation.Nullable;
 import javax.net.ssl.SSLContext;
@@ -384,6 +387,13 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     private CloseableHttpClient buildHttpClient(NomadApiConfiguration config) {
 
         return HttpClientBuilder.create()
+                .setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy() {
+                    @Override
+                    public long getKeepAliveDuration(HttpResponse response, HttpContext context) {
+                        final long serverKeepAlive = super.getKeepAliveDuration(response, context);
+                        return serverKeepAlive > 0 ? serverKeepAlive : 60000;
+                    }
+                })
                 .setRetryHandler(new DefaultHttpRequestRetryHandler() {
                     @Override
                     protected boolean handleAsIdempotent(HttpRequest request) {
