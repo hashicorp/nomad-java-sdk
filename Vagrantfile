@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "dependencies", type: "shell", inline: <<-SHELL
+    apt-get update
     apt-get install -y git openjdk-7-jdk-headless maven
   SHELL
 
@@ -17,5 +18,5 @@ PATH=/usr/local/gopath/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sb
 ENVIRONMENT
   SHELL
 
-  config.vm.provision "nomad", type: "shell", run: "always", inline: "source /etc/environment && /vagrant/scripts/build-nomad.sh"
+  config.vm.provision "nomad", type: "shell", run: "always", inline: "source /etc/environment && export GOPATH && /vagrant/scripts/build-nomad.sh"
 end
