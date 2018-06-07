@@ -109,7 +109,7 @@ public class JobsApi extends ApiBase {
     public EvaluationResponse deregister(final String jobId, @Nullable final WriteOptions options)
             throws IOException, NomadException {
 
-        return deregister(jobId, false, null);
+        return deregister(jobId, false, options);
     }
 
     /**
