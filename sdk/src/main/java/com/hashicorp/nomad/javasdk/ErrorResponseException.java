@@ -12,18 +12,22 @@ import java.io.IOException;
  */
 public final class ErrorResponseException extends ResponseException {
     private final String serverErrorMessage;
+    private final int statusCode;
 
-    private ErrorResponseException(HttpUriRequest request,
-                                   String errorLocation,
-                                   String serverErrorMessage,
-                                   @Nullable String rawEntity) {
+    private ErrorResponseException(String requestMethod,
+                                  String requestUri,
+                                  String errorLocation,
+                                  String serverErrorMessage,
+                                  int statusCode,
+                                  @Nullable String rawEntity) {
 
         super(
-                request.getMethod() + " " + request.getURI()
+                requestMethod + " " + requestUri
                         + " resulted in error " + errorLocation + ": " + serverErrorMessage,
                 rawEntity,
                 null);
         this.serverErrorMessage = serverErrorMessage;
+        this.statusCode = statusCode;
     }
 
     /**
@@ -31,6 +35,13 @@ public final class ErrorResponseException extends ResponseException {
      */
     public String getServerErrorMessage() {
         return serverErrorMessage;
+    }
+
+    /**
+     * @return status code sent by the server
+     */
+    public int getStatusCode() {
+        return statusCode;
     }
 
     static ErrorResponseException signaledInStatus(HttpUriRequest request, HttpResponse response) {
@@ -43,8 +54,15 @@ public final class ErrorResponseException extends ResponseException {
             rawEntity = null;
             errorMessage = "!!!ERROR GETTING ERROR MESSAGE FROM RESPONSE ENTITY: " + e + "!!!";
         }
+        int status = response.getStatusLine().getStatusCode();
         String errorLocation = "response status " + response.getStatusLine();
-        return new ErrorResponseException(request, errorLocation, errorMessage, rawEntity);
+        return new ErrorResponseException(
+                request.getMethod(),
+                request.getURI().toString(),
+                errorLocation,
+                errorMessage,
+                status,
+                rawEntity);
     }
 
     static ErrorResponseException signaledInEntity(HttpUriRequest request, HttpResponse response, String message) {
@@ -54,6 +72,13 @@ public final class ErrorResponseException extends ResponseException {
         } catch (IOException e) {
             rawEntity = null;
         }
-        return new ErrorResponseException(request, "in response entity", message, rawEntity);
+        int status = response.getStatusLine().getStatusCode();
+        return new ErrorResponseException(
+                request.getMethod(),
+                request.getURI().toString(),
+                "in response entity",
+                message,
+                status,
+                rawEntity);
     }
 }
