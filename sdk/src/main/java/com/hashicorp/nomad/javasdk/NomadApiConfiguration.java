@@ -145,6 +145,7 @@ public class NomadApiConfiguration {
      */
     public static class Tls {
         private final String caCertificateFile;
+        private final boolean skipVerify;
         private final String clientCertificateFile;
         private final String clientKeyFile;
 
@@ -154,10 +155,12 @@ public class NomadApiConfiguration {
          * Consider using the {#Builder} class to conveniently build a configuration.
          *
          * @param caCertificateFile     path to the CA certificate
+         * @param skipVerify            whether to trust any certificate returned by server
          * @param clientCertificateFile path to the client certificate
          * @param clientKeyFile         path to the client key
          */
         public Tls(@Nullable String caCertificateFile,
+                   boolean skipVerify,
                    @Nullable String clientCertificateFile,
                    @Nullable String clientKeyFile) {
 
@@ -166,8 +169,16 @@ public class NomadApiConfiguration {
                         "You cannot set only one of clientCertificateFile and clientKeyFile");
 
             this.caCertificateFile = caCertificateFile;
+            this.skipVerify = skipVerify;
             this.clientCertificateFile = clientCertificateFile;
             this.clientKeyFile = clientKeyFile;
+        }
+
+        /**
+         * Returns {@code true} if a client should not verify agent's TLS certificate.
+         */
+        public boolean isSkipVerify() {
+            return skipVerify;
         }
 
         /**
@@ -205,6 +216,7 @@ public class NomadApiConfiguration {
         private String namespace;
         private String authToken;
         private String tlsCaFile;
+        private boolean tlsSkipVerify;
         private String tlsCertFile;
         private String tlsKeyFile;
 
@@ -271,6 +283,16 @@ public class NomadApiConfiguration {
          */
         public Builder setTlsCaFile(String tlsCaFile) {
             this.tlsCaFile = tlsCaFile;
+            return this;
+        }
+
+        /**
+         * Defines, whether client should not verify agent's TLS certificate.
+         *
+         * @param tlsSkipVerify {@code true} to not verify agent's certificate
+         */
+        public Builder setTlsSkipVerify(boolean tlsSkipVerify) {
+            this.tlsSkipVerify = tlsSkipVerify;
             return this;
         }
 
@@ -358,6 +380,7 @@ public class NomadApiConfiguration {
 
             Tls tls = new Tls(
                     tlsCaFile,
+                    tlsSkipVerify,
                     tlsCertFile,
                     tlsKeyFile);
 
