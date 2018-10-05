@@ -39,6 +39,7 @@ public final class Allocation extends ApiObject {
     private BigInteger modifyIndex;
     private BigInteger allocModifyIndex;
     private long createTime;
+    private long modifyTime;
 
     @JsonProperty("ID")
     public String getId() {
@@ -298,6 +299,16 @@ public final class Allocation extends ApiObject {
 
     public Allocation setCreateTime(long createTime) {
         this.createTime = createTime;
+        return this;
+    }
+
+    @JsonProperty("ModifyTime")
+    public long getModifyTime() {
+        return modifyTime;
+    }
+
+    public Allocation setModifyTime(long modifyTime) {
+        this.modifyTime = modifyTime;
         return this;
     }
 

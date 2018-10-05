@@ -6,6 +6,7 @@ import com.hashicorp.nomad.javasdk.NomadJson;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a generated JavaBean representing a request or response structure.
@@ -15,6 +16,8 @@ import java.util.List;
 public final class TaskEvent extends ApiObject {
     private String type;
     private long time;
+    private String displayMessage;
+    private Map<String, String> details;
     private boolean failsTask;
     private String restartReason;
     private String setupError;
@@ -54,6 +57,33 @@ public final class TaskEvent extends ApiObject {
 
     public TaskEvent setTime(long time) {
         this.time = time;
+        return this;
+    }
+
+    @JsonProperty("DisplayMessage")
+    public String getDisplayMessage() {
+        return displayMessage;
+    }
+
+    public TaskEvent setDisplayMessage(String displayMessage) {
+        this.displayMessage = displayMessage;
+        return this;
+    }
+
+    @JsonProperty("Details")
+    public Map<String, String> getDetails() {
+        return details;
+    }
+
+    public TaskEvent setDetails(Map<String, String> details) {
+        this.details = details;
+        return this;
+    }
+
+    public TaskEvent addDetails(String key, String value) {
+        if (this.details == null)
+            this.details = new java.util.HashMap<>();
+        this.details.put(key, value);
         return this;
     }
 

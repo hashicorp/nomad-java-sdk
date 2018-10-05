@@ -31,6 +31,7 @@ public final class AllocationListStub extends ApiObject {
     private BigInteger createIndex;
     private BigInteger modifyIndex;
     private long createTime;
+    private long modifyTime;
 
     @JsonProperty("ID")
     public String getId() {
@@ -196,6 +197,16 @@ public final class AllocationListStub extends ApiObject {
 
     public AllocationListStub setCreateTime(long createTime) {
         this.createTime = createTime;
+        return this;
+    }
+
+    @JsonProperty("ModifyTime")
+    public long getModifyTime() {
+        return modifyTime;
+    }
+
+    public AllocationListStub setModifyTime(long modifyTime) {
+        this.modifyTime = modifyTime;
         return this;
     }
 

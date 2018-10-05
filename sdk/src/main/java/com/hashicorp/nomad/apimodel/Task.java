@@ -31,6 +31,7 @@ public final class Task extends ApiObject {
     private DispatchPayloadConfig dispatchPayload;
     private boolean leader;
     private long shutdownDelay;
+    private String killSignal;
 
     @JsonProperty("Name")
     public String getName() {
@@ -252,6 +253,16 @@ public final class Task extends ApiObject {
 
     public Task setShutdownDelay(long shutdownDelay) {
         this.shutdownDelay = shutdownDelay;
+        return this;
+    }
+
+    @JsonProperty("KillSignal")
+    public String getKillSignal() {
+        return killSignal;
+    }
+
+    public Task setKillSignal(String killSignal) {
+        this.killSignal = killSignal;
         return this;
     }
 
