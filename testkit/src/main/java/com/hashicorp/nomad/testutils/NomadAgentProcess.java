@@ -80,28 +80,28 @@ public class NomadAgentProcess implements AutoCloseable {
     }
 
     /**
-     * Returns the agent's configuration.
+     * @return The agent's configuration.
      */
     public NomadAgentConfiguration getConfig() {
         return config;
     }
 
     /**
-     * Returns the HTTP or HTTPS address (meaning "scheme://host:port") of the agent.
+     * @return The HTTP or HTTPS address (meaning "scheme://host:port") of the agent.
      */
     public HttpHost getHttpAddress() {
         return new HttpHost(getIpAddress(), config.getPorts().getHttp(), config.getTls().isHttp() ? "https" : "http");
     }
 
     /**
-     * Returns the RPC address (meaning "host:port") of the agent.
+     * @return The RPC address (meaning "host:port") of the agent.
      */
     public String getRpcAddress() {
         return getIpAddress() + ":" + config.getPorts().getRpc();
     }
 
     /**
-     * Returns the Serf address (meaning "host:port") of the agent.
+     * @return The Serf address (meaning "host:port") of the agent.
      */
     public String getSerfAddress() {
         return getIpAddress() + ":" + config.getPorts().getSerf();

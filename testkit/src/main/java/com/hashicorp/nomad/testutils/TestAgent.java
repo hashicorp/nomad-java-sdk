@@ -22,7 +22,6 @@ public class TestAgent implements AutoCloseable {
      *
      * @param agentProcess the agent process
      * @param apiClient    the API client to use
-     * @throws Exception if there is a problem while waiting for the agent to be ready
      */
     public TestAgent(NomadAgentProcess agentProcess, NomadApiClient apiClient) {
         this.agentProcess = agentProcess;
@@ -33,7 +32,6 @@ public class TestAgent implements AutoCloseable {
      * Creates a new TestAgent.
      *
      * @param agentProcess the agent process
-     * @throws Exception if there is a problem while waiting for the agent to be ready
      */
     public TestAgent(NomadAgentProcess agentProcess) {
         this(agentProcess, new NomadApiClient(agentProcess.getHttpAddress()));
@@ -44,7 +42,6 @@ public class TestAgent implements AutoCloseable {
      *
      * @param agentProcess     the agent process
      * @param apiConfigBuilder a partially-configured API config builder
-     * @throws Exception if there is a problem while waiting for the agent to be ready
      */
     public TestAgent(NomadAgentProcess agentProcess,
                      NomadApiConfiguration.Builder apiConfigBuilder) {
@@ -63,35 +60,35 @@ public class TestAgent implements AutoCloseable {
     }
 
     /**
-     * Returns the api client.
+     * @return The api client.
      */
     public NomadApiClient getApiClient() {
         return apiClient;
     }
 
     /**
-     * Returns the agent's configuration.
+     * @return The agent's configuration.
      */
     public NomadAgentConfiguration getConfig() {
         return agentProcess.getConfig();
     }
 
     /**
-     * Returns the HTTP or HTTPS address (meaning "scheme://host:port") of the agent.
+     * @return The HTTP or HTTPS address (meaning "scheme://host:port") of the agent.
      */
     public HttpHost getHttpAddress() {
         return agentProcess.getHttpAddress();
     }
 
     /**
-     * Returns the RPC address (meaning "host:port") of the agent.
+     * @return The RPC address (meaning "host:port") of the agent.
      */
     public String getRpcAddress() {
         return agentProcess.getRpcAddress();
     }
 
     /**
-     * Returns the Serf address (meaning "host:port") of the agent.
+     * @return The Serf address (meaning "host:port") of the agent.
      */
     public String getSerfAddress() {
         return agentProcess.getSerfAddress();

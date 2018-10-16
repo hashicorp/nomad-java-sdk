@@ -65,98 +65,98 @@ public class NomadAgentConfiguration {
     }
 
     /**
-     * Returns the agent's region.
+     * @return The agent's region.
      */
     public String getRegion() {
         return region;
     }
 
     /**
-     * Returns the agent's name.
+     * @return The agent's name.
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Returns the data directory.
+     * @return The data directory.
      */
     public File getDataDir() {
         return dataDir;
     }
 
     /**
-     * Returns the address Nomad should bind to.
+     * @return The address Nomad should bind to.
      */
     public String getBindAddr() {
         return bindAddr;
     }
 
     /**
-     * Returns the advertised addresses configuration.
+     * @return The advertised addresses configuration.
      */
     public AdvertiseAddrs getAdvertise() {
         return advertise;
     }
 
     /**
-     * Returns the log level.
+     * @return The log level.
      */
     public String getLogLevel() {
         return logLevel;
     }
 
     /**
-     * Returns the ports configuration.
+     * @return The ports configuration.
      */
     public Ports getPorts() {
         return ports;
     }
 
     /**
-     * Returns the server configuration.
+     * @return The server configuration.
      */
     public Server getServer() {
         return server;
     }
 
     /**
-     * Returns the client configuration.
+     * @return The client configuration.
      */
     public Client getClient() {
         return client;
     }
 
     /**
-     * Returns the ACL configuration.
+     * @return The ACL configuration.
      */
     public Acl getAcl() {
         return acl;
     }
 
     /**
-     * Returns true iff Checkpoint is disabled.
+     * @return true iff Checkpoint is disabled.
      */
     public boolean isDisableCheckpoint() {
         return disableCheckpoint;
     }
 
     /**
-     * Returns the Consul configuration.
+     * @return The Consul configuration.
      */
     public Consul getConsul() {
         return consul;
     }
 
     /**
-     * Returns the TLS configuration.
+     * @return The TLS configuration.
      */
     public Tls getTls() {
         return tls;
     }
 
     /**
-     * Returns the configuration as JSON.
+     * @return The configuration as JSON.
      */
     public String asJson() {
         try {
@@ -195,21 +195,21 @@ public class NomadAgentConfiguration {
         }
 
         /**
-         * Returns the advertised HTTP/HTTPS address.
+         * @return The advertised HTTP/HTTPS address.
          */
         public String getHttp() {
             return http;
         }
 
         /**
-         * Returns the advertised RPC address.
+         * @return The advertised RPC address.
          */
         public String getRpc() {
             return rpc;
         }
 
         /**
-         * Returns the advertised Serf address.
+         * @return The advertised Serf address.
          */
         public String getSerf() {
             return serf;
@@ -239,21 +239,21 @@ public class NomadAgentConfiguration {
         }
 
         /**
-         * Returns the HTTP/HTTPS port.
+         * @return The HTTP/HTTPS port.
          */
         public int getHttp() {
             return http;
         }
 
         /**
-         * Returns the RPC port.
+         * @return The RPC port.
          */
         public int getRpc() {
             return rpc;
         }
 
         /**
-         * Returns the Serf port.
+         * @return The Serf port.
          */
         public int getSerf() {
             return serf;
@@ -284,21 +284,21 @@ public class NomadAgentConfiguration {
         }
 
         /**
-         * Returns true iff the server is enabled.
+         * @return true iff the server is enabled.
          */
         public boolean getEnabled() {
             return enabled;
         }
 
         /**
-         * Returns the number of servers to expect for bootstrapping, or 0 if bootstrapping is disabled.
+         * @return The number of servers to expect for bootstrapping, or 0 if bootstrapping is disabled.
          */
         public int getBootstrapExpect() {
             return bootstrapExpect;
         }
 
         /**
-         * Returns the servers to try joining when starting.
+         * @return The servers to try joining when starting.
          */
         public List<String> getStartJoin() {
             return startJoin;
@@ -324,14 +324,14 @@ public class NomadAgentConfiguration {
         }
 
         /**
-         * Returns true iff the client is enabled.
+         * @return true iff the client is enabled.
          */
         public boolean getEnabled() {
             return enabled;
         }
 
         /**
-         * Returns the client options map.
+         * @return The client options map.
          */
         public Map<String, String> getOptions() {
             return options;
@@ -354,7 +354,7 @@ public class NomadAgentConfiguration {
         }
 
         /**
-         * Gets whether ACL enforcement and management are enabled.
+         * @return true iff ACL enforcement and management are enabled.
          */
         public boolean isEnabled() {
             return enabled;
@@ -386,21 +386,21 @@ public class NomadAgentConfiguration {
         }
 
         /**
-         * Returns true iff the client should advertise services in Consul.
+         * @return true iff the client should advertise services in Consul.
          */
         public boolean isAutoAdvertise() {
             return autoAdvertise;
         }
 
         /**
-         * Returns true iff the server should use Consul to find other servers.
+         * @return true iff the server should use Consul to find other servers.
          */
         public boolean isServerAutoJoin() {
             return serverAutoJoin;
         }
 
         /**
-         * Returns true iff the client should use Consul to find servers.
+         * @return true iff the client should use Consul to find servers.
          */
         public boolean isClientAutoJoin() {
             return clientAutoJoin;
@@ -435,28 +435,28 @@ public class NomadAgentConfiguration {
         }
 
         /**
-         * Returns true iff TLS is enabled for HTTP (HTTPS).
+         * @return true iff TLS is enabled for HTTP (HTTPS).
          */
         public boolean isHttp() {
             return http;
         }
 
         /**
-         * Sets the certificate authority file to use for TLS.
+         * @return The certificate authority file to use for TLS.
          */
         public String getCaFile() {
             return caFile;
         }
 
         /**
-         * Sets the certificate file to use for TLS.
+         * @return The certificate file to use for TLS.
          */
         public String getCertFile() {
             return certFile;
         }
 
         /**
-         * Sets the certificate key to use for TLS.
+         * @return The certificate key to use for TLS.
          */
         public String getKeyFile() {
             return keyFile;
@@ -498,6 +498,7 @@ public class NomadAgentConfiguration {
          * Builds a new configuration using the values in the builder.
          * <p>
          * If the node name or port numbers haven't been explicitly set, they will be automatically assigned.
+         * @return the constructed NomadAgentConfiguration
          */
         public NomadAgentConfiguration build() {
             int id = buildCount.incrementAndGet();
@@ -529,6 +530,7 @@ public class NomadAgentConfiguration {
          * Sets the agent's region.
          *
          * @param region the region to use
+         * @return Updated builder
          */
         public Builder setRegion(String region) {
             this.region = region;
@@ -539,6 +541,7 @@ public class NomadAgentConfiguration {
          * Sets the agent's name.
          *
          * @param name the name to use
+         * @return Updated builder
          */
         public Builder setName(String name) {
             this.name = name;
@@ -549,6 +552,7 @@ public class NomadAgentConfiguration {
          * Sets the data directory.
          *
          * @param dataDir path to the directory
+         * @return Updated builder
          */
         public Builder setDataDir(File dataDir) {
             this.dataDir = dataDir;
@@ -559,6 +563,7 @@ public class NomadAgentConfiguration {
          * Sets the address Nomad should bind to.
          *
          * @param bindAddr the address to bind to
+         * @return Updated builder
          */
         public Builder setBindAddr(String bindAddr) {
             this.bindAddr = bindAddr;
@@ -569,6 +574,7 @@ public class NomadAgentConfiguration {
          * Sets the HTTP port.
          *
          * @param httpPort the port to use
+         * @return Updated builder
          */
         public Builder setHttpPort(int httpPort) {
             this.httpPort = httpPort;
@@ -579,6 +585,7 @@ public class NomadAgentConfiguration {
          * Sets the RPC port.
          *
          * @param rpcPort the port to use
+         * @return Updated builder
          */
         public Builder setRpcPort(int rpcPort) {
             this.rpcPort = rpcPort;
@@ -589,6 +596,7 @@ public class NomadAgentConfiguration {
          * Sets the Serf port.
          *
          * @param serfPort the port to use
+         * @return Updated builder
          */
         public Builder setSerfPort(int serfPort) {
             this.serfPort = serfPort;
@@ -599,6 +607,7 @@ public class NomadAgentConfiguration {
          * Sets the advertised HTTP address.
          *
          * @param httpAdvertiseAddr the address to advertise
+         * @return Updated builder
          */
         public Builder setHttpAdvertiseAddr(String httpAdvertiseAddr) {
             this.httpAdvertiseAddr = httpAdvertiseAddr;
@@ -609,6 +618,7 @@ public class NomadAgentConfiguration {
          * Sets the advertised RPC address.
          *
          * @param rpcAdvertiseAddr the address to advertise
+         * @return Updated builder
          */
         public Builder setRpcAdvertiseAddr(String rpcAdvertiseAddr) {
             this.rpcAdvertiseAddr = rpcAdvertiseAddr;
@@ -619,6 +629,7 @@ public class NomadAgentConfiguration {
          * Sets the advertised Serf address.
          *
          * @param serfAdvertiseAddr the address to advertise
+         * @return Updated builder
          */
         public Builder setSerfAdvertiseAddr(String serfAdvertiseAddr) {
             this.serfAdvertiseAddr = serfAdvertiseAddr;
@@ -629,6 +640,7 @@ public class NomadAgentConfiguration {
          * Enables or disables the Nomad server in the agent.
          *
          * @param serverEnabled true to enable, false to disable
+         * @return Updated builder
          */
         public Builder setServerEnabled(boolean serverEnabled) {
             this.serverEnabled = serverEnabled;
@@ -639,6 +651,7 @@ public class NomadAgentConfiguration {
          * Sets the number of servers to expect for bootstrapping, or disables bootstrapping if 0 is specified.
          *
          * @param serverBootstrapExpect the number of servers to expect, or 0 to disable
+         * @return Updated builder
          */
         public Builder setServerBootstrapExpect(int serverBootstrapExpect) {
             this.serverBootstrapExpect = serverBootstrapExpect;
@@ -649,6 +662,7 @@ public class NomadAgentConfiguration {
          * Sets the servers to try joining when starting.
          *
          * @param serverStartJoin addresses of the servers to join
+         * @return Updated builder
          */
         public Builder setServerStartJoin(String... serverStartJoin) {
             this.serverStartJoin = asList(serverStartJoin);
@@ -659,6 +673,7 @@ public class NomadAgentConfiguration {
          * Enables or disables the client.
          *
          * @param clientEnabled true to enable, false to disable
+         * @return Updated builder
          */
         public Builder setClientEnabled(boolean clientEnabled) {
             this.clientEnabled = clientEnabled;
@@ -670,6 +685,7 @@ public class NomadAgentConfiguration {
          *
          * @param key   the option's name
          * @param value the option's value
+         * @return Updated builder
          */
         public Builder addClientOption(String key, String value) {
             if (clientOptions == null)
@@ -682,6 +698,7 @@ public class NomadAgentConfiguration {
          * Sets whether ACL enforcement and management is enabled.
          *
          * @param aclEnabled true to enforce ACLs, false to not enforce ALCs
+         * @return Updated builder
          */
         public Builder setAclEnabled(boolean aclEnabled) {
             this.aclEnabled = aclEnabled;
@@ -692,6 +709,7 @@ public class NomadAgentConfiguration {
          * Enables or disables TLS for HTTP connections (HTTPS).
          *
          * @param tlsHttp true to enable, false to disable
+         * @return Updated builder
          */
         public Builder setTlsHttp(boolean tlsHttp) {
             this.tlsHttp = tlsHttp;
@@ -702,6 +720,7 @@ public class NomadAgentConfiguration {
          * Sets the certificate authority file to use for TLS.
          *
          * @param tlsCaFile path to the file
+         * @return Updated builder
          */
         public Builder setTlsCaFile(String tlsCaFile) {
             this.tlsCaFile = tlsCaFile;
@@ -713,6 +732,7 @@ public class NomadAgentConfiguration {
          *
          * @param tlsCertFile path to the certificate file
          * @param tlsKeyFile  path to the key file
+         * @return Updated builder
          */
         public Builder setTlsCertAndKeyFiles(String tlsCertFile, String tlsKeyFile) {
             this.tlsCertFile = tlsCertFile;
