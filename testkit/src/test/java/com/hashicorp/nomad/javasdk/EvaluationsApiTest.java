@@ -25,7 +25,7 @@ public class EvaluationsApiTest extends ApiTestBase {
             assertPristineServerQueryResponse(initialResponse);
             assertThat(initialResponse.getValue(), is(empty()));
 
-            String evalID = agent.getApiClient().getJobsApi().register(createTestJob()).getValue();
+            String evalID = agent.getApiClient().getJobsApi().register(createTestJob()).getValue().getEvalId();
 
             ServerQueryResponse<List<Evaluation>> updatedResponse = evaluationsApi.list();
             assertUpdatedServerQueryResponse(updatedResponse);
@@ -45,7 +45,7 @@ public class EvaluationsApiTest extends ApiTestBase {
             assertPristineServerQueryResponse(initialResponse);
             assertThat(initialResponse.getValue(), is(empty()));
 
-            String evalID = agent.getApiClient().getJobsApi().register(createTestJob()).getValue();
+            String evalID = agent.getApiClient().getJobsApi().register(createTestJob()).getValue().getEvalId();
 
             ServerQueryResponse<List<Evaluation>> updatedResponse = evaluationsApi.list(evalID.substring(0, 4));
             assertUpdatedServerQueryResponse(updatedResponse);
@@ -70,7 +70,7 @@ public class EvaluationsApiTest extends ApiTestBase {
                 }
             };
 
-            String evalID = agent.getApiClient().getJobsApi().register(createTestJob()).getValue();
+            String evalID = agent.getApiClient().getJobsApi().register(createTestJob()).getValue().getEvalId();
 
             ServerQueryResponse<Evaluation> response = evaluationsApi.info(evalID);
             assertUpdatedServerQueryResponse(response);
@@ -87,7 +87,7 @@ public class EvaluationsApiTest extends ApiTestBase {
             assertPristineServerQueryResponse(initialResponse);
             assertThat(initialResponse.getValue(), is(empty()));
 
-            final String evalID = agent.getApiClient().getJobsApi().register(createTestJob()).getValue();
+            final String evalID = agent.getApiClient().getJobsApi().register(createTestJob()).getValue().getEvalId();
 
             ServerQueryResponse<List<AllocationListStub>> response = evaluationsApi.allocations(evalID,
                     QueryOptions.pollRepeatedlyUntil(

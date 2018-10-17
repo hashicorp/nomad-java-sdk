@@ -1,12 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
-import com.hashicorp.nomad.apimodel.AllocationListStub;
-import com.hashicorp.nomad.apimodel.Evaluation;
-import com.hashicorp.nomad.apimodel.Job;
-import com.hashicorp.nomad.apimodel.JobListStub;
-import com.hashicorp.nomad.apimodel.JobPlanResponse;
-import com.hashicorp.nomad.apimodel.JobSummary;
-import com.hashicorp.nomad.apimodel.PeriodicConfig;
+import com.hashicorp.nomad.apimodel.*;
 import com.hashicorp.nomad.testutils.TestAgent;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -37,9 +31,9 @@ public class JobsApiTest extends ApiTestBase {
             assertThatNoJobsHaveBeenRun(jobsApi);
 
             Job job = createTestJob();
-            EvaluationResponse registrationResponse = jobsApi.register(job);
+            ServerResponse<JobRegisterResponse> registrationResponse = jobsApi.register(job);
             assertUpdatedServerResponse(registrationResponse);
-            assertThat("evaluation ID", registrationResponse.getValue(), is(nonEmptyString()));
+            assertThat("evaluation ID", registrationResponse.getValue().getEvalId(), is(nonEmptyString()));
 
             ServerQueryResponse<List<JobListStub>> updatedListResponse = jobsApi.list();
             assertUpdatedServerQueryResponse(updatedListResponse);
@@ -72,9 +66,9 @@ public class JobsApiTest extends ApiTestBase {
 
             assertThatNoJobsHaveBeenRun(jobsApi);
 
-            EvaluationResponse registrationResponse = jobsApi.register(job, BigInteger.ZERO);
+            ServerResponse<JobRegisterResponse> registrationResponse = jobsApi.register(job, BigInteger.ZERO);
             assertUpdatedServerResponse(registrationResponse);
-            assertThat("evaluation ID", registrationResponse.getValue(), is(nonEmptyString()));
+            assertThat("evaluation ID", registrationResponse.getValue().getEvalId(), is(nonEmptyString()));
 
             ServerQueryResponse<List<JobListStub>> updatedListResponse = jobsApi.list();
             assertUpdatedServerQueryResponse(updatedListResponse);
@@ -90,7 +84,7 @@ public class JobsApiTest extends ApiTestBase {
                 }
             };
 
-            EvaluationResponse enforcedUpdateResponse = jobsApi.register(job, currentIndex);
+            ServerResponse<JobRegisterResponse> enforcedUpdateResponse = jobsApi.register(job, currentIndex);
             assertUpdatedServerResponse(enforcedUpdateResponse);
         }
     }
@@ -219,7 +213,7 @@ public class JobsApiTest extends ApiTestBase {
             assertThat("jobs", jobs, is(empty()));
 
             Job job = createTestJob();
-            EvaluationResponse registrationResponse = jobsApi.register(job);
+            ServerResponse<JobRegisterResponse> registrationResponse = jobsApi.register(job);
             assertUpdatedServerResponse(registrationResponse);
 
             ServerQueryResponse<List<JobListStub>> updatedListResponse = jobsApi.list(job.getId().substring(0, 1));
@@ -324,7 +318,7 @@ public class JobsApiTest extends ApiTestBase {
             assertThatNoJobsHaveBeenRun(jobsApi);
 
             Job job = createTestJob();
-            EvaluationResponse registrationResponse = jobsApi.register(job);
+            ServerResponse<JobRegisterResponse> registrationResponse = jobsApi.register(job);
             assertUpdatedServerResponse(registrationResponse);
 
             EvaluationResponse evaluationResponse = jobsApi.forceEvaluate(job.getId());
@@ -406,7 +400,7 @@ public class JobsApiTest extends ApiTestBase {
                 }
             };
 
-            EvaluationResponse registerResponse = jobsApi.register(job);
+            ServerResponse<JobRegisterResponse> registerResponse = jobsApi.register(job);
             assertUpdatedServerResponse(registerResponse);
 
             ServerQueryResponse<JobSummary> jobSummaryResponse = jobsApi.summary(job.getId());

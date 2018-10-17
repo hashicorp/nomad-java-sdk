@@ -8,6 +8,7 @@ import com.hashicorp.nomad.apimodel.Job;
 import com.hashicorp.nomad.apimodel.JobDispatchResponse;
 import com.hashicorp.nomad.apimodel.JobListStub;
 import com.hashicorp.nomad.apimodel.JobPlanResponse;
+import com.hashicorp.nomad.apimodel.JobRegisterResponse;
 import com.hashicorp.nomad.apimodel.JobSummary;
 import com.hashicorp.nomad.apimodel.JobValidateResponse;
 import org.apache.http.HttpResponse;
@@ -518,7 +519,7 @@ public class JobsApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
      */
-    public EvaluationResponse register(Job job) throws IOException, NomadException {
+    public ServerResponse<JobRegisterResponse> register(Job job) throws IOException, NomadException {
         return register(job, null, null);
     }
 
@@ -531,7 +532,9 @@ public class JobsApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
      */
-    public EvaluationResponse register(Job job, @Nullable WriteOptions options) throws IOException, NomadException {
+    public ServerResponse<JobRegisterResponse> register(
+            Job job,
+            @Nullable WriteOptions options) throws IOException, NomadException {
         return register(job, null, options);
     }
 
@@ -546,7 +549,9 @@ public class JobsApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
      */
-    public EvaluationResponse register(Job job, @Nullable BigInteger modifyIndex) throws IOException, NomadException {
+    public ServerResponse<JobRegisterResponse> register(
+            Job job,
+            @Nullable BigInteger modifyIndex) throws IOException, NomadException {
         return register(job, modifyIndex, null);
     }
 
@@ -562,9 +567,10 @@ public class JobsApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
      */
-    public EvaluationResponse register(Job job,
-                                       @Nullable BigInteger modifyIndex,
-                                       @Nullable WriteOptions options) throws IOException, NomadException {
+    public ServerResponse<JobRegisterResponse> register(
+            Job job,
+            @Nullable BigInteger modifyIndex,
+            @Nullable WriteOptions options) throws IOException, NomadException {
         return register(job, modifyIndex, false, options);
     }
 
@@ -582,12 +588,14 @@ public class JobsApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/jobs.html#put-post">{@code PUT /v1/jobs}</a>
      */
-    public EvaluationResponse register(Job job,
-                                       @Nullable BigInteger modifyIndex,
-                                       boolean policyOverride,
-                                       @Nullable WriteOptions options) throws IOException, NomadException {
-        return executeEvaluationCreatingRequest(
-                put("/v1/jobs", new JobRegistrationRequest(job, modifyIndex, policyOverride), options));
+    public ServerResponse<JobRegisterResponse> register(
+            Job job,
+            @Nullable BigInteger modifyIndex,
+            boolean policyOverride,
+            @Nullable WriteOptions options) throws IOException, NomadException {
+        return executeServerAction(
+                put("/v1/jobs", new JobRegistrationRequest(job, modifyIndex, policyOverride), options),
+                NomadJson.parserFor(JobRegisterResponse.class));
     }
 
     /**

@@ -1,13 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
-import com.hashicorp.nomad.apimodel.AclToken;
-import com.hashicorp.nomad.apimodel.EphemeralDisk;
-import com.hashicorp.nomad.apimodel.Evaluation;
-import com.hashicorp.nomad.apimodel.Job;
-import com.hashicorp.nomad.apimodel.LogConfig;
-import com.hashicorp.nomad.apimodel.Resources;
-import com.hashicorp.nomad.apimodel.Task;
-import com.hashicorp.nomad.apimodel.TaskGroup;
+import com.hashicorp.nomad.apimodel.*;
 import com.hashicorp.nomad.testutils.TestAgent;
 import com.hashicorp.nomad.testutils.NomadAgentConfiguration;
 import com.hashicorp.nomad.testutils.NomadAgentProcess;
@@ -186,9 +179,9 @@ public class ApiTestBase {
     }
 
     protected Evaluation registerTestJobAndPollUntilEvaluationCompletes(TestAgent agent, Job job) throws IOException, NomadException {
-        EvaluationResponse registerResponse = agent.getApiClient().getJobsApi().register(job);
+        ServerResponse<JobRegisterResponse> registerResponse = agent.getApiClient().getJobsApi().register(job);
         assertUpdatedServerResponse(registerResponse);
-        String evalID = registerResponse.getValue();
+        String evalID = registerResponse.getValue().getEvalId();
         assertThat(evalID, is(not("0")));
 
         Evaluation evaluation = agent.getApiClient().getEvaluationsApi().pollForCompletion(evalID, waitStrategyForTest()).getValue();
