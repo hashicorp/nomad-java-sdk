@@ -178,8 +178,6 @@ public class JobsApi extends ApiBase {
     }
 
     /**
-     * Registers or updates a job in the active region.
-     * <p>
      * Dispatches a new instance of a parameterized job in the active region.
      *
      * @param jobId   id of the parameterized job to instantiate
