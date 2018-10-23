@@ -16,10 +16,10 @@ package com.hashicorp.nomad.javasdk;/*
  */
 
 import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.fail;
 
 public abstract class ErrorResponseAssertion {
@@ -32,6 +32,15 @@ public abstract class ErrorResponseAssertion {
             assertThat(e.getServerErrorMessage(), containsString(partOfErrorMessage));
         }
 
+    }
+
+    public ErrorResponseAssertion(int code) throws IOException, NomadException {
+        try {
+            NomadResponse<?> response = performRequest();
+            fail("Expected request to throw a ResponseException, but got " + response);
+        } catch (ErrorResponseException e) {
+            assertThat(e.getServerErrorCode(), is(code));
+        }
     }
 
     protected abstract NomadResponse<?> performRequest() throws IOException, NomadException;
