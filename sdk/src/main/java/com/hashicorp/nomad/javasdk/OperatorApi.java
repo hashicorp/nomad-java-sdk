@@ -1,5 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
+import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 import com.hashicorp.nomad.apimodel.RaftConfiguration;
 
 import javax.annotation.Nullable;
@@ -28,6 +29,18 @@ public class OperatorApi extends ApiBase {
     }
 
     /**
+     * Gets the health of the autopilot status.
+     *
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/operator.html#read-health">{@code GET /v1/operator/autopilot/health}</a>
+     */
+    public NomadResponse<OperatorHealthReply> getHealth() throws IOException, NomadException {
+        return getHealth(null);
+    }
+
+
+    /**
      * Gets the cluster's Raft configuration.
      *
      * @param options options controlling how the request is performed
@@ -42,6 +55,23 @@ public class OperatorApi extends ApiBase {
                 "/v1/operator/raft/configuration",
                 options,
                 NomadJson.parserFor(RaftConfiguration.class));
+    }
+
+    /**
+     * Gets the health of the autopilot status.
+     *
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/operator.html#read-health">{@code GET /v1/operator/autopilot/health}</a>
+     */
+    public NomadResponse<OperatorHealthReply> getHealth(
+            @Nullable QueryOptions<OperatorHealthReply> options
+    ) throws IOException, NomadException {
+        return executeServerQuery(
+                "/v1/operator/autopilot/health",
+                options,
+                NomadJson.parserFor(OperatorHealthReply.class));
     }
 
     /**
@@ -78,4 +108,5 @@ public class OperatorApi extends ApiBase {
                 null
         );
     }
+
 }
