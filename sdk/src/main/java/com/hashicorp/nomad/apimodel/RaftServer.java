@@ -18,6 +18,7 @@ public final class RaftServer extends ApiObject {
     private String address;
     private boolean leader;
     private boolean voter;
+    private String raftProtocol;
 
     @JsonProperty("ID")
     public String getId() {
@@ -66,6 +67,16 @@ public final class RaftServer extends ApiObject {
 
     public RaftServer setVoter(boolean voter) {
         this.voter = voter;
+        return this;
+    }
+
+    @JsonProperty("RaftProtocol")
+    public String getRaftProtocol() {
+        return raftProtocol;
+    }
+
+    public RaftServer setRaftProtocol(String raftProtocol) {
+        this.raftProtocol = raftProtocol;
         return this;
     }
 
