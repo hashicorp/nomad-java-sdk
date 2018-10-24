@@ -2,6 +2,7 @@ package com.hashicorp.nomad.javasdk;
 
 import com.hashicorp.nomad.apimodel.Node;
 import com.hashicorp.nomad.apimodel.NodeListStub;
+import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
@@ -23,10 +24,11 @@ import java.io.InputStream;
 import java.net.ConnectException;
 import java.util.List;
 
-import static com.hashicorp.nomad.javasdk.NomadPredicates.both;
-import static com.hashicorp.nomad.javasdk.NomadPredicates.clientNodeIsReady;
+import static com.hashicorp.nomad.javasdk.NomadPredicates.isHealthy;
 import static com.hashicorp.nomad.javasdk.NomadPredicates.hadKnownLeader;
+import static com.hashicorp.nomad.javasdk.NomadPredicates.clientNodeIsReady;
 import static com.hashicorp.nomad.javasdk.NomadPredicates.responseValue;
+import static com.hashicorp.nomad.javasdk.NomadPredicates.both;
 
 /**
  * An asynchronous client for the
@@ -312,13 +314,46 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     public NomadResponse<?> pollUntilAgentIsReady(final WaitStrategy waitStrategy)
             throws IOException, NomadException, InterruptedException {
 
-        Predicate<ServerQueryResponse<List<NodeListStub>>> predicate = null;
-
         while (true) {
             try {
                 return getAgentApi().self();
             } catch (ConnectException e) {
                 // we'll try again
+            }
+            Thread.sleep(100);
+            waitStrategy.getWait();
+        }
+    }
+
+    /**
+     * Polls until the autopilot indicates that the cluster is healthy.
+     * <p>
+     * At a minimum, the API must be responding to API requests.
+     *
+     * @param waitStrategy the wait strategy to use while polling
+     * @return a future that completes successfully when the API is ready
+     * @throws IOException          if there is an HTTP or lower-level problem
+     * @throws NomadException       if the response signals an error or cannot be deserialized
+     * @throws InterruptedException if the thread is interrupted while waiting to poll again
+     */
+    public NomadResponse<?> pollUntilClusterHealthy(final WaitStrategy waitStrategy)
+            throws IOException, NomadException, InterruptedException {
+
+        Predicate<ServerQueryResponse<OperatorHealthReply>> predicate = isHealthy();
+
+        while (true) {
+            try {
+                return getOperatorApi().getHealth(
+                        QueryOptions
+                                .pollRepeatedlyUntil(predicate, waitStrategy)
+                                .setAllowStale(true)
+                );
+            } catch (ConnectException e) {
+                // we'll try again
+            } catch (ErrorResponseException e) {
+                if (e.getServerErrorCode() != 429) {
+                    throw e;
+                }
             }
             Thread.sleep(100);
             waitStrategy.getWait();
