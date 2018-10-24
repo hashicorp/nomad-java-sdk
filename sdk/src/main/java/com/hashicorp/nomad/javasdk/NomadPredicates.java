@@ -3,6 +3,7 @@ package com.hashicorp.nomad.javasdk;
 import com.hashicorp.nomad.apimodel.Evaluation;
 import com.hashicorp.nomad.apimodel.Job;
 import com.hashicorp.nomad.apimodel.NodeListStub;
+import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -22,6 +23,18 @@ public abstract class NomadPredicates {
             @Override
             public boolean apply(ServerQueryResponse<T> response) {
                 return response.hadKnownLeader();
+            }
+        };
+    }
+
+    /**
+     * Returns a predicate that checks whether the cluster was healthy per the autopilot.
+     */
+    public static Predicate<ServerQueryResponse<OperatorHealthReply>> isHealthy() {
+        return new Predicate<ServerQueryResponse<OperatorHealthReply>>() {
+            @Override
+            public boolean apply(ServerQueryResponse<OperatorHealthReply> response) {
+                return response.getValue().getHealthy();
             }
         };
     }
