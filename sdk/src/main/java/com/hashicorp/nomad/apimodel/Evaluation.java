@@ -6,6 +6,7 @@ import com.hashicorp.nomad.javasdk.NomadJson;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +28,8 @@ public final class Evaluation extends ApiObject {
     private String deploymentId;
     private String status;
     private String statusDescription;
-    private long wait;
+    private String wait;
+    private Date waitUntil;
     private String nextEval;
     private String previousEval;
     private String blockedEval;
@@ -162,12 +164,22 @@ public final class Evaluation extends ApiObject {
     }
 
     @JsonProperty("Wait")
-    public long getWait() {
+    public String getWait() {
         return wait;
     }
 
-    public Evaluation setWait(long wait) {
+    public Evaluation setWait(String wait) {
         this.wait = wait;
+        return this;
+    }
+
+    @JsonProperty("WaitUntil")
+    public Date getWaitUntil() {
+        return waitUntil;
+    }
+
+    public Evaluation setWaitUntil(Date waitUntil) {
+        this.waitUntil = waitUntil;
         return this;
     }
 

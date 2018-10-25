@@ -14,16 +14,28 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class NodeListStub extends ApiObject {
+    private String address;
     private String id;
     private String datacenter;
     private String name;
     private String nodeClass;
     private String version;
     private boolean drain;
+    private String schedulingEligibility;
     private String status;
     private String statusDescription;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
+
+    @JsonProperty("Address")
+    public String getAddress() {
+        return address;
+    }
+
+    public NodeListStub setAddress(String address) {
+        this.address = address;
+        return this;
+    }
 
     @JsonProperty("ID")
     public String getId() {
@@ -82,6 +94,16 @@ public final class NodeListStub extends ApiObject {
 
     public NodeListStub setDrain(boolean drain) {
         this.drain = drain;
+        return this;
+    }
+
+    @JsonProperty("SchedulingEligibility")
+    public String getSchedulingEligibility() {
+        return schedulingEligibility;
+    }
+
+    public NodeListStub setSchedulingEligibility(String schedulingEligibility) {
+        this.schedulingEligibility = schedulingEligibility;
         return this;
     }
 

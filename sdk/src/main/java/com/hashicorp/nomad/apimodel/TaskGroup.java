@@ -19,8 +19,10 @@ public final class TaskGroup extends ApiObject {
     private List<Constraint> constraints;
     private List<Task> tasks;
     private RestartPolicy restartPolicy;
+    private ReschedulePolicy reschedulePolicy;
     private EphemeralDisk ephemeralDisk;
     private UpdateStrategy update;
+    private MigrateStrategy migrate;
     private Map<String, String> meta;
 
     @JsonProperty("Name")
@@ -89,6 +91,16 @@ public final class TaskGroup extends ApiObject {
         return this;
     }
 
+    @JsonProperty("ReschedulePolicy")
+    public ReschedulePolicy getReschedulePolicy() {
+        return reschedulePolicy;
+    }
+
+    public TaskGroup setReschedulePolicy(ReschedulePolicy reschedulePolicy) {
+        this.reschedulePolicy = reschedulePolicy;
+        return this;
+    }
+
     @JsonProperty("EphemeralDisk")
     public EphemeralDisk getEphemeralDisk() {
         return ephemeralDisk;
@@ -106,6 +118,16 @@ public final class TaskGroup extends ApiObject {
 
     public TaskGroup setUpdate(UpdateStrategy update) {
         this.update = update;
+        return this;
+    }
+
+    @JsonProperty("Migrate")
+    public MigrateStrategy getMigrate() {
+        return migrate;
+    }
+
+    public TaskGroup setMigrate(MigrateStrategy migrate) {
+        this.migrate = migrate;
         return this;
     }
 

@@ -23,8 +23,8 @@ public final class ServiceCheck extends ApiObject {
     private String protocol;
     private String portLabel;
     private String addressMode;
-    private long interval;
-    private long timeout;
+    private String interval;
+    private String timeout;
     private String initialStatus;
     private boolean tlsSkipVerify;
     private Map<String, List<String>> header;
@@ -130,21 +130,21 @@ public final class ServiceCheck extends ApiObject {
     }
 
     @JsonProperty("Interval")
-    public long getInterval() {
+    public String getInterval() {
         return interval;
     }
 
-    public ServiceCheck setInterval(long interval) {
+    public ServiceCheck setInterval(String interval) {
         this.interval = interval;
         return this;
     }
 
     @JsonProperty("Timeout")
-    public long getTimeout() {
+    public String getTimeout() {
         return timeout;
     }
 
-    public ServiceCheck setTimeout(long timeout) {
+    public ServiceCheck setTimeout(String timeout) {
         this.timeout = timeout;
         return this;
     }

@@ -21,7 +21,7 @@ public final class ServerHealth extends ApiObject {
     private String serfStatus;
     private String version;
     private boolean leader;
-    private long lastContact;
+    private String lastContact;
     private BigInteger lastTerm;
     private BigInteger lastIndex;
     private boolean healthy;
@@ -89,11 +89,11 @@ public final class ServerHealth extends ApiObject {
     }
 
     @JsonProperty("LastContact")
-    public long getLastContact() {
+    public String getLastContact() {
         return lastContact;
     }
 
-    public ServerHealth setLastContact(long lastContact) {
+    public ServerHealth setLastContact(String lastContact) {
         this.lastContact = lastContact;
         return this;
     }

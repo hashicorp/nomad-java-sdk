@@ -24,7 +24,7 @@ public final class AllocationMetric extends ApiObject {
     private Map<String, Integer> dimensionExhausted;
     private List<String> quotaExhausted;
     private Map<String, Double> scores;
-    private long allocationTime;
+    private String allocationTime;
     private int coalescedFailures;
 
     @JsonProperty("NodesEvaluated")
@@ -178,11 +178,11 @@ public final class AllocationMetric extends ApiObject {
     }
 
     @JsonProperty("AllocationTime")
-    public long getAllocationTime() {
+    public String getAllocationTime() {
         return allocationTime;
     }
 
-    public AllocationMetric setAllocationTime(long allocationTime) {
+    public AllocationMetric setAllocationTime(String allocationTime) {
         this.allocationTime = allocationTime;
         return this;
     }
