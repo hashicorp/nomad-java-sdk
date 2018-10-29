@@ -94,8 +94,10 @@ public class AgentApiTest extends ApiTestBase {
         try (TestAgent agent = newClientServer()) {
             AgentApi agentApi = agent.getApiClient().getAgentApi();
 
+            TestAgent agent2 = newAgent(new NomadAgentConfiguration.Builder());
+
             List<String> servers = agentApi.servers().getValue();
-            servers.add("127.0.0.2:9999");
+            servers.add(agent2.getRpcAddress());
             NomadResponse<Void> result = agentApi.setServers(servers);
 
             List<String> updatedServers = agentApi.servers().getValue();
