@@ -123,19 +123,33 @@ public class ApiTestBase {
     /**
      * Checks metadata for server query requests made after actions that would have altered their output
      */
-    protected void assertUpdatedServerQueryResponse(ServerQueryResponse<?> response) throws ResponseHeaderException {
+    protected void assertUpdatedServerQueryResponse(ServerQueryResponse<?> response, BigInteger previousIndex) throws ResponseHeaderException {
         assertThat("response", response, not(nullValue()));
         assertThat("should have known leader", response.hadKnownLeader(), is(true));
         assertThat("should have last contact", response.getMillisSinceLastContact(), equalTo(0L));
-        assertThat("index of " + response, response.getIndex(), greaterThan(BigInteger.ZERO));
+        assertThat("index of " + response, response.getIndex(), greaterThan(previousIndex));
+    }
+
+    /**
+     * Checks metadata for server query requests made after actions that would have altered their output
+     */
+    protected void assertUpdatedServerQueryResponse(ServerQueryResponse<?> response) throws ResponseHeaderException {
+        assertUpdatedServerQueryResponse(response, BigInteger.valueOf(-1));
     }
 
     /**
      * Checks metadata for server write requests
      */
     protected void assertUpdatedServerResponse(ServerResponse<?> response) {
+        assertUpdatedServerResponse(response, BigInteger.valueOf(-1));
+    }
+
+    /**
+     * Checks metadata for server write requests
+     */
+    protected void assertUpdatedServerResponse(ServerResponse<?> response, BigInteger prevIndex) {
         assertThat("response", response, not(nullValue()));
-        assertThat("index of " + response, response.getIndex(), greaterThan(BigInteger.ZERO));
+        assertThat("index of " + response, response.getIndex(), greaterThan(prevIndex));
     }
 
     protected WaitStrategy waitStrategyForTest() {
