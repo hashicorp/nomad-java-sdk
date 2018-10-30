@@ -73,6 +73,7 @@ public class NodesApiTest extends ApiTestBase {
             assertUpdatedServerQueryResponse(infoResponse);
             assertThat(infoResponse.getValue().getId(), is(NodeListStub.getId()));
             assertThat(infoResponse.getValue().getDatacenter(), is(NodeListStub.getDatacenter()));
+            assertThat(infoResponse.getValue().getDrivers(), hasKey("mock_driver"));
         }
     }
 
