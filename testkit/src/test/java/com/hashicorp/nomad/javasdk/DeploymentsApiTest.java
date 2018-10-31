@@ -24,7 +24,7 @@ public class DeploymentsApiTest extends ApiTestBase {
             final DeploymentsApi deploymentsApi = agent.getApiClient().getDeploymentsApi();
 
             Job job = createTestJob().setType("service").setUpdate(new UpdateStrategy().setCanary(1));
-            jobsApi.register(job);
+            registerTestJobAndPollUntilEvaluationCompletes(agent, job);
 
             List<Deployment> all = deploymentsApi.list("").getValue();
             assertThat( all, Matchers.<Deployment>hasSize(1));

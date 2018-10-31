@@ -1,5 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
+import com.hashicorp.nomad.apimodel.AutopilotConfiguration;
 import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 import com.hashicorp.nomad.apimodel.RaftConfiguration;
 
@@ -107,6 +108,34 @@ public class OperatorApi extends ApiBase {
                 ),
                 null
         );
+    }
+
+    /**
+     * Gets the autopilot configuration.
+     *
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/operator.html#read-autopilot-configuration">{@code GET /v1/operator/autopilot/configuration}</a>
+     */
+    public NomadResponse<AutopilotConfiguration> getAutopilotConfiguration() throws IOException, NomadException {
+        return getAutopilotConfiguration(null);
+    }
+
+    /**
+     * Gets the autopilot configuration.
+     *
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/operator.html#read-autopilot-configuration">{@code GET /v1/operator/autopilot/configuration}</a>
+     */
+    public NomadResponse<AutopilotConfiguration> getAutopilotConfiguration(
+            @Nullable QueryOptions<AutopilotConfiguration> options
+    ) throws IOException, NomadException {
+        return executeServerQuery(
+                "/v1/operator/autopilot/configuration",
+                options,
+                NomadJson.parserFor(AutopilotConfiguration.class));
     }
 
 }
