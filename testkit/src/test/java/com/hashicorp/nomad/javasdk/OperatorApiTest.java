@@ -5,7 +5,6 @@ import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 import com.hashicorp.nomad.apimodel.RaftConfiguration;
 import com.hashicorp.nomad.testutils.NomadAgentConfiguration;
 import com.hashicorp.nomad.testutils.TestAgent;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.junit.Test;
 
 import java.io.IOException;

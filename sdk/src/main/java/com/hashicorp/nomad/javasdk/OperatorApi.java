@@ -164,7 +164,7 @@ public class OperatorApi extends ApiBase {
     public NomadResponse<Boolean> updateAutopilotConfiguration(
             AutopilotConfiguration autopilotConfiguration,
             @Nullable WriteOptions options
-    ) throws IOException, NomadException {
+        ) throws IOException, NomadException {
         return executeServerAction(
                 put(
                         uri("/v1/operator/autopilot/configuration"),
