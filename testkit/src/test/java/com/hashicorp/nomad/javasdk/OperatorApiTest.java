@@ -5,6 +5,7 @@ import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 import com.hashicorp.nomad.apimodel.RaftConfiguration;
 import com.hashicorp.nomad.testutils.NomadAgentConfiguration;
 import com.hashicorp.nomad.testutils.TestAgent;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -78,6 +79,20 @@ public class OperatorApiTest extends ApiTestBase {
 
             NomadResponse<AutopilotConfiguration> autopilotConfiguration = operatorApi.getAutopilotConfiguration();
             assertThat(autopilotConfiguration.getValue().getCleanupDeadServers(), is(false));
+        }
+    }
+
+    @Test
+    public void canSetAutopilotConfiguration() throws Exception {
+        try (TestAgent agent = newAgent(new NomadAgentConfiguration.Builder().setRaftProtocol(3))) {
+            final OperatorApi operatorApi = agent.getApiClient().getOperatorApi();
+
+            AutopilotConfiguration autopilotConfiguration = operatorApi.getAutopilotConfiguration().getValue();
+            assertThat(autopilotConfiguration.getCleanupDeadServers(), is(false));
+            autopilotConfiguration.setCleanupDeadServers(true);
+
+            NomadResponse<Boolean> response = operatorApi.updateAutopilotConfiguration(autopilotConfiguration);
+            assertThat(response.getValue(), is(true));
         }
     }
 

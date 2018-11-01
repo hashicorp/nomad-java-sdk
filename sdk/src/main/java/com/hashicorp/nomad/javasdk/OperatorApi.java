@@ -138,4 +138,40 @@ public class OperatorApi extends ApiBase {
                 NomadJson.parserFor(AutopilotConfiguration.class));
     }
 
+    /**
+     * Updates the autopilot configuration.
+     *
+     * @param autopilotConfiguration the desired autopilot configuration
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/operator.html#update-autopilot-configuration">{@code PUT /v1/operator/autopilot/configuration}</a>
+     */
+    public NomadResponse<Boolean> updateAutopilotConfiguration(
+            AutopilotConfiguration autopilotConfiguration
+    ) throws IOException, NomadException {
+        return updateAutopilotConfiguration(autopilotConfiguration, null);
+    }
+
+    /**
+     * Updates the autopilot configuration.
+     *
+     * @param autopilotConfiguration the desired autopilot configuration
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/operator.html#update-autopilot-configuration">{@code PUT /v1/operator/autopilot/configuration}</a>
+     */
+    public NomadResponse<Boolean> updateAutopilotConfiguration(
+            AutopilotConfiguration autopilotConfiguration,
+            @Nullable WriteOptions options
+    ) throws IOException, NomadException {
+        return executeServerAction(
+                put(
+                        uri("/v1/operator/autopilot/configuration"),
+                        autopilotConfiguration,
+                        options
+                ),
+                NomadJson.parserFor(Boolean.class)
+        );
+    }
 }
