@@ -3,9 +3,11 @@ package com.hashicorp.nomad.javasdk;
 import com.hashicorp.nomad.apimodel.AutopilotConfiguration;
 import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 import com.hashicorp.nomad.apimodel.RaftConfiguration;
+import org.apache.http.client.methods.RequestBuilder;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * API for operating a Nomad cluster,
@@ -164,13 +166,35 @@ public class OperatorApi extends ApiBase {
     public NomadResponse<Boolean> updateAutopilotConfiguration(
             AutopilotConfiguration autopilotConfiguration,
             @Nullable WriteOptions options
+    ) throws IOException, NomadException {
+        return updateAutopilotConfiguration(autopilotConfiguration, options, null);
+    }
+
+    /**
+     * Updates the autopilot configuration.
+     *
+     * @param autopilotConfiguration the desired autopilot configuration
+     * @param options options controlling how the request is performed
+     * @param cas if not null, use check-and-set semantics on the update
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api/operator.html#update-autopilot-configuration">{@code PUT /v1/operator/autopilot/configuration}</a>
+     */
+    public NomadResponse<Boolean> updateAutopilotConfiguration(
+            AutopilotConfiguration autopilotConfiguration,
+            @Nullable WriteOptions options,
+            @Nullable BigInteger cas
         ) throws IOException, NomadException {
+        RequestBuilder builder = put(
+                uri("/v1/operator/autopilot/configuration"),
+                autopilotConfiguration,
+                options
+        );
+        if (cas != null) {
+            builder.addParameter("cas", cas.toString());
+        }
         return executeServerAction(
-                put(
-                        uri("/v1/operator/autopilot/configuration"),
-                        autopilotConfiguration,
-                        options
-                ),
+                builder,
                 NomadJson.parserFor(Boolean.class)
         );
     }

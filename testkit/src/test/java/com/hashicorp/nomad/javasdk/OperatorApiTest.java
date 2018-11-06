@@ -8,6 +8,7 @@ import com.hashicorp.nomad.testutils.TestAgent;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -77,7 +78,7 @@ public class OperatorApiTest extends ApiTestBase {
             final OperatorApi operatorApi = agent.getApiClient().getOperatorApi();
 
             NomadResponse<AutopilotConfiguration> autopilotConfiguration = operatorApi.getAutopilotConfiguration();
-            assertThat(autopilotConfiguration.getValue().getCleanupDeadServers(), is(false));
+            assertThat(autopilotConfiguration.getValue().getCleanupDeadServers(), is(true));
         }
     }
 
@@ -87,11 +88,34 @@ public class OperatorApiTest extends ApiTestBase {
             final OperatorApi operatorApi = agent.getApiClient().getOperatorApi();
 
             AutopilotConfiguration autopilotConfiguration = operatorApi.getAutopilotConfiguration().getValue();
-            assertThat(autopilotConfiguration.getCleanupDeadServers(), is(false));
-            autopilotConfiguration.setCleanupDeadServers(true);
+            assertThat(autopilotConfiguration.getCleanupDeadServers(), is(true));
+            autopilotConfiguration.setCleanupDeadServers(false);
 
             NomadResponse<Boolean> response = operatorApi.updateAutopilotConfiguration(autopilotConfiguration);
             assertThat(response.getValue(), is(true));
+
+            AutopilotConfiguration updatedAutopilotConfiguration = operatorApi.getAutopilotConfiguration().getValue();
+            assertThat(updatedAutopilotConfiguration.getCleanupDeadServers(), is(false));
+        }
+    }
+
+    @Test
+    public void supportCheckAndSetForAutopilotConfiguration() throws Exception {
+        try (TestAgent agent = newAgent(new NomadAgentConfiguration.Builder().setRaftProtocol(3))) {
+            final OperatorApi operatorApi = agent.getApiClient().getOperatorApi();
+
+            final AutopilotConfiguration autopilotConfiguration = operatorApi.getAutopilotConfiguration().getValue();
+            assertThat(autopilotConfiguration.getCleanupDeadServers(), is(true));
+            autopilotConfiguration.setCleanupDeadServers(false);
+
+            NomadResponse<Boolean> failedResponse = operatorApi.updateAutopilotConfiguration(autopilotConfiguration, null, autopilotConfiguration.getModifyIndex().add(BigInteger.ONE));
+            assertThat(failedResponse.getValue(), is(false));
+
+            NomadResponse<Boolean> response = operatorApi.updateAutopilotConfiguration(autopilotConfiguration, null, autopilotConfiguration.getModifyIndex());
+            assertThat(response.getValue(), is(true));
+
+            AutopilotConfiguration updatedAutopilotConfiguration = operatorApi.getAutopilotConfiguration().getValue();
+            assertThat(updatedAutopilotConfiguration.getCleanupDeadServers(), is(false));
         }
     }
 
