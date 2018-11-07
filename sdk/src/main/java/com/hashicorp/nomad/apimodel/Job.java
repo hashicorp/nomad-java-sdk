@@ -30,6 +30,7 @@ public final class Job extends ApiObject {
     private UpdateStrategy update;
     private PeriodicConfig periodic;
     private ParameterizedJobConfig parameterizedJob;
+    private boolean dispatched;
     private byte[] payload;
     private ReschedulePolicy reschedule;
     private MigrateStrategy migrate;
@@ -215,6 +216,16 @@ public final class Job extends ApiObject {
 
     public Job setParameterizedJob(ParameterizedJobConfig parameterizedJob) {
         this.parameterizedJob = parameterizedJob;
+        return this;
+    }
+
+    @JsonProperty("Dispatched")
+    public boolean getDispatched() {
+        return dispatched;
+    }
+
+    public Job setDispatched(boolean dispatched) {
+        this.dispatched = dispatched;
         return this;
     }
 

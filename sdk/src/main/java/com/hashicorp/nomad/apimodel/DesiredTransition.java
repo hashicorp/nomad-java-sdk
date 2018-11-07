@@ -14,6 +14,7 @@ import java.util.List;
  */
 public final class DesiredTransition extends ApiObject {
     private Boolean migrate;
+    private Boolean reschedule;
 
     @JsonProperty("Migrate")
     public Boolean getMigrate() {
@@ -22,6 +23,16 @@ public final class DesiredTransition extends ApiObject {
 
     public DesiredTransition setMigrate(Boolean migrate) {
         this.migrate = migrate;
+        return this;
+    }
+
+    @JsonProperty("Reschedule")
+    public Boolean getReschedule() {
+        return reschedule;
+    }
+
+    public DesiredTransition setReschedule(Boolean reschedule) {
+        this.reschedule = reschedule;
         return this;
     }
 

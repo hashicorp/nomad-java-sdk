@@ -7,6 +7,7 @@ import com.hashicorp.nomad.javasdk.NomadJson;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a generated JavaBean representing a request or response structure.
@@ -24,6 +25,7 @@ public final class NodeListStub extends ApiObject {
     private String schedulingEligibility;
     private String status;
     private String statusDescription;
+    private Map<String, DriverInfo> drivers;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
 
@@ -124,6 +126,23 @@ public final class NodeListStub extends ApiObject {
 
     public NodeListStub setStatusDescription(String statusDescription) {
         this.statusDescription = statusDescription;
+        return this;
+    }
+
+    @JsonProperty("Drivers")
+    public Map<String, DriverInfo> getDrivers() {
+        return drivers;
+    }
+
+    public NodeListStub setDrivers(Map<String, DriverInfo> drivers) {
+        this.drivers = drivers;
+        return this;
+    }
+
+    public NodeListStub addDrivers(String key, DriverInfo value) {
+        if (this.drivers == null)
+            this.drivers = new java.util.HashMap<>();
+        this.drivers.put(key, value);
         return this;
     }
 

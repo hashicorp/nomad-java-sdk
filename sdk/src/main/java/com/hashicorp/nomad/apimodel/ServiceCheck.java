@@ -30,6 +30,8 @@ public final class ServiceCheck extends ApiObject {
     private Map<String, List<String>> header;
     private String method;
     private CheckRestart checkRestart;
+    private String grpcService;
+    private boolean grpcUseTls;
 
     @JsonProperty("Id")
     public String getId() {
@@ -203,6 +205,26 @@ public final class ServiceCheck extends ApiObject {
 
     public ServiceCheck setCheckRestart(CheckRestart checkRestart) {
         this.checkRestart = checkRestart;
+        return this;
+    }
+
+    @JsonProperty("GRPCService")
+    public String getGrpcService() {
+        return grpcService;
+    }
+
+    public ServiceCheck setGrpcService(String grpcService) {
+        this.grpcService = grpcService;
+        return this;
+    }
+
+    @JsonProperty("GRPCUseTLS")
+    public boolean getGrpcUseTls() {
+        return grpcUseTls;
+    }
+
+    public ServiceCheck setGrpcUseTls(boolean grpcUseTls) {
+        this.grpcUseTls = grpcUseTls;
         return this;
     }
 

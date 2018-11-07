@@ -91,19 +91,20 @@ public class NodesApiTest extends ApiTestBase {
 
             List<NodeListStub> nodes = nodesApi.list().getValue();
             assertThat(nodes, not(empty()));
-            String nodeId = nodes.get(0).getId();
+            NodeListStub node = nodes.get(0);
+            String nodeId = node.getId();
 
             Node initialInfo = nodesApi.info(nodeId).getValue();
             assertThat("not initially draining", initialInfo.getDrain(), is(false));
 
             ServerResponse<Void> enableDrainResponse = nodesApi.toggleDrain(nodeId, true);
-            assertUpdatedServerResponse(enableDrainResponse);
+            assertUpdatedServerResponse(enableDrainResponse, node.getModifyIndex());
 
             Node drainingInfo = nodesApi.info(nodeId).getValue();
             assertThat("draining", drainingInfo.getDrain(), is(true));
 
             ServerResponse<Void> disableDrainResponse = nodesApi.toggleDrain(nodeId, false);
-            assertUpdatedServerResponse(disableDrainResponse);
+            assertUpdatedServerResponse(disableDrainResponse, enableDrainResponse.getIndex());
 
             Node finalInfo = nodesApi.info(nodeId).getValue();
             assertThat("not initially draining", finalInfo.getDrain(), is(false));

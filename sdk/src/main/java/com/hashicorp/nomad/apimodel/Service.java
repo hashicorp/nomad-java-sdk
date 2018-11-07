@@ -16,6 +16,7 @@ public final class Service extends ApiObject {
     private String id;
     private String name;
     private List<String> tags;
+    private List<String> canaryTags;
     private String portLabel;
     private String addressMode;
     private List<ServiceCheck> checks;
@@ -56,6 +57,24 @@ public final class Service extends ApiObject {
             this.tags = new java.util.ArrayList<>();
         for (String item : tags)
             this.tags.add(item);
+        return this;
+    }
+
+    @JsonProperty("CanaryTags")
+    public List<String> getCanaryTags() {
+        return canaryTags;
+    }
+
+    public Service setCanaryTags(List<String> canaryTags) {
+        this.canaryTags = canaryTags;
+        return this;
+    }
+
+    public Service addCanaryTags(String... canaryTags) {
+        if (this.canaryTags == null)
+            this.canaryTags = new java.util.ArrayList<>();
+        for (String item : canaryTags)
+            this.canaryTags.add(item);
         return this;
     }
 

@@ -5,6 +5,7 @@ import com.hashicorp.nomad.javasdk.ApiObject;
 import com.hashicorp.nomad.javasdk.NomadJson;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,6 +16,8 @@ import java.util.List;
 public final class DeploymentState extends ApiObject {
     private List<String> placedCanaries;
     private boolean autoRevert;
+    private String progressDeadline;
+    private Date requireProgressBy;
     private boolean promoted;
     private int desiredCanaries;
     private int desiredTotal;
@@ -47,6 +50,26 @@ public final class DeploymentState extends ApiObject {
 
     public DeploymentState setAutoRevert(boolean autoRevert) {
         this.autoRevert = autoRevert;
+        return this;
+    }
+
+    @JsonProperty("ProgressDeadline")
+    public String getProgressDeadline() {
+        return progressDeadline;
+    }
+
+    public DeploymentState setProgressDeadline(String progressDeadline) {
+        this.progressDeadline = progressDeadline;
+        return this;
+    }
+
+    @JsonProperty("RequireProgressBy")
+    public Date getRequireProgressBy() {
+        return requireProgressBy;
+    }
+
+    public DeploymentState setRequireProgressBy(Date requireProgressBy) {
+        this.requireProgressBy = requireProgressBy;
         return this;
     }
 
