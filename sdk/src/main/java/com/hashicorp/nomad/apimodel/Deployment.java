@@ -20,6 +20,7 @@ public final class Deployment extends ApiObject {
     private String jobId;
     private BigInteger jobVersion;
     private BigInteger jobModifyIndex;
+    private BigInteger jobSpecModifyIndex;
     private BigInteger jobCreateIndex;
     private Map<String, DeploymentState> taskGroups;
     private String status;
@@ -74,6 +75,16 @@ public final class Deployment extends ApiObject {
 
     public Deployment setJobModifyIndex(BigInteger jobModifyIndex) {
         this.jobModifyIndex = jobModifyIndex;
+        return this;
+    }
+
+    @JsonProperty("JobSpecModifyIndex")
+    public BigInteger getJobSpecModifyIndex() {
+        return jobSpecModifyIndex;
+    }
+
+    public Deployment setJobSpecModifyIndex(BigInteger jobSpecModifyIndex) {
+        this.jobSpecModifyIndex = jobSpecModifyIndex;
         return this;
     }
 

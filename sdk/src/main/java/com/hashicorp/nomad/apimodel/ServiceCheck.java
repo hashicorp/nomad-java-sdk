@@ -23,13 +23,15 @@ public final class ServiceCheck extends ApiObject {
     private String protocol;
     private String portLabel;
     private String addressMode;
-    private long interval;
-    private long timeout;
+    private String interval;
+    private String timeout;
     private String initialStatus;
     private boolean tlsSkipVerify;
     private Map<String, List<String>> header;
     private String method;
     private CheckRestart checkRestart;
+    private String grpcService;
+    private boolean grpcUseTls;
 
     @JsonProperty("Id")
     public String getId() {
@@ -130,21 +132,21 @@ public final class ServiceCheck extends ApiObject {
     }
 
     @JsonProperty("Interval")
-    public long getInterval() {
+    public String getInterval() {
         return interval;
     }
 
-    public ServiceCheck setInterval(long interval) {
+    public ServiceCheck setInterval(String interval) {
         this.interval = interval;
         return this;
     }
 
     @JsonProperty("Timeout")
-    public long getTimeout() {
+    public String getTimeout() {
         return timeout;
     }
 
-    public ServiceCheck setTimeout(long timeout) {
+    public ServiceCheck setTimeout(String timeout) {
         this.timeout = timeout;
         return this;
     }
@@ -203,6 +205,26 @@ public final class ServiceCheck extends ApiObject {
 
     public ServiceCheck setCheckRestart(CheckRestart checkRestart) {
         this.checkRestart = checkRestart;
+        return this;
+    }
+
+    @JsonProperty("GRPCService")
+    public String getGrpcService() {
+        return grpcService;
+    }
+
+    public ServiceCheck setGrpcService(String grpcService) {
+        this.grpcService = grpcService;
+        return this;
+    }
+
+    @JsonProperty("GRPCUseTLS")
+    public boolean getGrpcUseTls() {
+        return grpcUseTls;
+    }
+
+    public ServiceCheck setGrpcUseTls(boolean grpcUseTls) {
+        this.grpcUseTls = grpcUseTls;
         return this;
     }
 

@@ -123,7 +123,7 @@ public class DeploymentsApi extends ApiBase {
      * @param deploymentId ID of the deployment to list allocations for
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/api/deployments.html#list-allocations-for-deployment">{@code GET /v1/deployment/<ID>/allocations}</a>
+     * @see <a href="https://www.nomadproject.io/api/deployments.html#list-allocations-for-deployment">{@code GET /v1/deployment/allocations/<ID>}</a>
      */
     public ServerQueryResponse<List<AllocationListStub>> allocations(final String deploymentId)
             throws IOException, NomadException {
@@ -138,7 +138,7 @@ public class DeploymentsApi extends ApiBase {
      * @param options      options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/api/deployments.html#list-allocations-for-deployment">{@code GET /v1/deployment/<ID>/allocations}</a>
+     * @see <a href="https://www.nomadproject.io/api/deployments.html#list-allocations-for-deployment">{@code GET /v1/deployment/allocations/<ID>}</a>
      */
     public ServerQueryResponse<List<AllocationListStub>> allocations(
             final String deploymentId,
@@ -146,7 +146,7 @@ public class DeploymentsApi extends ApiBase {
     ) throws IOException, NomadException {
 
         return executeServerQuery(
-                "/v1/deployment/" + deploymentId + "/allocations",
+                "/v1/deployment/allocations/" + deploymentId,
                 options,
                 NomadJson.parserForListOf(AllocationListStub.class));
     }

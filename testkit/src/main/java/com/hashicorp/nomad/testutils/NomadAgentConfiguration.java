@@ -265,6 +265,8 @@ public class NomadAgentConfiguration {
      */
     public static class Server {
         private final boolean enabled;
+        @JsonProperty("raft_protocol")
+        private final int raftProtocol;
         @JsonProperty("bootstrap_expect")
         private final int bootstrapExpect;
         @JsonProperty("start_join")
@@ -278,9 +280,22 @@ public class NomadAgentConfiguration {
          * @param startJoin       the servers to try joining when starting.
          */
         public Server(boolean enabled, int bootstrapExpect, List<String> startJoin) {
+            this(enabled, bootstrapExpect, startJoin, 2);
+        }
+
+        /**
+         * Creates a new Server configuration.
+         *
+         * @param enabled         true iff the server is enabled
+         * @param bootstrapExpect the number of servers to expect for bootstrapping, or 0 if bootstrapping is disabled
+         * @param startJoin       the servers to try joining when starting.
+         * @param raftProtocol    the raft protocol version
+         */
+        public Server(boolean enabled, int bootstrapExpect, List<String> startJoin, int raftProtocol) {
             this.enabled = enabled;
             this.bootstrapExpect = bootstrapExpect;
             this.startJoin = startJoin == null ? null : unmodifiableList(new ArrayList<>(startJoin));
+            this.raftProtocol = raftProtocol;
         }
 
         /**
@@ -288,6 +303,13 @@ public class NomadAgentConfiguration {
          */
         public boolean getEnabled() {
             return enabled;
+        }
+
+        /**
+         * @return the configured raft_protocol version
+         */
+        public int getRaftProtocol() {
+            return raftProtocol;
         }
 
         /**
@@ -490,6 +512,7 @@ public class NomadAgentConfiguration {
         private boolean consulServerAutoJoin = false;
         private boolean consulClientAutoJoin = false;
         private boolean tlsHttp = false;
+        private int raftProtocol = 2;
         private String tlsCaFile;
         private String tlsCertFile;
         private String tlsKeyFile;
@@ -516,7 +539,7 @@ public class NomadAgentConfiguration {
                     rpcPort == 0 ? 21000 + id : rpcPort,
                     serfPort == 0 ? 22000 + id : serfPort);
 
-            Server server = new Server(serverEnabled, serverBootstrapExpect, serverStartJoin);
+            Server server = new Server(serverEnabled, serverBootstrapExpect, serverStartJoin, raftProtocol);
 
             Consul consul = new Consul(consulAutoAdvertise, consulServerAutoJoin, consulClientAutoJoin);
 
@@ -644,6 +667,17 @@ public class NomadAgentConfiguration {
          */
         public Builder setServerEnabled(boolean serverEnabled) {
             this.serverEnabled = serverEnabled;
+            return this;
+        }
+
+        /**
+         * Set the raft protocol version.
+         *
+         * @param raftProtocol raft protocol version
+         * @return Updated builder
+         */
+        public Builder setRaftProtocol(int raftProtocol) {
+            this.raftProtocol = raftProtocol;
             return this;
         }
 

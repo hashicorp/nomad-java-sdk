@@ -28,6 +28,8 @@ public final class AllocationListStub extends ApiObject {
     private String clientDescription;
     private Map<String, TaskState> taskStates;
     private AllocDeploymentStatus deploymentStatus;
+    private RescheduleTracker rescheduleTracker;
+    private String followupEvalId;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
     private long createTime;
@@ -167,6 +169,26 @@ public final class AllocationListStub extends ApiObject {
 
     public AllocationListStub setDeploymentStatus(AllocDeploymentStatus deploymentStatus) {
         this.deploymentStatus = deploymentStatus;
+        return this;
+    }
+
+    @JsonProperty("RescheduleTracker")
+    public RescheduleTracker getRescheduleTracker() {
+        return rescheduleTracker;
+    }
+
+    public AllocationListStub setRescheduleTracker(RescheduleTracker rescheduleTracker) {
+        this.rescheduleTracker = rescheduleTracker;
+        return this;
+    }
+
+    @JsonProperty("FollowupEvalID")
+    public String getFollowupEvalId() {
+        return followupEvalId;
+    }
+
+    public AllocationListStub setFollowupEvalId(String followupEvalId) {
+        this.followupEvalId = followupEvalId;
         return this;
     }
 

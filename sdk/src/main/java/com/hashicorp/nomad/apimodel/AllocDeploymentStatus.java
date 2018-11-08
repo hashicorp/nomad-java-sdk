@@ -6,6 +6,7 @@ import com.hashicorp.nomad.javasdk.NomadJson;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,6 +16,8 @@ import java.util.List;
  */
 public final class AllocDeploymentStatus extends ApiObject {
     private Boolean healthy;
+    private Date timestamp;
+    private boolean canary;
     private BigInteger modifyIndex;
 
     @JsonProperty("Healthy")
@@ -24,6 +27,26 @@ public final class AllocDeploymentStatus extends ApiObject {
 
     public AllocDeploymentStatus setHealthy(Boolean healthy) {
         this.healthy = healthy;
+        return this;
+    }
+
+    @JsonProperty("Timestamp")
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public AllocDeploymentStatus setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
+        return this;
+    }
+
+    @JsonProperty("Canary")
+    public boolean getCanary() {
+        return canary;
+    }
+
+    public AllocDeploymentStatus setCanary(boolean canary) {
+        this.canary = canary;
         return this;
     }
 

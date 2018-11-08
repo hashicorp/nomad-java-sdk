@@ -29,12 +29,16 @@ public final class Allocation extends ApiObject {
     private AllocationMetric metrics;
     private String desiredStatus;
     private String desiredDescription;
+    private DesiredTransition desiredTransition;
     private String clientStatus;
     private String clientDescription;
     private Map<String, TaskState> taskStates;
     private String deploymentId;
     private AllocDeploymentStatus deploymentStatus;
+    private String followupEvalId;
     private String previousAllocation;
+    private String nextAllocation;
+    private RescheduleTracker rescheduleTracker;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
     private BigInteger allocModifyIndex;
@@ -195,6 +199,16 @@ public final class Allocation extends ApiObject {
         return this;
     }
 
+    @JsonProperty("DesiredTransition")
+    public DesiredTransition getDesiredTransition() {
+        return desiredTransition;
+    }
+
+    public Allocation setDesiredTransition(DesiredTransition desiredTransition) {
+        this.desiredTransition = desiredTransition;
+        return this;
+    }
+
     @JsonProperty("ClientStatus")
     public String getClientStatus() {
         return clientStatus;
@@ -252,6 +266,16 @@ public final class Allocation extends ApiObject {
         return this;
     }
 
+    @JsonProperty("FollowupEvalID")
+    public String getFollowupEvalId() {
+        return followupEvalId;
+    }
+
+    public Allocation setFollowupEvalId(String followupEvalId) {
+        this.followupEvalId = followupEvalId;
+        return this;
+    }
+
     @JsonProperty("PreviousAllocation")
     public String getPreviousAllocation() {
         return previousAllocation;
@@ -259,6 +283,26 @@ public final class Allocation extends ApiObject {
 
     public Allocation setPreviousAllocation(String previousAllocation) {
         this.previousAllocation = previousAllocation;
+        return this;
+    }
+
+    @JsonProperty("NextAllocation")
+    public String getNextAllocation() {
+        return nextAllocation;
+    }
+
+    public Allocation setNextAllocation(String nextAllocation) {
+        this.nextAllocation = nextAllocation;
+        return this;
+    }
+
+    @JsonProperty("RescheduleTracker")
+    public RescheduleTracker getRescheduleTracker() {
+        return rescheduleTracker;
+    }
+
+    public Allocation setRescheduleTracker(RescheduleTracker rescheduleTracker) {
+        this.rescheduleTracker = rescheduleTracker;
         return this;
     }
 

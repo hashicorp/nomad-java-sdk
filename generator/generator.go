@@ -225,20 +225,20 @@ func (g *Generator) javaBeanProperty(f reflect.StructField) java.BeanProperty {
 		nameInJson = f.Name
 	}
 	return java.BeanProperty{
-		Name:            propertyName(nameInJson),
-		JavaType:        g.javaType(f.Type),
+		Name:             propertyName(nameInJson),
+		JavaType:         g.javaType(f.Type),
 		GetterAnnotation: "@JsonProperty(\"" + nameInJson + "\")",
 	}
 }
 
 func className(t reflect.Type) string {
-	return javaName(t.Name(), true);
+	return javaName(t.Name(), true)
 }
 
 // To meet JavaBean conventions, lowercase the first letter of the name
 // and lowercase the non-first letters of multi-letter acronyms
 func propertyName(nameInJson string) string {
-	return javaName(nameInJson, false);
+	return javaName(nameInJson, false)
 }
 
 func javaName(nameInJson string, firstCharacterUppercase bool) string {
@@ -247,10 +247,10 @@ func javaName(nameInJson string, firstCharacterUppercase bool) string {
 	var previousWasUpper bool
 	for i, ch := range jsonRunes {
 		isUpper := unicode.IsUpper(ch)
-		if (i == 0) {
-			if (firstCharacterUppercase && !isUpper) {
+		if i == 0 {
+			if firstCharacterUppercase && !isUpper {
 				ch = unicode.ToUpper(ch)
-			} else if (!firstCharacterUppercase && isUpper) {
+			} else if !firstCharacterUppercase && isUpper {
 				ch = unicode.ToLower(ch)
 			}
 		} else if isUpper && (previousWasUpper && !(i+1 < len(jsonRunes) && unicode.IsLower(jsonRunes[i+1]))) {
@@ -347,7 +347,7 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 
 	switch t.String() {
 	case "time.Duration":
-		return java.PrimitiveLong
+		return java.String
 	case "time.Time":
 		return java.Date
 	default:
@@ -355,8 +355,10 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 		case reflect.Struct:
 			generator.structs <- t
 			return java.NewReferenceType(className(t))
-		case reflect.String:  // This probably indicates an enumeration type; unfortunately we can't capture the values with reflection :(
+		case reflect.String: // This probably indicates an enumeration type; unfortunately we can't capture the values with reflection :(
 			return java.String
+		case reflect.Int:
+			return java.Integer
 		default:
 			panic("Unknown kind " + t.Kind().String() + " for " + t.String() + " in package " + t.PkgPath())
 		}

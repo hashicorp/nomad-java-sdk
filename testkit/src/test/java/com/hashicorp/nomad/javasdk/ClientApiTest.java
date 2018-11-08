@@ -133,7 +133,7 @@ public class ClientApiTest extends ApiTestBase {
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
-            NomadResponse<String> statsResponse = clientApi.readAt(allocation.getId(), "alloc/out.txt", 5, 13);
+            NomadResponse<String> statsResponse = clientApi.readAt(allocation.getId(), "/alloc/out.txt", 5, 13);
             assertThat(statsResponse.getValue(), is("fghijklmnopqr"));
         }
     }

@@ -810,6 +810,40 @@ public class JobsApi extends ApiBase {
     }
 
     /**
+     * Lists the deployments belonging to a job in the active region.
+     *
+     * @param jobId ID of the job to list deployments for
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/job.html">{@code GET /v1/job/<ID>/deployments}</a>
+     */
+    public ServerQueryResponse<List<Deployment>> deployments(final String jobId)
+            throws IOException, NomadException {
+
+        return deployments(jobId, null);
+    }
+
+    /**
+     * Lists the deployments belonging to a job in the active region.
+     *
+     * @param jobId   the ID of the job to list deployments for
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/job.html">{@code GET /v1/job/<ID>/deployments}</a>
+     */
+    public ServerQueryResponse<List<Deployment>> deployments(
+            final String jobId,
+            @Nullable final QueryOptions<List<Deployment>> options
+    ) throws IOException, NomadException {
+
+        return executeServerQuery(
+                "/v1/job/" + jobId + "/deployments",
+                options,
+                NomadJson.parserForListOf(Deployment.class));
+    }
+
+    /**
      * Class matching the JSON request entity for job dispatch requests.
      */
     private static class JobDispatchRequest {

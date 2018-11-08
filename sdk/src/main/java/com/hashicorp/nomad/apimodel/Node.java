@@ -27,9 +27,13 @@ public final class Node extends ApiObject {
     private Map<String, String> meta;
     private String nodeClass;
     private boolean drain;
+    private DrainStrategy drainStrategy;
+    private String schedulingEligibility;
     private String status;
     private String statusDescription;
     private long statusUpdatedAt;
+    private List<NodeEvent> events;
+    private Map<String, DriverInfo> drivers;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
 
@@ -174,6 +178,26 @@ public final class Node extends ApiObject {
         return this;
     }
 
+    @JsonProperty("DrainStrategy")
+    public DrainStrategy getDrainStrategy() {
+        return drainStrategy;
+    }
+
+    public Node setDrainStrategy(DrainStrategy drainStrategy) {
+        this.drainStrategy = drainStrategy;
+        return this;
+    }
+
+    @JsonProperty("SchedulingEligibility")
+    public String getSchedulingEligibility() {
+        return schedulingEligibility;
+    }
+
+    public Node setSchedulingEligibility(String schedulingEligibility) {
+        this.schedulingEligibility = schedulingEligibility;
+        return this;
+    }
+
     @JsonProperty("Status")
     public String getStatus() {
         return status;
@@ -201,6 +225,41 @@ public final class Node extends ApiObject {
 
     public Node setStatusUpdatedAt(long statusUpdatedAt) {
         this.statusUpdatedAt = statusUpdatedAt;
+        return this;
+    }
+
+    @JsonProperty("Events")
+    public List<NodeEvent> getEvents() {
+        return events;
+    }
+
+    public Node setEvents(List<NodeEvent> events) {
+        this.events = events;
+        return this;
+    }
+
+    public Node addEvents(NodeEvent... events) {
+        if (this.events == null)
+            this.events = new java.util.ArrayList<>();
+        for (NodeEvent item : events)
+            this.events.add(item);
+        return this;
+    }
+
+    @JsonProperty("Drivers")
+    public Map<String, DriverInfo> getDrivers() {
+        return drivers;
+    }
+
+    public Node setDrivers(Map<String, DriverInfo> drivers) {
+        this.drivers = drivers;
+        return this;
+    }
+
+    public Node addDrivers(String key, DriverInfo value) {
+        if (this.drivers == null)
+            this.drivers = new java.util.HashMap<>();
+        this.drivers.put(key, value);
         return this;
     }
 

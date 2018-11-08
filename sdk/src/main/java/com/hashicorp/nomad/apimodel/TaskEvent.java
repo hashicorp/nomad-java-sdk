@@ -27,7 +27,7 @@ public final class TaskEvent extends ApiObject {
     private int signal;
     private String message;
     private String killReason;
-    private long killTimeout;
+    private String killTimeout;
     private String killError;
     private long startDelay;
     private String downloadError;
@@ -178,11 +178,11 @@ public final class TaskEvent extends ApiObject {
     }
 
     @JsonProperty("KillTimeout")
-    public long getKillTimeout() {
+    public String getKillTimeout() {
         return killTimeout;
     }
 
-    public TaskEvent setKillTimeout(long killTimeout) {
+    public TaskEvent setKillTimeout(String killTimeout) {
         this.killTimeout = killTimeout;
         return this;
     }

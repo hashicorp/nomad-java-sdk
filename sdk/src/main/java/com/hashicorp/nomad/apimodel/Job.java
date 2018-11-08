@@ -30,7 +30,10 @@ public final class Job extends ApiObject {
     private UpdateStrategy update;
     private PeriodicConfig periodic;
     private ParameterizedJobConfig parameterizedJob;
+    private boolean dispatched;
     private byte[] payload;
+    private ReschedulePolicy reschedule;
+    private MigrateStrategy migrate;
     private Map<String, String> meta;
     private String vaultToken;
     private String status;
@@ -216,6 +219,16 @@ public final class Job extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Dispatched")
+    public boolean getDispatched() {
+        return dispatched;
+    }
+
+    public Job setDispatched(boolean dispatched) {
+        this.dispatched = dispatched;
+        return this;
+    }
+
     @JsonProperty("Payload")
     public byte[] getPayload() {
         return payload;
@@ -223,6 +236,26 @@ public final class Job extends ApiObject {
 
     public Job setPayload(byte[] payload) {
         this.payload = payload;
+        return this;
+    }
+
+    @JsonProperty("Reschedule")
+    public ReschedulePolicy getReschedule() {
+        return reschedule;
+    }
+
+    public Job setReschedule(ReschedulePolicy reschedule) {
+        this.reschedule = reschedule;
+        return this;
+    }
+
+    @JsonProperty("Migrate")
+    public MigrateStrategy getMigrate() {
+        return migrate;
+    }
+
+    public Job setMigrate(MigrateStrategy migrate) {
+        this.migrate = migrate;
         return this;
     }
 

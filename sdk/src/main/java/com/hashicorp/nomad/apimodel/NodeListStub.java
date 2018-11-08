@@ -7,6 +7,7 @@ import com.hashicorp.nomad.javasdk.NomadJson;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a generated JavaBean representing a request or response structure.
@@ -14,16 +15,29 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class NodeListStub extends ApiObject {
+    private String address;
     private String id;
     private String datacenter;
     private String name;
     private String nodeClass;
     private String version;
     private boolean drain;
+    private String schedulingEligibility;
     private String status;
     private String statusDescription;
+    private Map<String, DriverInfo> drivers;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
+
+    @JsonProperty("Address")
+    public String getAddress() {
+        return address;
+    }
+
+    public NodeListStub setAddress(String address) {
+        this.address = address;
+        return this;
+    }
 
     @JsonProperty("ID")
     public String getId() {
@@ -85,6 +99,16 @@ public final class NodeListStub extends ApiObject {
         return this;
     }
 
+    @JsonProperty("SchedulingEligibility")
+    public String getSchedulingEligibility() {
+        return schedulingEligibility;
+    }
+
+    public NodeListStub setSchedulingEligibility(String schedulingEligibility) {
+        this.schedulingEligibility = schedulingEligibility;
+        return this;
+    }
+
     @JsonProperty("Status")
     public String getStatus() {
         return status;
@@ -102,6 +126,23 @@ public final class NodeListStub extends ApiObject {
 
     public NodeListStub setStatusDescription(String statusDescription) {
         this.statusDescription = statusDescription;
+        return this;
+    }
+
+    @JsonProperty("Drivers")
+    public Map<String, DriverInfo> getDrivers() {
+        return drivers;
+    }
+
+    public NodeListStub setDrivers(Map<String, DriverInfo> drivers) {
+        this.drivers = drivers;
+        return this;
+    }
+
+    public NodeListStub addDrivers(String key, DriverInfo value) {
+        if (this.drivers == null)
+            this.drivers = new java.util.HashMap<>();
+        this.drivers.put(key, value);
         return this;
     }
 

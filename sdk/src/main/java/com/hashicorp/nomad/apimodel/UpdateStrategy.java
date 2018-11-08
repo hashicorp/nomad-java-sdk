@@ -18,6 +18,7 @@ public final class UpdateStrategy extends ApiObject {
     private String healthCheck;
     private Long minHealthyTime;
     private Long healthyDeadline;
+    private Long progressDeadline;
     private Boolean autoRevert;
     private Integer canary;
 
@@ -68,6 +69,16 @@ public final class UpdateStrategy extends ApiObject {
 
     public UpdateStrategy setHealthyDeadline(Long healthyDeadline) {
         this.healthyDeadline = healthyDeadline;
+        return this;
+    }
+
+    @JsonProperty("ProgressDeadline")
+    public Long getProgressDeadline() {
+        return progressDeadline;
+    }
+
+    public UpdateStrategy setProgressDeadline(Long progressDeadline) {
+        this.progressDeadline = progressDeadline;
         return this;
     }
 

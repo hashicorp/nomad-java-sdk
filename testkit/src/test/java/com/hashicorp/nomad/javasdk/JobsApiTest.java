@@ -34,15 +34,15 @@ public class JobsApiTest extends ApiTestBase {
         try (TestAgent agent = newServer()) {
             JobsApi jobsApi = agent.getApiClient().getJobsApi();
 
-            assertThatNoJobsHaveBeenRun(jobsApi);
+            ServerQueryResponse<List<JobListStub>> list0 = assertThatNoJobsHaveBeenRun(jobsApi);
 
             Job job = createTestJob();
             EvaluationResponse registrationResponse = jobsApi.register(job);
-            assertUpdatedServerResponse(registrationResponse);
+            assertUpdatedServerResponse(registrationResponse, list0.getIndex());
             assertThat("evaluation ID", registrationResponse.getValue(), is(nonEmptyString()));
 
             ServerQueryResponse<List<JobListStub>> updatedListResponse = jobsApi.list();
-            assertUpdatedServerQueryResponse(updatedListResponse);
+            assertUpdatedServerQueryResponse(updatedListResponse, list0.getIndex());
             List<JobListStub> updatedJobs = updatedListResponse.getValue();
             assertThat("jobs", updatedJobs, hasSize(1));
             assertThat("id", updatedJobs.get(0).getId(), is(job.getId()));
@@ -51,7 +51,8 @@ public class JobsApiTest extends ApiTestBase {
 
     private ServerQueryResponse<List<JobListStub>> assertThatNoJobsHaveBeenRun(JobsApi jobsApi) throws Exception {
         ServerQueryResponse<List<JobListStub>> listResponse = jobsApi.list();
-        assertPristineServerQueryResponse(listResponse);
+        // cannot assert pristine server response because index is greater than one due to job summary reconciliation
+        assertUpdatedServerQueryResponse(listResponse);
         assertThat("jobs", listResponse.getValue(), is(empty()));
         return listResponse;
     }
@@ -70,14 +71,14 @@ public class JobsApiTest extends ApiTestBase {
                 }
             };
 
-            assertThatNoJobsHaveBeenRun(jobsApi);
+            ServerQueryResponse<List<JobListStub>> list0 = assertThatNoJobsHaveBeenRun(jobsApi);
 
             EvaluationResponse registrationResponse = jobsApi.register(job, BigInteger.ZERO);
-            assertUpdatedServerResponse(registrationResponse);
+            assertUpdatedServerResponse(registrationResponse, list0.getIndex());
             assertThat("evaluation ID", registrationResponse.getValue(), is(nonEmptyString()));
 
             ServerQueryResponse<List<JobListStub>> updatedListResponse = jobsApi.list();
-            assertUpdatedServerQueryResponse(updatedListResponse);
+            assertUpdatedServerQueryResponse(updatedListResponse, list0.getIndex());
             List<JobListStub> updatedJobs = updatedListResponse.getValue();
             assertThat("jobs", updatedJobs, hasSize(1));
             assertThat("id", updatedJobs.get(0).getId(), is(job.getId()));
@@ -214,7 +215,7 @@ public class JobsApiTest extends ApiTestBase {
             JobsApi jobsApi = agent.getApiClient().getJobsApi();
 
             ServerQueryResponse<List<JobListStub>> listResponse = jobsApi.list("dummy");
-            assertPristineServerQueryResponse(listResponse);
+            assertUpdatedServerQueryResponse(listResponse);
             List<JobListStub> jobs = listResponse.getValue();
             assertThat("jobs", jobs, is(empty()));
 
@@ -256,13 +257,13 @@ public class JobsApiTest extends ApiTestBase {
             Job job = createTestJob();
 
             ServerQueryResponse<List<Evaluation>> preRegistrationResponse = jobsApi.evaluations(job.getId());
-            assertPristineServerQueryResponse(preRegistrationResponse);
+            assertUpdatedServerQueryResponse(preRegistrationResponse);
             assertThat(preRegistrationResponse.getValue(), empty());
 
             String evalId = registerTestJobAndPollUntilEvaluationCompletes(agent, job).getId();
 
             ServerQueryResponse<List<Evaluation>> postRegistrationResponse = jobsApi.evaluations(job.getId());
-            assertUpdatedServerQueryResponse(postRegistrationResponse);
+            assertUpdatedServerQueryResponse(postRegistrationResponse, preRegistrationResponse.getIndex());
             List<Evaluation> evaluations = postRegistrationResponse.getValue();
             assertThat(evaluations, not(empty()));
             Evaluation evaluation = evaluations.get(evaluations.size() - 1);
