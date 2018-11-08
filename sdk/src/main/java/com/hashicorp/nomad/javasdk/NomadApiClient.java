@@ -17,7 +17,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.protocol.HttpContext;
 
 import javax.annotation.Nullable;
+import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -443,14 +445,18 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     private static SSLContext buildSslContext(NomadApiConfiguration.Tls tls) {
         try {
             SSLContext context = SSLContext.getInstance("TLS");
-            context.init(
-                    tls.getClientKeyFile() == null
-                            ? null
-                            : TlsUtils.usePemCertificateAndKey(tls.getClientCertificateFile(), tls.getClientKeyFile()),
-                    tls.getCaCertificateFile() == null
-                            ? null
-                            : TlsUtils.trustPemCertificate(tls.getCaCertificateFile()),
-                    null);
+
+            KeyManager[] keyManagers = tls.getClientKeyFile() == null
+                    ? null
+                    : TlsUtils.usePemCertificateAndKey(tls.getClientCertificateFile(), tls.getClientKeyFile());
+
+            TrustManager[] trustManagers = tls.isSkipVerify()
+                    ? TlsUtils.trustAnyCertificate()
+                    : tls.getCaCertificateFile() != null
+                        ? TlsUtils.trustPemCertificate(tls.getCaCertificateFile())
+                        : null;
+
+            context.init(keyManagers, trustManagers, null);
             return context;
         } catch (Throwable e) {
             throw new RuntimeException("There was an error building the SSLContext: " + e, e);

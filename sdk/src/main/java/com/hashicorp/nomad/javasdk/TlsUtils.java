@@ -8,6 +8,7 @@ import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -26,10 +27,16 @@ import static java.nio.charset.StandardCharsets.US_ASCII;
  */
 final class TlsUtils {
 
-    private TlsUtils() { }
+
+    private TlsUtils() {
+    }
 
     static TrustManager[] trustPemCertificate(final String path) throws GeneralSecurityException, IOException {
         return asTrustManagers(asKeyStore(loadPemCertificate(path)));
+    }
+
+    static TrustManager[] trustAnyCertificate() {
+        return new TrustManager[]{new CredulousTrustManager()};
     }
 
     static KeyManager[] usePemCertificateAndKey(final String certPath, final String keyPath)
@@ -80,4 +87,23 @@ final class TlsUtils {
         factory.init(keyStore, new char[]{});
         return factory.getKeyManagers();
     }
+
+    /**
+     * TrustManager implementation that does not verify any certificates.
+     */
+    private static class CredulousTrustManager implements X509TrustManager {
+        @Override
+        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+    }
+
 }
