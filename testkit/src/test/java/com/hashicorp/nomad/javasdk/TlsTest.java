@@ -48,4 +48,27 @@ public class TlsTest extends ApiTestBase {
         }
     }
 
+    @Test
+    public void shouldUsePKCS8ClientCertificateAgainstClient() throws Exception {
+        NomadAgentConfiguration.Builder agentConfigBuilder = new NomadAgentConfiguration.Builder()
+                .setTlsHttp(true)
+                .setTlsCaFile(certPath("nomad-ca.pem"))
+                .setTlsCertAndKeyFiles(certPath("client.pem"), certPath("client-key.pem"));
+        NomadApiConfiguration.Builder apiConfigBuilder = new NomadApiConfiguration.Builder()
+                .setTlsCaFile(certPath("nomad-ca.pem"))
+                .setTlsCertAndKeyFiles(certPath("sdk.pem"), certPath("sdk-key-p8.pem"));
+
+        try (TestAgent server = newAgent(agentConfigBuilder, apiConfigBuilder)) {
+            try (TestAgent client = newAgent(
+                    agentConfigBuilder
+                            .setServerEnabled(false)
+                            .setServerBootstrapExpect(0)
+                            .setClientEnabled(true)
+                            .setServerStartJoin(),
+                    apiConfigBuilder)) {
+                client.getApiClient().getAgentApi().setServers(server.getRpcAddress());
+            }
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
+import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
@@ -55,7 +56,12 @@ final class TlsUtils {
         try (final FileInputStream in = new FileInputStream(path)) {
             try (final InputStreamReader reader = new InputStreamReader(in, US_ASCII)) {
                 try (PEMParser parser = new PEMParser(reader)) {
-                    return new JcaPEMKeyConverter().getKeyPair((PEMKeyPair) parser.readObject()).getPrivate();
+                    Object key = parser.readObject();
+                    if (key instanceof PEMKeyPair) {
+                        return new JcaPEMKeyConverter().getKeyPair((PEMKeyPair) key).getPrivate();
+                    } else if (key instanceof PrivateKeyInfo) {
+                        return new JcaPEMKeyConverter().getPrivateKey((PrivateKeyInfo) key);
+                    } else throw new IOException("unsupported private key format");
                 }
             }
         }
