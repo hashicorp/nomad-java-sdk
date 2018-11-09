@@ -10,7 +10,13 @@ before_script:
     GOPATH="$PWD/gopath"
     PATH="$GOPATH/bin:$PATH"
 
+    java -version 
+
+    go version
+
     scripts/build-nomad.sh
+
+    nomad -version
 
     set +euo pipefail  # restore options to work around https://github.com/travis-ci/travis-ci/issues/5434
 
