@@ -6,7 +6,7 @@ A Java SDK for interacting with [HashiCorp's Nomad] through its [HTTP API].
 [HashiCorp's Nomad]: https://www.nomadproject.io/
 [HTTP API]: https://www.nomadproject.io/docs/http/
 
-This SDK requires at least a Java 7 runtime.
+As of v0.8.x, this SDK requires at least a Java 8 runtime.
 
 As of version 0.6.3, the Nomad Java API version will match the nomad version
 it was built to work with.
