@@ -1,5 +1,5 @@
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = "ubuntu/xenial64"
   config.vm.box_check_update = false
 
   config.vm.provider "virtualbox" do |v|
@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision "dependencies", type: "shell", inline: <<-SHELL
     apt-get update
-    apt-get install -y git openjdk-7-jdk-headless maven
+    apt-get install -y git openjdk-8-jdk-headless maven gcc
   SHELL
 
   config.vm.provision "environment", type: "shell", inline: <<-SHELL
