@@ -806,7 +806,7 @@ public class JobsApi extends ApiBase {
                                                        @Nonnull String value) {
                 return new EvaluationResponse(httpResponse, rawEntity, value);
             }
-        });
+        }, null);
     }
 
     /**

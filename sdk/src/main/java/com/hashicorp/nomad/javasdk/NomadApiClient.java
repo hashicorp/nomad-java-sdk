@@ -364,9 +364,10 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
 
     <R extends NomadResponse<?>> R execute(
             final RequestBuilder requestBuilder,
-            final ResponseAdapter<?, R> responseAdapter
+            final ResponseAdapter<?, R> responseAdapter,
+            @Nullable final RequestOptions requestOptions
     ) throws IOException, NomadException {
-        final HttpUriRequest request = buildRequest(requestBuilder);
+        final HttpUriRequest request = buildRequest(requestBuilder, requestOptions);
         try (final CloseableHttpResponse response = httpClient.execute(request)) {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw ErrorResponseException.signaledInStatus(request, response);
@@ -379,10 +380,13 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
         }
     }
 
-    InputStream executeRawStream(final RequestBuilder requestBuilder)
+    InputStream executeRawStream(
+            final RequestBuilder requestBuilder,
+            @Nullable final RequestOptions requestOptions
+    )
             throws IOException, NomadException {
 
-        final HttpUriRequest request = buildRequest(requestBuilder);
+        final HttpUriRequest request = buildRequest(requestBuilder, requestOptions);
         CloseableHttpResponse response = httpClient.execute(request);
         try {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
@@ -395,10 +399,13 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
         }
     }
 
-    FramedStream executeFramedStream(final RequestBuilder requestBuilder)
+    FramedStream executeFramedStream(
+            final RequestBuilder requestBuilder,
+            @Nullable final RequestOptions requestOptions
+    )
             throws IOException, NomadException {
 
-        final HttpUriRequest request = buildRequest(requestBuilder);
+        final HttpUriRequest request = buildRequest(requestBuilder, requestOptions);
         CloseableHttpResponse response = httpClient.execute(request);
         try {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
@@ -415,10 +422,31 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
         return config.getAddress();
     }
 
-    private HttpUriRequest buildRequest(RequestBuilder requestBuilder) {
-        return requestBuilder
-                .addHeader("X-Nomad-Token", config.getAuthToken())
-                .build();
+    private HttpUriRequest buildRequest(
+            RequestBuilder requestBuilder,
+            @Nullable RequestOptions options
+    ) {
+        String region =    getConfig().getRegion();
+        String namespace = getConfig().getNamespace();
+        String authToken = getConfig().getAuthToken();
+
+        if (options != null) {
+            if (options.getRegion() != null)
+                region = options.getRegion();
+            if (options.getNamespace() != null)
+                namespace = options.getNamespace();
+            if (options.getAuthToken() != null)
+                authToken = options.getAuthToken();
+        }
+
+        if (region != null && !region.isEmpty())
+            requestBuilder.addParameter("region", region);
+        if (namespace != null && !namespace.isEmpty())
+            requestBuilder.addParameter("namespace", namespace);
+        if (authToken != null && !authToken.isEmpty())
+            requestBuilder.addHeader("X-Nomad-Token", authToken);
+
+        return requestBuilder.build();
     }
 
     private CloseableHttpClient buildHttpClient(NomadApiConfiguration config) {

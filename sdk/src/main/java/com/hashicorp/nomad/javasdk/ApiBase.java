@@ -83,14 +83,14 @@ abstract class ApiBase {
             final RequestBuilder request,
             @Nullable final ValueExtractor<T> valueExtractor) throws IOException, NomadException {
 
-        return apiClient.execute(request, new NomadResponseAdapter<>(valueExtractor));
+        return apiClient.execute(request, new NomadResponseAdapter<>(valueExtractor), null);
     }
 
     protected <T> ServerResponse<T> executeServerAction(
             final RequestBuilder request,
             @Nullable final ValueExtractor<T> valueExtractor) throws IOException, NomadException {
 
-        return apiClient.execute(request, new ServerResponseAdapter<>(valueExtractor));
+        return apiClient.execute(request, new ServerResponseAdapter<>(valueExtractor), null);
     }
 
     protected <T> ServerQueryResponse<T> executeServerQuery(
@@ -192,17 +192,7 @@ abstract class ApiBase {
             final ValueExtractor<T> valueExtractor,
             RequestBuilder requestBuilder
     ) throws IOException, NomadException {
-        String region = apiClient.getConfig().getRegion();
-        String namespace = apiClient.getConfig().getNamespace();
-        String authToken = apiClient.getConfig().getAuthToken();
-
         if (options != null) {
-            if (options.getRegion() != null)
-                region = options.getRegion();
-            if (options.getNamespace() != null)
-                namespace = options.getNamespace();
-            if (options.getAuthToken() != null)
-                authToken = options.getAuthToken();
             if (options.getIndex() != null)
                 requestBuilder.addParameter("index", options.getIndex().toString());
             if (wait != null)
@@ -210,15 +200,7 @@ abstract class ApiBase {
             if (options.isAllowStale())
                 requestBuilder.addParameter("stale", null);
         }
-
-        if (region != null)
-            requestBuilder.addParameter("region", region);
-        if (namespace != null)
-            requestBuilder.addParameter("namespace", namespace);
-        if (authToken != null)
-            requestBuilder.addHeader("X-Nomad-Token", authToken);
-
-        return apiClient.execute(requestBuilder, new ServerQueryResponseAdapter<>(valueExtractor));
+        return apiClient.execute(requestBuilder, new ServerQueryResponseAdapter<>(valueExtractor), options);
     }
 
     private RequestBuilder prepareWrite(
