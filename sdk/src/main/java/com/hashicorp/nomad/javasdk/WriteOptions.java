@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 /**
  * Options that control how an operation that writes to a Nomad server is performed.
  */
-public class WriteOptions {
+public class WriteOptions implements RequestOptions {
     private final String region;
     @Nullable private String namespace;
     @Nullable private String secretId;
@@ -74,6 +74,16 @@ public class WriteOptions {
     public WriteOptions setSecretId(@Nullable String secretId) {
         this.secretId = secretId;
         return this;
+    }
+
+    /**
+     * Gets the secret ID of the ACL token to use for this request.
+     * <p>
+     * When null, falls back to the NomadApiClient's auth token.
+     */
+    @Nullable
+    public String getAuthToken() {
+        return secretId;
     }
 
 }

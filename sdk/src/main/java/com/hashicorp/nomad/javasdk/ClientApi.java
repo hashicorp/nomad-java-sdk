@@ -171,7 +171,7 @@ public class ClientApi extends ApiBase {
             uri.addParameter("offset", Long.toString(offset));
         if (origin != null)
             uri.addParameter("origin", origin);
-        return apiClient.executeFramedStream(get(uri));
+        return apiClient.executeFramedStream(get(uri), null);
     }
 
     /**
@@ -228,7 +228,7 @@ public class ClientApi extends ApiBase {
                         .addParameter("plain", "true")
                         .addParameter("follow", Boolean.toString(follow))
                         .addParameter("type", logType)
-        ));
+        ), null);
     }
 
     /**
@@ -258,7 +258,7 @@ public class ClientApi extends ApiBase {
                         .addParameter("task", taskName)
                         .addParameter("follow", Boolean.toString(follow))
                         .addParameter("type", logType)
-        ));
+        ), null);
     }
 
     /**

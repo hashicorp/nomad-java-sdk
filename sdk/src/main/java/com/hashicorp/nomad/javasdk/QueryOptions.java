@@ -8,7 +8,7 @@ import java.math.BigInteger;
  *
  * @param <T> the response value type of the request these options will be used with
  */
-public class QueryOptions<T> {
+public class QueryOptions<T> implements RequestOptions {
     @Nullable private String region;
     @Nullable private String namespace;
     @Nullable private BigInteger index;
