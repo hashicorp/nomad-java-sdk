@@ -16,7 +16,7 @@ import java.util.List;
 public final class DeploymentState extends ApiObject {
     private List<String> placedCanaries;
     private boolean autoRevert;
-    private String progressDeadline;
+    private long progressDeadline;
     private Date requireProgressBy;
     private boolean promoted;
     private int desiredCanaries;
@@ -54,11 +54,11 @@ public final class DeploymentState extends ApiObject {
     }
 
     @JsonProperty("ProgressDeadline")
-    public String getProgressDeadline() {
+    public long getProgressDeadline() {
         return progressDeadline;
     }
 
-    public DeploymentState setProgressDeadline(String progressDeadline) {
+    public DeploymentState setProgressDeadline(long progressDeadline) {
         this.progressDeadline = progressDeadline;
         return this;
     }

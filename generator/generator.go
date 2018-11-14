@@ -347,7 +347,7 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 
 	switch t.String() {
 	case "time.Duration":
-		return java.String
+		return java.PrimitiveLong
 	case "time.Time":
 		return java.Date
 	default:

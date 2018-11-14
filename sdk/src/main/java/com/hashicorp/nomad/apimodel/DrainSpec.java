@@ -13,15 +13,15 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class DrainSpec extends ApiObject {
-    private String deadline;
+    private long deadline;
     private boolean ignoreSystemJobs;
 
     @JsonProperty("Deadline")
-    public String getDeadline() {
+    public long getDeadline() {
         return deadline;
     }
 
-    public DrainSpec setDeadline(String deadline) {
+    public DrainSpec setDeadline(long deadline) {
         this.deadline = deadline;
         return this;
     }

@@ -15,9 +15,11 @@ import java.util.List;
  */
 public final class AutopilotConfiguration extends ApiObject {
     private boolean cleanupDeadServers;
-    private String lastContactThreshold;
+    private String lastContactThreshold;    // NOTE: the API generator will try to convert this to long but
+                                            // the Nomad HTTP API emits it as a string; do not change
     private BigInteger maxTrailingLogs;
-    private String serverStabilizationTime;
+    private String serverStabilizationTime; // NOTE: the API generator will try to convert this to long but
+                                            // the Nomad HTTP API emits it as a string; do not change
     private boolean enableRedundancyZones;
     private boolean disableUpgradeMigration;
     private boolean enableCustomUpgrades;

@@ -28,7 +28,7 @@ public final class Evaluation extends ApiObject {
     private String deploymentId;
     private String status;
     private String statusDescription;
-    private String wait;
+    private long wait;
     private Date waitUntil;
     private String nextEval;
     private String previousEval;
@@ -164,11 +164,11 @@ public final class Evaluation extends ApiObject {
     }
 
     @JsonProperty("Wait")
-    public String getWait() {
+    public long getWait() {
         return wait;
     }
 
-    public Evaluation setWait(String wait) {
+    public Evaluation setWait(long wait) {
         this.wait = wait;
         return this;
     }
