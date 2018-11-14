@@ -19,6 +19,7 @@ public final class Task extends ApiObject {
     private String user;
     private Map<String, Object> config;
     private List<Constraint> constraints;
+    private List<Affinity> affinities;
     private Map<String, String> env;
     private List<Service> services;
     private Resources resources;
@@ -95,6 +96,24 @@ public final class Task extends ApiObject {
             this.constraints = new java.util.ArrayList<>();
         for (Constraint item : constraints)
             this.constraints.add(item);
+        return this;
+    }
+
+    @JsonProperty("Affinities")
+    public List<Affinity> getAffinities() {
+        return affinities;
+    }
+
+    public Task setAffinities(List<Affinity> affinities) {
+        this.affinities = affinities;
+        return this;
+    }
+
+    public Task addAffinities(Affinity... affinities) {
+        if (this.affinities == null)
+            this.affinities = new java.util.ArrayList<>();
+        for (Affinity item : affinities)
+            this.affinities.add(item);
         return this;
     }
 

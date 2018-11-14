@@ -18,8 +18,10 @@ public final class AllocationListStub extends ApiObject {
     private String id;
     private String evalId;
     private String name;
+    private String namespace;
     private String nodeId;
     private String jobId;
+    private String jobType;
     private BigInteger jobVersion;
     private String taskGroup;
     private String desiredStatus;
@@ -65,6 +67,16 @@ public final class AllocationListStub extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public AllocationListStub setNamespace(String namespace) {
+        this.namespace = namespace;
+        return this;
+    }
+
     @JsonProperty("NodeID")
     public String getNodeId() {
         return nodeId;
@@ -82,6 +94,16 @@ public final class AllocationListStub extends ApiObject {
 
     public AllocationListStub setJobId(String jobId) {
         this.jobId = jobId;
+        return this;
+    }
+
+    @JsonProperty("JobType")
+    public String getJobType() {
+        return jobType;
+    }
+
+    public AllocationListStub setJobType(String jobType) {
+        this.jobType = jobType;
         return this;
     }
 

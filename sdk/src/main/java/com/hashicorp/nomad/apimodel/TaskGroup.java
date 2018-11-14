@@ -17,7 +17,9 @@ public final class TaskGroup extends ApiObject {
     private String name;
     private Integer count;
     private List<Constraint> constraints;
+    private List<Affinity> affinities;
     private List<Task> tasks;
+    private List<Spread> spreads;
     private RestartPolicy restartPolicy;
     private ReschedulePolicy reschedulePolicy;
     private EphemeralDisk ephemeralDisk;
@@ -63,6 +65,24 @@ public final class TaskGroup extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Affinities")
+    public List<Affinity> getAffinities() {
+        return affinities;
+    }
+
+    public TaskGroup setAffinities(List<Affinity> affinities) {
+        this.affinities = affinities;
+        return this;
+    }
+
+    public TaskGroup addAffinities(Affinity... affinities) {
+        if (this.affinities == null)
+            this.affinities = new java.util.ArrayList<>();
+        for (Affinity item : affinities)
+            this.affinities.add(item);
+        return this;
+    }
+
     @JsonProperty("Tasks")
     public List<Task> getTasks() {
         return tasks;
@@ -78,6 +98,24 @@ public final class TaskGroup extends ApiObject {
             this.tasks = new java.util.ArrayList<>();
         for (Task item : tasks)
             this.tasks.add(item);
+        return this;
+    }
+
+    @JsonProperty("Spreads")
+    public List<Spread> getSpreads() {
+        return spreads;
+    }
+
+    public TaskGroup setSpreads(List<Spread> spreads) {
+        this.spreads = spreads;
+        return this;
+    }
+
+    public TaskGroup addSpreads(Spread... spreads) {
+        if (this.spreads == null)
+            this.spreads = new java.util.ArrayList<>();
+        for (Spread item : spreads)
+            this.spreads.add(item);
         return this;
     }
 

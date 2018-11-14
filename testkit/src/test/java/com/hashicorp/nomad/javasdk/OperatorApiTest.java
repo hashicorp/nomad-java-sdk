@@ -3,6 +3,7 @@ package com.hashicorp.nomad.javasdk;
 import com.hashicorp.nomad.apimodel.AutopilotConfiguration;
 import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 import com.hashicorp.nomad.apimodel.RaftConfiguration;
+import com.hashicorp.nomad.apimodel.SchedulerConfiguration;
 import com.hashicorp.nomad.testutils.NomadAgentConfiguration;
 import com.hashicorp.nomad.testutils.TestAgent;
 import org.junit.Test;
@@ -116,6 +117,54 @@ public class OperatorApiTest extends ApiTestBase {
 
             AutopilotConfiguration updatedAutopilotConfiguration = operatorApi.getAutopilotConfiguration().getValue();
             assertThat(updatedAutopilotConfiguration.getCleanupDeadServers(), is(false));
+        }
+    }
+
+    @Test
+    public void shouldGetSchedulerConfiguration() throws Exception {
+        try (TestAgent agent = newServer()) {
+            final OperatorApi operatorApi = agent.getApiClient().getOperatorApi();
+
+            final NomadResponse<SchedulerConfiguration> response = operatorApi.getSchedulerConfiguration(null);
+            final SchedulerConfiguration config = response.getValue();
+            assertThat("systemScheduler", config.getPreemptionConfig().getSystemSchedulerEnabled(), is(true));
+        }
+    }
+
+    @Test
+    public void canSetSchedulerConfiguration() throws Exception {
+        try (TestAgent agent = newAgent(new NomadAgentConfiguration.Builder().setRaftProtocol(3))) {
+            final OperatorApi operatorApi = agent.getApiClient().getOperatorApi();
+
+            SchedulerConfiguration schedulerConfiguration = operatorApi.getSchedulerConfiguration(null).getValue();
+            assertThat(schedulerConfiguration.getPreemptionConfig().getSystemSchedulerEnabled(), is(true));
+
+            schedulerConfiguration.getPreemptionConfig().setSystemSchedulerEnabled(false);
+            NomadResponse<Boolean> response = operatorApi.updateSchedulerConfiguration(schedulerConfiguration);
+            assertThat(response.getValue(), is(true));
+
+            SchedulerConfiguration updatedSchedulerConfiguration = operatorApi.getSchedulerConfiguration(null).getValue();
+            assertThat(updatedSchedulerConfiguration.getPreemptionConfig().getSystemSchedulerEnabled(), is(false));
+        }
+    }
+
+    @Test
+    public void supportCheckAndSetForSchedulerConfiguration() throws Exception {
+        try (TestAgent agent = newAgent(new NomadAgentConfiguration.Builder().setRaftProtocol(3))) {
+            final OperatorApi operatorApi = agent.getApiClient().getOperatorApi();
+
+            final SchedulerConfiguration schedulerConfiguration = operatorApi.getSchedulerConfiguration(null).getValue();
+            assertThat(schedulerConfiguration.getPreemptionConfig().getSystemSchedulerEnabled(), is(true));
+
+            schedulerConfiguration.getPreemptionConfig().setSystemSchedulerEnabled(false);
+            NomadResponse<Boolean> failedResponse = operatorApi.updateSchedulerConfiguration(schedulerConfiguration, null, schedulerConfiguration.getModifyIndex().add(BigInteger.ONE));
+            assertThat(failedResponse.getValue(), is(false));
+
+            NomadResponse<Boolean> response = operatorApi.updateSchedulerConfiguration(schedulerConfiguration, null, schedulerConfiguration.getModifyIndex());
+            assertThat(response.getValue(), is(true));
+
+            SchedulerConfiguration updatedSchedulerConfiguration = operatorApi.getSchedulerConfiguration(null).getValue();
+            assertThat(updatedSchedulerConfiguration.getPreemptionConfig().getSystemSchedulerEnabled(), is(false));
         }
     }
 

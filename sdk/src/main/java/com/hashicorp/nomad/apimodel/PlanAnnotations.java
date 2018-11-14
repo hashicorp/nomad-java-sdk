@@ -15,6 +15,7 @@ import java.util.Map;
  */
 public final class PlanAnnotations extends ApiObject {
     private Map<String, DesiredUpdates> desiredTgUpdates;
+    private List<AllocationListStub> preemptedAllocs;
 
     @JsonProperty("DesiredTGUpdates")
     public Map<String, DesiredUpdates> getDesiredTgUpdates() {
@@ -30,6 +31,24 @@ public final class PlanAnnotations extends ApiObject {
         if (this.desiredTgUpdates == null)
             this.desiredTgUpdates = new java.util.HashMap<>();
         this.desiredTgUpdates.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("PreemptedAllocs")
+    public List<AllocationListStub> getPreemptedAllocs() {
+        return preemptedAllocs;
+    }
+
+    public PlanAnnotations setPreemptedAllocs(List<AllocationListStub> preemptedAllocs) {
+        this.preemptedAllocs = preemptedAllocs;
+        return this;
+    }
+
+    public PlanAnnotations addPreemptedAllocs(AllocationListStub... preemptedAllocs) {
+        if (this.preemptedAllocs == null)
+            this.preemptedAllocs = new java.util.ArrayList<>();
+        for (AllocationListStub item : preemptedAllocs)
+            this.preemptedAllocs.add(item);
         return this;
     }
 

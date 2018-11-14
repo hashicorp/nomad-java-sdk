@@ -21,6 +21,7 @@ public final class DesiredUpdates extends ApiObject {
     private BigInteger inPlaceUpdate;
     private BigInteger destructiveUpdate;
     private BigInteger canary;
+    private BigInteger preemptions;
 
     @JsonProperty("Ignore")
     public BigInteger getIgnore() {
@@ -89,6 +90,16 @@ public final class DesiredUpdates extends ApiObject {
 
     public DesiredUpdates setCanary(BigInteger canary) {
         this.canary = canary;
+        return this;
+    }
+
+    @JsonProperty("Preemptions")
+    public BigInteger getPreemptions() {
+        return preemptions;
+    }
+
+    public DesiredUpdates setPreemptions(BigInteger preemptions) {
+        this.preemptions = preemptions;
         return this;
     }
 
