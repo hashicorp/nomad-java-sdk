@@ -4,7 +4,7 @@ Nomad Java SDK [![Build Status](https://travis-ci.org/hashicorp/nomad-java-sdk.s
 A Java SDK for interacting with [HashiCorp's Nomad] through its [HTTP API].
 
 [HashiCorp's Nomad]: https://www.nomadproject.io/
-[HTTP API]: https://www.nomadproject.io/docs/http/
+[HTTP API]: https://www.nomadproject.io/api/index.html
 
 As of v0.8.x, this SDK requires at least a Java 8 runtime.
 
