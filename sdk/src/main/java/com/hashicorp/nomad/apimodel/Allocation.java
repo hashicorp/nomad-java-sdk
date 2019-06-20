@@ -20,6 +20,7 @@ public final class Allocation extends ApiObject {
     private String evalId;
     private String name;
     private String nodeId;
+    private String nodeName;
     private String jobId;
     private Job job;
     private String taskGroup;
@@ -95,6 +96,16 @@ public final class Allocation extends ApiObject {
 
     public Allocation setNodeId(String nodeId) {
         this.nodeId = nodeId;
+        return this;
+    }
+
+    @JsonProperty("NodeName")
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    public Allocation setNodeName(String nodeName) {
+        this.nodeName = nodeName;
         return this;
     }
 

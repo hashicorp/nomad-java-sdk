@@ -19,8 +19,9 @@ public final class UpdateStrategy extends ApiObject {
     private Long minHealthyTime;
     private Long healthyDeadline;
     private Long progressDeadline;
-    private Boolean autoRevert;
     private Integer canary;
+    private Boolean autoRevert;
+    private Boolean autoPromote;
 
     @JsonProperty("Stagger")
     public Long getStagger() {
@@ -82,6 +83,16 @@ public final class UpdateStrategy extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Canary")
+    public Integer getCanary() {
+        return canary;
+    }
+
+    public UpdateStrategy setCanary(Integer canary) {
+        this.canary = canary;
+        return this;
+    }
+
     @JsonProperty("AutoRevert")
     public Boolean getAutoRevert() {
         return autoRevert;
@@ -92,13 +103,13 @@ public final class UpdateStrategy extends ApiObject {
         return this;
     }
 
-    @JsonProperty("Canary")
-    public Integer getCanary() {
-        return canary;
+    @JsonProperty("AutoPromote")
+    public Boolean getAutoPromote() {
+        return autoPromote;
     }
 
-    public UpdateStrategy setCanary(Integer canary) {
-        this.canary = canary;
+    public UpdateStrategy setAutoPromote(Boolean autoPromote) {
+        this.autoPromote = autoPromote;
         return this;
     }
 

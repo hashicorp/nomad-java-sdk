@@ -17,6 +17,7 @@ public final class NodeResources extends ApiObject {
     private NodeMemoryResources memory;
     private NodeDiskResources disk;
     private List<NetworkResource> networks;
+    private List<NodeDeviceResource> devices;
 
     @JsonProperty("Cpu")
     public NodeCpuResources getCpu() {
@@ -63,6 +64,24 @@ public final class NodeResources extends ApiObject {
             this.networks = new java.util.ArrayList<>();
         for (NetworkResource item : networks)
             this.networks.add(item);
+        return this;
+    }
+
+    @JsonProperty("Devices")
+    public List<NodeDeviceResource> getDevices() {
+        return devices;
+    }
+
+    public NodeResources setDevices(List<NodeDeviceResource> devices) {
+        this.devices = devices;
+        return this;
+    }
+
+    public NodeResources addDevices(NodeDeviceResource... devices) {
+        if (this.devices == null)
+            this.devices = new java.util.ArrayList<>();
+        for (NodeDeviceResource item : devices)
+            this.devices.add(item);
         return this;
     }
 

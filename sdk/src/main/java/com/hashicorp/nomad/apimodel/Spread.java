@@ -14,7 +14,7 @@ import java.util.List;
  */
 public final class Spread extends ApiObject {
     private String attribute;
-    private int weight;
+    private short weight;
     private List<SpreadTarget> spreadTarget;
 
     @JsonProperty("Attribute")
@@ -28,11 +28,11 @@ public final class Spread extends ApiObject {
     }
 
     @JsonProperty("Weight")
-    public int getWeight() {
+    public short getWeight() {
         return weight;
     }
 
-    public Spread setWeight(int weight) {
+    public Spread setWeight(short weight) {
         this.weight = weight;
         return this;
     }

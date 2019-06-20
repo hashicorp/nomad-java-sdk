@@ -16,9 +16,9 @@ public final class Resources extends ApiObject {
     private Integer cpu;
     private Integer memoryMb;
     private Integer diskMb;
-    private Integer iops;
     private List<NetworkResource> networks;
     private List<RequestedDevice> devices;
+    private Integer iops;
 
     @JsonProperty("CPU")
     public Integer getCpu() {
@@ -47,16 +47,6 @@ public final class Resources extends ApiObject {
 
     public Resources setDiskMb(Integer diskMb) {
         this.diskMb = diskMb;
-        return this;
-    }
-
-    @JsonProperty("IOPS")
-    public Integer getIops() {
-        return iops;
-    }
-
-    public Resources setIops(Integer iops) {
-        this.iops = iops;
         return this;
     }
 
@@ -93,6 +83,16 @@ public final class Resources extends ApiObject {
             this.devices = new java.util.ArrayList<>();
         for (RequestedDevice item : devices)
             this.devices.add(item);
+        return this;
+    }
+
+    @JsonProperty("IOPS")
+    public Integer getIops() {
+        return iops;
+    }
+
+    public Resources setIops(Integer iops) {
+        this.iops = iops;
         return this;
     }
 

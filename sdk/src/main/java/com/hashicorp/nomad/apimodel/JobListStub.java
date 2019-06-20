@@ -17,6 +17,7 @@ public final class JobListStub extends ApiObject {
     private String id;
     private String parentId;
     private String name;
+    private List<String> datacenters;
     private String type;
     private int priority;
     private boolean periodic;
@@ -57,6 +58,24 @@ public final class JobListStub extends ApiObject {
 
     public JobListStub setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    @JsonProperty("Datacenters")
+    public List<String> getDatacenters() {
+        return datacenters;
+    }
+
+    public JobListStub setDatacenters(List<String> datacenters) {
+        this.datacenters = datacenters;
+        return this;
+    }
+
+    public JobListStub addDatacenters(String... datacenters) {
+        if (this.datacenters == null)
+            this.datacenters = new java.util.ArrayList<>();
+        for (String item : datacenters)
+            this.datacenters.add(item);
         return this;
     }
 

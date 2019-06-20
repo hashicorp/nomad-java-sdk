@@ -16,7 +16,7 @@ public final class Affinity extends ApiObject {
     private String lTarget;
     private String rTarget;
     private String operand;
-    private double weight;
+    private short weight;
 
     @JsonProperty("LTarget")
     public String getLTarget() {
@@ -49,11 +49,11 @@ public final class Affinity extends ApiObject {
     }
 
     @JsonProperty("Weight")
-    public double getWeight() {
+    public short getWeight() {
         return weight;
     }
 
-    public Affinity setWeight(double weight) {
+    public Affinity setWeight(short weight) {
         this.weight = weight;
         return this;
     }

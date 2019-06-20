@@ -14,6 +14,8 @@ import java.util.List;
  */
 public final class PreemptionConfig extends ApiObject {
     private boolean systemSchedulerEnabled;
+    private boolean batchSchedulerEnabled;
+    private boolean serviceSchedulerEnabled;
 
     @JsonProperty("SystemSchedulerEnabled")
     public boolean getSystemSchedulerEnabled() {
@@ -22,6 +24,26 @@ public final class PreemptionConfig extends ApiObject {
 
     public PreemptionConfig setSystemSchedulerEnabled(boolean systemSchedulerEnabled) {
         this.systemSchedulerEnabled = systemSchedulerEnabled;
+        return this;
+    }
+
+    @JsonProperty("BatchSchedulerEnabled")
+    public boolean getBatchSchedulerEnabled() {
+        return batchSchedulerEnabled;
+    }
+
+    public PreemptionConfig setBatchSchedulerEnabled(boolean batchSchedulerEnabled) {
+        this.batchSchedulerEnabled = batchSchedulerEnabled;
+        return this;
+    }
+
+    @JsonProperty("ServiceSchedulerEnabled")
+    public boolean getServiceSchedulerEnabled() {
+        return serviceSchedulerEnabled;
+    }
+
+    public PreemptionConfig setServiceSchedulerEnabled(boolean serviceSchedulerEnabled) {
+        this.serviceSchedulerEnabled = serviceSchedulerEnabled;
         return this;
     }
 

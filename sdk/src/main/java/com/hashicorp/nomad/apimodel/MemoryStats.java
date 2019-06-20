@@ -17,6 +17,7 @@ public final class MemoryStats extends ApiObject {
     private BigInteger rss;
     private BigInteger cache;
     private BigInteger swap;
+    private BigInteger usage;
     private BigInteger maxUsage;
     private BigInteger kernelUsage;
     private BigInteger kernelMaxUsage;
@@ -49,6 +50,16 @@ public final class MemoryStats extends ApiObject {
 
     public MemoryStats setSwap(BigInteger swap) {
         this.swap = swap;
+        return this;
+    }
+
+    @JsonProperty("Usage")
+    public BigInteger getUsage() {
+        return usage;
+    }
+
+    public MemoryStats setUsage(BigInteger usage) {
+        this.usage = usage;
         return this;
     }
 

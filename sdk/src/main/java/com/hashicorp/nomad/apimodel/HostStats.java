@@ -17,6 +17,7 @@ public final class HostStats extends ApiObject {
     private HostMemoryStats memory;
     private List<HostCpuStats> cpu;
     private List<HostDiskStats> diskStats;
+    private List<DeviceGroupStats> deviceStats;
     private BigInteger uptime;
     private double cpuTicksConsumed;
 
@@ -63,6 +64,24 @@ public final class HostStats extends ApiObject {
             this.diskStats = new java.util.ArrayList<>();
         for (HostDiskStats item : diskStats)
             this.diskStats.add(item);
+        return this;
+    }
+
+    @JsonProperty("DeviceStats")
+    public List<DeviceGroupStats> getDeviceStats() {
+        return deviceStats;
+    }
+
+    public HostStats setDeviceStats(List<DeviceGroupStats> deviceStats) {
+        this.deviceStats = deviceStats;
+        return this;
+    }
+
+    public HostStats addDeviceStats(DeviceGroupStats... deviceStats) {
+        if (this.deviceStats == null)
+            this.deviceStats = new java.util.ArrayList<>();
+        for (DeviceGroupStats item : deviceStats)
+            this.deviceStats.add(item);
         return this;
     }
 

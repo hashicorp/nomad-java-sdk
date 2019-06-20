@@ -4,6 +4,8 @@ import com.hashicorp.nomad.apimodel.AutopilotConfiguration;
 import com.hashicorp.nomad.apimodel.OperatorHealthReply;
 import com.hashicorp.nomad.apimodel.RaftConfiguration;
 import com.hashicorp.nomad.apimodel.SchedulerConfiguration;
+import com.hashicorp.nomad.apimodel.SchedulerConfigurationResponse;
+import com.hashicorp.nomad.apimodel.SchedulerSetConfigurationResponse;
 import org.apache.http.client.methods.RequestBuilder;
 
 import javax.annotation.Nullable;
@@ -208,13 +210,13 @@ public class OperatorApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/api/operator.html#read-scheduler-configuration">{@code GET /v1/operator/scheduler/configuration}</a>
      */
-    public NomadResponse<SchedulerConfiguration> getSchedulerConfiguration(
-            @Nullable QueryOptions<SchedulerConfiguration> options
+    public NomadResponse<SchedulerConfigurationResponse> getSchedulerConfiguration(
+            @Nullable QueryOptions<SchedulerConfigurationResponse> options
     ) throws IOException, NomadException {
         return executeServerQuery(
                 "/v1/operator/scheduler/configuration",
                 options,
-                NomadJson.parserFor(SchedulerConfiguration.class));
+                NomadJson.parserFor(SchedulerConfigurationResponse.class));
     }
 
     /**
@@ -225,7 +227,7 @@ public class OperatorApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/api/operator.html#update-scheduler-configuration">{@code PUT /v1/operator/scheduler/configuration}</a>
      */
-    public NomadResponse<Boolean> updateSchedulerConfiguration(
+    public NomadResponse<SchedulerSetConfigurationResponse> updateSchedulerConfiguration(
             SchedulerConfiguration schedulerConfiguration
     ) throws IOException, NomadException {
         return updateSchedulerConfiguration(schedulerConfiguration, null, null);
@@ -241,7 +243,7 @@ public class OperatorApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/api/operator.html#update-scheduler-configuration">{@code PUT /v1/operator/scheduler/configuration}</a>
      */
-    public NomadResponse<Boolean> updateSchedulerConfiguration(
+    public NomadResponse<SchedulerSetConfigurationResponse> updateSchedulerConfiguration(
             SchedulerConfiguration schedulerConfiguration,
             @Nullable WriteOptions options,
             @Nullable BigInteger cas
@@ -256,7 +258,7 @@ public class OperatorApi extends ApiBase {
         }
         return executeServerAction(
                 builder,
-                NomadJson.parserFor(Boolean.class)
+                NomadJson.parserFor(SchedulerSetConfigurationResponse.class)
         );
     }
 }

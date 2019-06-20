@@ -14,7 +14,7 @@ import java.util.List;
  */
 public final class SpreadTarget extends ApiObject {
     private String value;
-    private long percent;
+    private byte percent;
 
     @JsonProperty("Value")
     public String getValue() {
@@ -27,11 +27,11 @@ public final class SpreadTarget extends ApiObject {
     }
 
     @JsonProperty("Percent")
-    public long getPercent() {
+    public byte getPercent() {
         return percent;
     }
 
-    public SpreadTarget setPercent(long percent) {
+    public SpreadTarget setPercent(byte percent) {
         this.percent = percent;
         return this;
     }
