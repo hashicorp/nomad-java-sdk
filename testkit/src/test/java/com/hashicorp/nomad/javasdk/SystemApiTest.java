@@ -18,7 +18,7 @@ public class SystemApiTest extends ApiTestBase {
             NomadResponse<Void> response = systemApi.garbageCollect();
             assertThat(response.getRawEntity(), emptyOrNullString());
 
-            NomadResponse<Void> regionSpecificResponse = systemApi.garbageCollect(new WriteOptions("global"));
+            NomadResponse<Void> regionSpecificResponse = systemApi.garbageCollect(new WriteOptions("test-region"));
             assertThat(regionSpecificResponse.getRawEntity(), emptyOrNullString());
 
             new ErrorResponseAssertion("No path to region") {
@@ -39,7 +39,7 @@ public class SystemApiTest extends ApiTestBase {
             NomadResponse<Void> response = systemApi.reconcileSummaries();
             assertThat(response.getRawEntity(), emptyOrNullString());
 
-            NomadResponse<Void> regionSpecificResponse = systemApi.reconcileSummaries(new WriteOptions("global"));
+            NomadResponse<Void> regionSpecificResponse = systemApi.reconcileSummaries(new WriteOptions("test-region"));
             assertThat(regionSpecificResponse.getRawEntity(), emptyOrNullString());
 
             new ErrorResponseAssertion("No path to region") {

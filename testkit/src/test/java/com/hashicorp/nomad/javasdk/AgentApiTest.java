@@ -23,7 +23,7 @@ public class AgentApiTest extends ApiTestBase {
 
             AgentSelf result = agentApi.self().getValue();
             assertThat("Member name in response", result.getMember().getName(), nonEmptyString());
-            assertThat((String) result.getConfig().get("Region"), is("global"));
+            assertThat((String) result.getConfig().get("Region"), is("test-region"));
             assertThat((String) result.getConfig().get("Datacenter"), is("dc1"));
         }
     }
@@ -55,7 +55,7 @@ public class AgentApiTest extends ApiTestBase {
             ServerMembers serverMembers = agentApi.members().getValue();
             assertThat(serverMembers.getServerName(), startsWith("node"));
             assertThat(serverMembers.getServerDc(), is("dc1"));
-            assertThat(serverMembers.getServerRegion(), is("global"));
+            assertThat(serverMembers.getServerRegion(), is("test-region"));
             List<AgentMember> members = serverMembers.getMembers();
             assertThat(members, hasSize(1));
             AgentMember member = members.get(0);
