@@ -76,6 +76,11 @@
                 <artifactId>bcpkix-jdk15on</artifactId>
                 <version>1.56</version>
             </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>2.10.5</version>
+            </dependency>
 
             <!-- Dependencies not needed at runtime -->
             <dependency>
