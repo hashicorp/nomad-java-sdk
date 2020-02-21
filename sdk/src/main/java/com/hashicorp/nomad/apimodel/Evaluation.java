@@ -42,6 +42,8 @@ public final class Evaluation extends ApiObject {
     private BigInteger snapshotIndex;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
+    private long createTime;
+    private long modifyTime;
 
     @JsonProperty("ID")
     public String getId() {
@@ -321,6 +323,26 @@ public final class Evaluation extends ApiObject {
 
     public Evaluation setModifyIndex(BigInteger modifyIndex) {
         this.modifyIndex = modifyIndex;
+        return this;
+    }
+
+    @JsonProperty("CreateTime")
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public Evaluation setCreateTime(long createTime) {
+        this.createTime = createTime;
+        return this;
+    }
+
+    @JsonProperty("ModifyTime")
+    public long getModifyTime() {
+        return modifyTime;
+    }
+
+    public Evaluation setModifyTime(long modifyTime) {
+        this.modifyTime = modifyTime;
         return this;
     }
 
