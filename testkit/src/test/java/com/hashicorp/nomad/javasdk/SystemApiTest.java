@@ -24,7 +24,6 @@ public class SystemApiTest extends ApiTestBase {
             new ErrorResponseAssertion("No path to region") {
                 @Override
                 protected NomadResponse<?> performRequest() throws IOException, NomadException {
-                    System.err.println("Performing non-existent-region request");
                     return systemApi.garbageCollect(new WriteOptions("non-existent-region"));
                 }
             };

@@ -3,6 +3,7 @@ package com.hashicorp.nomad.javasdk;
 import com.hashicorp.nomad.apimodel.AllocationListStub;
 import com.hashicorp.nomad.apimodel.Evaluation;
 import com.hashicorp.nomad.testutils.TestAgent;
+import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -31,8 +32,11 @@ public class EvaluationsApiTest extends ApiTestBase {
             assertUpdatedServerQueryResponse(updatedResponse);
             List<Evaluation> evaluations = updatedResponse.getValue();
             assertThat(evaluations, not(empty()));
+            assertThat(evaluations, Matchers.everyItem(Matchers.<Evaluation>hasProperty("createTime", nonEmptyString())));
+            assertThat(evaluations, Matchers.everyItem(Matchers.<Evaluation>hasProperty("modifyTime", nonEmptyString())));
             Evaluation originalEvaluation = evaluations.get(evaluations.size() - 1);
             assertThat(originalEvaluation.getId(), is(evalID));
+
         }
     }
 

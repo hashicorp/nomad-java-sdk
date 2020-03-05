@@ -24,12 +24,16 @@ public class AllocationsApiTest extends ApiTestBase {
             assertPristineServerQueryResponse(response);
             assertThat("allocations", response.getValue(), empty());
 
-            String evalID = registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent).getId();
+            Evaluation eval = registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent);
 
             ServerQueryResponse<List<AllocationListStub>> updatedResponse = allocationsApi.list();
             assertUpdatedServerQueryResponse(updatedResponse);
-            assertThat(updatedResponse.getValue(), not(empty()));
-            assertThat(updatedResponse.getValue(), hasItem(Matchers.<AllocationListStub>hasProperty("evalId", is(evalID))));
+            List<AllocationListStub> list = updatedResponse.getValue();
+            assertThat(list, not(empty()));
+            assertThat(list, everyItem(Matchers.<AllocationListStub>hasProperty("evalId", is(eval.getId()))));
+            assertThat(list, everyItem(Matchers.<AllocationListStub>hasProperty("namespace", is("default"))));
+            assertThat(list, everyItem(Matchers.<AllocationListStub>hasProperty("nodeName", nonEmptyString())));
+            assertThat(list, everyItem(Matchers.<AllocationListStub>hasProperty("jobType", is(eval.getType()))));
         }
     }
 
@@ -95,8 +99,16 @@ public class AllocationsApiTest extends ApiTestBase {
 
             ServerQueryResponse<Allocation> infoResponse = allocationsApi.info(allocationId);
             assertUpdatedServerQueryResponse(infoResponse);
-            assertThat(infoResponse.getValue().getId(), is(allocationId));
-            assertThat(infoResponse.getValue().getEvalId(), is(evalID));
+            Allocation alloc = infoResponse.getValue();
+            assertThat(alloc.getId(), is(allocationId));
+            assertThat(alloc.getEvalId(), is(evalID));
+            assertThat(alloc.getMetrics(), notNullValue());
+            assertThat(alloc.getMetrics().getScoreMetaData(), not(empty()));
+            assertThat(alloc.getNodeName(), nonEmptyString());
+
+            assertThat(alloc.getAllocatedResources().getShared().getDiskMb(), greaterThan(0l));
+            assertThat(alloc.getAllocatedResources().getTasks().get("task1").getCpu().getCpuShares(), is(100l));
+            assertThat(alloc.getAllocatedResources().getTasks().get("task1").getMemory().getMemoryMb(), is(256l));
         }
     }
 
