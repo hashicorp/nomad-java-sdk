@@ -18,8 +18,11 @@ public final class AllocationListStub extends ApiObject {
     private String id;
     private String evalId;
     private String name;
+    private String namespace;
     private String nodeId;
+    private String nodeName;
     private String jobId;
+    private String jobType;
     private BigInteger jobVersion;
     private String taskGroup;
     private String desiredStatus;
@@ -30,6 +33,8 @@ public final class AllocationListStub extends ApiObject {
     private AllocDeploymentStatus deploymentStatus;
     private String followupEvalId;
     private RescheduleTracker rescheduleTracker;
+    private List<String> preemptedAllocations;
+    private String preemptedByAllocation;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
     private long createTime;
@@ -65,6 +70,16 @@ public final class AllocationListStub extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public AllocationListStub setNamespace(String namespace) {
+        this.namespace = namespace;
+        return this;
+    }
+
     @JsonProperty("NodeID")
     public String getNodeId() {
         return nodeId;
@@ -75,6 +90,16 @@ public final class AllocationListStub extends ApiObject {
         return this;
     }
 
+    @JsonProperty("NodeName")
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    public AllocationListStub setNodeName(String nodeName) {
+        this.nodeName = nodeName;
+        return this;
+    }
+
     @JsonProperty("JobID")
     public String getJobId() {
         return jobId;
@@ -82,6 +107,16 @@ public final class AllocationListStub extends ApiObject {
 
     public AllocationListStub setJobId(String jobId) {
         this.jobId = jobId;
+        return this;
+    }
+
+    @JsonProperty("JobType")
+    public String getJobType() {
+        return jobType;
+    }
+
+    public AllocationListStub setJobType(String jobType) {
+        this.jobType = jobType;
         return this;
     }
 
@@ -189,6 +224,34 @@ public final class AllocationListStub extends ApiObject {
 
     public AllocationListStub setRescheduleTracker(RescheduleTracker rescheduleTracker) {
         this.rescheduleTracker = rescheduleTracker;
+        return this;
+    }
+
+    @JsonProperty("PreemptedAllocations")
+    public List<String> getPreemptedAllocations() {
+        return preemptedAllocations;
+    }
+
+    public AllocationListStub setPreemptedAllocations(List<String> preemptedAllocations) {
+        this.preemptedAllocations = preemptedAllocations;
+        return this;
+    }
+
+    public AllocationListStub addPreemptedAllocations(String... preemptedAllocations) {
+        if (this.preemptedAllocations == null)
+            this.preemptedAllocations = new java.util.ArrayList<>();
+        for (String item : preemptedAllocations)
+            this.preemptedAllocations.add(item);
+        return this;
+    }
+
+    @JsonProperty("PreemptedByAllocation")
+    public String getPreemptedByAllocation() {
+        return preemptedByAllocation;
+    }
+
+    public AllocationListStub setPreemptedByAllocation(String preemptedByAllocation) {
+        this.preemptedByAllocation = preemptedByAllocation;
         return this;
     }
 

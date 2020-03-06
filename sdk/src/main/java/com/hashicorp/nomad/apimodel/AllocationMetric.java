@@ -26,6 +26,7 @@ public final class AllocationMetric extends ApiObject {
     private Map<String, Double> scores;
     private long allocationTime;
     private int coalescedFailures;
+    private List<NodeScoreMeta> scoreMetaData;
 
     @JsonProperty("NodesEvaluated")
     public int getNodesEvaluated() {
@@ -194,6 +195,24 @@ public final class AllocationMetric extends ApiObject {
 
     public AllocationMetric setCoalescedFailures(int coalescedFailures) {
         this.coalescedFailures = coalescedFailures;
+        return this;
+    }
+
+    @JsonProperty("ScoreMetaData")
+    public List<NodeScoreMeta> getScoreMetaData() {
+        return scoreMetaData;
+    }
+
+    public AllocationMetric setScoreMetaData(List<NodeScoreMeta> scoreMetaData) {
+        this.scoreMetaData = scoreMetaData;
+        return this;
+    }
+
+    public AllocationMetric addScoreMetaData(NodeScoreMeta... scoreMetaData) {
+        if (this.scoreMetaData == null)
+            this.scoreMetaData = new java.util.ArrayList<>();
+        for (NodeScoreMeta item : scoreMetaData)
+            this.scoreMetaData.add(item);
         return this;
     }
 

@@ -26,8 +26,10 @@ public final class Job extends ApiObject {
     private Boolean allAtOnce;
     private List<String> datacenters;
     private List<Constraint> constraints;
+    private List<Affinity> affinities;
     private List<TaskGroup> taskGroups;
     private UpdateStrategy update;
+    private List<Spread> spreads;
     private PeriodicConfig periodic;
     private ParameterizedJobConfig parameterizedJob;
     private boolean dispatched;
@@ -171,6 +173,24 @@ public final class Job extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Affinities")
+    public List<Affinity> getAffinities() {
+        return affinities;
+    }
+
+    public Job setAffinities(List<Affinity> affinities) {
+        this.affinities = affinities;
+        return this;
+    }
+
+    public Job addAffinities(Affinity... affinities) {
+        if (this.affinities == null)
+            this.affinities = new java.util.ArrayList<>();
+        for (Affinity item : affinities)
+            this.affinities.add(item);
+        return this;
+    }
+
     @JsonProperty("TaskGroups")
     public List<TaskGroup> getTaskGroups() {
         return taskGroups;
@@ -196,6 +216,24 @@ public final class Job extends ApiObject {
 
     public Job setUpdate(UpdateStrategy update) {
         this.update = update;
+        return this;
+    }
+
+    @JsonProperty("Spreads")
+    public List<Spread> getSpreads() {
+        return spreads;
+    }
+
+    public Job setSpreads(List<Spread> spreads) {
+        this.spreads = spreads;
+        return this;
+    }
+
+    public Job addSpreads(Spread... spreads) {
+        if (this.spreads == null)
+            this.spreads = new java.util.ArrayList<>();
+        for (Spread item : spreads)
+            this.spreads.add(item);
         return this;
     }
 

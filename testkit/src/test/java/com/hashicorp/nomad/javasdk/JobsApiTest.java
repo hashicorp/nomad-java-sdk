@@ -1,12 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
-import com.hashicorp.nomad.apimodel.AllocationListStub;
-import com.hashicorp.nomad.apimodel.Evaluation;
-import com.hashicorp.nomad.apimodel.Job;
-import com.hashicorp.nomad.apimodel.JobListStub;
-import com.hashicorp.nomad.apimodel.JobPlanResponse;
-import com.hashicorp.nomad.apimodel.JobSummary;
-import com.hashicorp.nomad.apimodel.PeriodicConfig;
+import com.hashicorp.nomad.apimodel.*;
 import com.hashicorp.nomad.testutils.TestAgent;
 import org.hamcrest.Matchers;
 import org.junit.Test;
@@ -16,16 +10,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.emptyOrNullString;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasKey;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 public class JobsApiTest extends ApiTestBase {
 
@@ -46,6 +31,7 @@ public class JobsApiTest extends ApiTestBase {
             List<JobListStub> updatedJobs = updatedListResponse.getValue();
             assertThat("jobs", updatedJobs, hasSize(1));
             assertThat("id", updatedJobs.get(0).getId(), is(job.getId()));
+            assertThat(updatedJobs, Matchers.everyItem(Matchers.<JobListStub>hasProperty("datacenters", not(empty()))));
         }
     }
 
@@ -96,24 +82,22 @@ public class JobsApiTest extends ApiTestBase {
         }
     }
 
-//    @Test
-//    public void shouldValidateJob() throws Exception {
-//        try (TestAgent agent = newServer()) {
-//            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
-//
-//            final Job job = createTestJob();
-//
-//            ServerResponse<JobValidateResponse> response = jobsApi.validate(job);
-//            assertUpdatedServerResponse(response);
-//            assertThat("errors", response.getValue().getValidationErrors(), empty());
-//
-//            job.setId(null);
-//
-//            response = jobsApi.validate(job);
-//            assertUpdatedServerResponse(response);
-//            assertThat("errors", response.getValue().getValidationErrors(), not(empty()));
-//        }
-//    }
+    @Test
+    public void shouldValidateJob() throws Exception {
+        try (TestAgent agent = newServer()) {
+            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
+
+            final Job job = createTestJob();
+
+            ServerResponse<JobValidateResponse> response = jobsApi.validate(job);
+            assertThat("errors", response.getValue().getValidationErrors(), anyOf(empty(), nullValue()));
+
+            job.setId(null);
+
+            response = jobsApi.validate(job);
+            assertThat("errors", response.getValue().getValidationErrors(), not(empty()));
+        }
+    }
 
     @Test
     public void shouldRevertJob() throws Exception {
@@ -126,7 +110,7 @@ public class JobsApiTest extends ApiTestBase {
             job.addMeta("foo", "bar");
             registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent, job);
 
-            // Fails at incorrect index
+            // Fails at incorrect version
             new ErrorResponseAssertion("enforcing version") {
                 @Override
                 protected NomadResponse<?> performRequest() throws IOException, NomadException {
@@ -135,8 +119,8 @@ public class JobsApiTest extends ApiTestBase {
             };
 
             final EvaluationResponse response = jobsApi.revert(job.getId(), new BigInteger("0"), new BigInteger("1"), null);
-
             assertThat(response.getValue(), nonEmptyString());
+            agent.getApiClient().getEvaluationsApi().pollForCompletion(response, waitStrategyForTest()).getValue();
         }
     }
 
@@ -415,6 +399,25 @@ public class JobsApiTest extends ApiTestBase {
             JobSummary summary = jobSummaryResponse.getValue();
             assertThat(summary.getJobId(), is(job.getId()));
             assertThat(summary.getSummary(), hasKey(job.getTaskGroups().get(0).getName()));
+        }
+    }
+
+    @Test
+    public void shouldBlockOnNonexistentDeviceRequest() throws Exception {
+        try (TestAgent agent = newClientServer()) {
+            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
+
+            final Job job = createTestJob();
+            RequestedDevice dev = new RequestedDevice().setName("non-existent").setCount(BigInteger.ONE);
+
+            TaskGroup tg0 = job.getTaskGroups().get(0);
+            tg0.getTasks().get(0).getResources().addDevices(dev);
+
+            EvaluationResponse registerResponse = jobsApi.register(job);
+            assertUpdatedServerResponse(registerResponse);
+
+            Evaluation eval = agent.getApiClient().getEvaluationsApi().pollForCompletion(registerResponse, waitStrategyForTest()).getValue();
+            assertThat("blocked for missing devices",eval.getFailedTgAllocs().get(tg0.getName()).getConstraintFiltered(), hasKey("missing devices"));
         }
     }
 

@@ -318,6 +318,11 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 				return java.Boolean
 			case reflect.Int:
 				return java.Integer
+			case reflect.Int8:
+				// probably a weight [-100,100], use wider type
+				return java.PrimitiveShort
+			case reflect.Float64:
+				return java.PrimitiveDouble
 			case reflect.Int64:
 				return java.Long
 			case reflect.String:

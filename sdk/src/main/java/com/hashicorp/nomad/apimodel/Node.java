@@ -23,6 +23,8 @@ public final class Node extends ApiObject {
     private Map<String, String> attributes;
     private Resources resources;
     private Resources reserved;
+    private NodeResources nodeResources;
+    private NodeReservedResources reservedResources;
     private Map<String, String> links;
     private Map<String, String> meta;
     private String nodeClass;
@@ -121,6 +123,26 @@ public final class Node extends ApiObject {
 
     public Node setReserved(Resources reserved) {
         this.reserved = reserved;
+        return this;
+    }
+
+    @JsonProperty("NodeResources")
+    public NodeResources getNodeResources() {
+        return nodeResources;
+    }
+
+    public Node setNodeResources(NodeResources nodeResources) {
+        this.nodeResources = nodeResources;
+        return this;
+    }
+
+    @JsonProperty("ReservedResources")
+    public NodeReservedResources getReservedResources() {
+        return reservedResources;
+    }
+
+    public Node setReservedResources(NodeReservedResources reservedResources) {
+        this.reservedResources = reservedResources;
         return this;
     }
 

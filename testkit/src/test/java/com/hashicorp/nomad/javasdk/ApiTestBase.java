@@ -45,7 +45,7 @@ public class ApiTestBase {
      * This is sufficient for many tests, and skips the overhead of waiting for the client to initialize.
      */
     protected TestAgent newServer() throws Exception {
-        return newAgent(new NomadAgentConfiguration.Builder());
+        return newAgent(new NomadAgentConfiguration.Builder().setRegion("test-region"));
     }
 
     /**
@@ -54,7 +54,7 @@ public class ApiTestBase {
      * This is useful for tests that need allocations to actually be created.
      */
     protected TestAgent newClientServer() throws Exception {
-        return newAgent(new NomadAgentConfiguration.Builder().setClientEnabled(true).addClientOption("driver.raw_exec.enable", "1"));
+        return newAgent(new NomadAgentConfiguration.Builder().setRegion("test-region").setClientEnabled(true).addClientOption("driver.raw_exec.enable", "1"));
     }
 
     protected TestAgent newAgent(NomadAgentConfiguration.Builder agentConfigBuilder) throws Exception {
@@ -182,7 +182,7 @@ public class ApiTestBase {
         return new Job()
                 .setId("job1")
                 .setName("redis")
-                .setRegion("region1")
+                .setRegion("test-region")
                 .setType("batch")
                 .setPriority(1)
                 .addDatacenters("dc1")
@@ -237,7 +237,7 @@ public class ApiTestBase {
         return new Job()
                 .setId("job1")
                 .setName("redis")
-                .setRegion("region1")
+                .setRegion("test-region")
                 .setType("batch")
                 .setPriority(1)
                 .addDatacenters("dc1")

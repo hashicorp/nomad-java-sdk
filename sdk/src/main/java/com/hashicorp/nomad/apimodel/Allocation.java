@@ -20,11 +20,13 @@ public final class Allocation extends ApiObject {
     private String evalId;
     private String name;
     private String nodeId;
+    private String nodeName;
     private String jobId;
     private Job job;
     private String taskGroup;
     private Resources resources;
     private Map<String, Resources> taskResources;
+    private AllocatedResources allocatedResources;
     private Map<String, String> services;
     private AllocationMetric metrics;
     private String desiredStatus;
@@ -39,6 +41,8 @@ public final class Allocation extends ApiObject {
     private String previousAllocation;
     private String nextAllocation;
     private RescheduleTracker rescheduleTracker;
+    private List<String> preemptedAllocations;
+    private String preemptedByAllocation;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
     private BigInteger allocModifyIndex;
@@ -92,6 +96,16 @@ public final class Allocation extends ApiObject {
 
     public Allocation setNodeId(String nodeId) {
         this.nodeId = nodeId;
+        return this;
+    }
+
+    @JsonProperty("NodeName")
+    public String getNodeName() {
+        return nodeName;
+    }
+
+    public Allocation setNodeName(String nodeName) {
+        this.nodeName = nodeName;
         return this;
     }
 
@@ -149,6 +163,16 @@ public final class Allocation extends ApiObject {
         if (this.taskResources == null)
             this.taskResources = new java.util.HashMap<>();
         this.taskResources.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("AllocatedResources")
+    public AllocatedResources getAllocatedResources() {
+        return allocatedResources;
+    }
+
+    public Allocation setAllocatedResources(AllocatedResources allocatedResources) {
+        this.allocatedResources = allocatedResources;
         return this;
     }
 
@@ -303,6 +327,34 @@ public final class Allocation extends ApiObject {
 
     public Allocation setRescheduleTracker(RescheduleTracker rescheduleTracker) {
         this.rescheduleTracker = rescheduleTracker;
+        return this;
+    }
+
+    @JsonProperty("PreemptedAllocations")
+    public List<String> getPreemptedAllocations() {
+        return preemptedAllocations;
+    }
+
+    public Allocation setPreemptedAllocations(List<String> preemptedAllocations) {
+        this.preemptedAllocations = preemptedAllocations;
+        return this;
+    }
+
+    public Allocation addPreemptedAllocations(String... preemptedAllocations) {
+        if (this.preemptedAllocations == null)
+            this.preemptedAllocations = new java.util.ArrayList<>();
+        for (String item : preemptedAllocations)
+            this.preemptedAllocations.add(item);
+        return this;
+    }
+
+    @JsonProperty("PreemptedByAllocation")
+    public String getPreemptedByAllocation() {
+        return preemptedByAllocation;
+    }
+
+    public Allocation setPreemptedByAllocation(String preemptedByAllocation) {
+        this.preemptedByAllocation = preemptedByAllocation;
         return this;
     }
 

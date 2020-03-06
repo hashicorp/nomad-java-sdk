@@ -9,6 +9,7 @@ import com.hashicorp.nomad.testutils.TestAgent;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -71,9 +72,16 @@ public class NodesApiTest extends ApiTestBase {
 
             ServerQueryResponse<Node> infoResponse = nodesApi.info(NodeListStub.getId());
             assertUpdatedServerQueryResponse(infoResponse);
-            assertThat(infoResponse.getValue().getId(), is(NodeListStub.getId()));
-            assertThat(infoResponse.getValue().getDatacenter(), is(NodeListStub.getDatacenter()));
-            assertThat(infoResponse.getValue().getDrivers(), hasKey("mock_driver"));
+            Node node = infoResponse.getValue();
+            assertThat(node.getId(), is(NodeListStub.getId()));
+            assertThat(node.getDatacenter(), is(NodeListStub.getDatacenter()));
+            assertThat(node.getDrivers(), hasKey("mock_driver"));
+            assertThat(node.getNodeResources(), notNullValue());
+            assertThat(node.getNodeResources().getCpu().getCpuShares(), greaterThan(0l));
+            assertThat(node.getNodeResources().getMemory().getMemoryMb(), greaterThan(0l));
+            assertThat(node.getReservedResources(), notNullValue());
+            assertThat(node.getReservedResources().getCpu().getCpuShares(), is(BigInteger.ZERO));
+            assertThat(node.getReservedResources().getMemory().getMemoryMb(), is(BigInteger.ZERO));
         }
     }
 

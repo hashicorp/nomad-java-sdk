@@ -3,6 +3,7 @@ package com.hashicorp.nomad.testutils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -49,7 +50,12 @@ class AugmentedProcess {
         try {
             while (true) {
                 try {
-                    process.waitFor();
+                    boolean exited = process.waitFor(5, TimeUnit.SECONDS);
+                    if (!exited) {
+                        System.err.println("process has not exited, closing forcibly");
+                        process.destroyForcibly();
+                        continue;
+                    }
                     Runtime.getRuntime().removeShutdownHook(shutdownHook);
                     return;
                 } catch (InterruptedException e) {

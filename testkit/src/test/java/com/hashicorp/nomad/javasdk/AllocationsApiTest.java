@@ -1,11 +1,11 @@
 package com.hashicorp.nomad.javasdk;
 
-import com.hashicorp.nomad.apimodel.Allocation;
-import com.hashicorp.nomad.apimodel.AllocationListStub;
+import com.hashicorp.nomad.apimodel.*;
 import com.hashicorp.nomad.testutils.TestAgent;
-import org.hamcrest.Matchers;
+import org.hamcrest.*;
 import org.junit.Test;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -24,12 +24,16 @@ public class AllocationsApiTest extends ApiTestBase {
             assertPristineServerQueryResponse(response);
             assertThat("allocations", response.getValue(), empty());
 
-            String evalID = registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent).getId();
+            Evaluation eval = registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent);
 
             ServerQueryResponse<List<AllocationListStub>> updatedResponse = allocationsApi.list();
             assertUpdatedServerQueryResponse(updatedResponse);
-            assertThat(updatedResponse.getValue(), not(empty()));
-            assertThat(updatedResponse.getValue(), hasItem(Matchers.<AllocationListStub>hasProperty("evalId", is(evalID))));
+            List<AllocationListStub> list = updatedResponse.getValue();
+            assertThat(list, not(empty()));
+            assertThat(list, everyItem(Matchers.<AllocationListStub>hasProperty("evalId", is(eval.getId()))));
+            assertThat(list, everyItem(Matchers.<AllocationListStub>hasProperty("namespace", is("default"))));
+            assertThat(list, everyItem(Matchers.<AllocationListStub>hasProperty("nodeName", nonEmptyString())));
+            assertThat(list, everyItem(Matchers.<AllocationListStub>hasProperty("jobType", is(eval.getType()))));
         }
     }
 
@@ -95,8 +99,109 @@ public class AllocationsApiTest extends ApiTestBase {
 
             ServerQueryResponse<Allocation> infoResponse = allocationsApi.info(allocationId);
             assertUpdatedServerQueryResponse(infoResponse);
-            assertThat(infoResponse.getValue().getId(), is(allocationId));
-            assertThat(infoResponse.getValue().getEvalId(), is(evalID));
+            Allocation alloc = infoResponse.getValue();
+            assertThat(alloc.getId(), is(allocationId));
+            assertThat(alloc.getEvalId(), is(evalID));
+            assertThat(alloc.getMetrics(), notNullValue());
+            assertThat(alloc.getMetrics().getScoreMetaData(), not(empty()));
+            assertThat(alloc.getNodeName(), nonEmptyString());
+
+            assertThat(alloc.getAllocatedResources().getShared().getDiskMb(), greaterThan(0l));
+            assertThat(alloc.getAllocatedResources().getTasks().get("task1").getCpu().getCpuShares(), is(100l));
+            assertThat(alloc.getAllocatedResources().getTasks().get("task1").getMemory().getMemoryMb(), is(256l));
+        }
+    }
+
+    @Test
+    public void shouldStopAllocation() throws Exception {
+        try (TestAgent agent = newClientServer()) {
+            final AllocationsApi allocationsApi = agent.getApiClient().getAllocationsApi();
+
+            String evalID = registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent).getId();
+
+            new ErrorResponseAssertion("allocation not found") {
+                @Override
+                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+                    return allocationsApi.stop(UUID.randomUUID().toString());
+                }
+            };
+
+            ServerQueryResponse<List<AllocationListStub>> response = allocationsApi.list();
+            assertThat("allocations", response.getValue(), not(empty()));
+            String allocationId = response.getValue().get(0).getId();
+
+            ServerResponse<AllocStopResponse> stopResponse = allocationsApi.stop(allocationId);
+            assertUpdatedServerResponse(stopResponse);
+            assertThat(stopResponse.getValue().getEvalId(), not(evalID));
+        }
+    }
+
+    @Test
+    public void shouldSignalAllocation() throws Exception {
+        try (TestAgent agent = newClientServer()) {
+            final AllocationsApi allocationsApi = agent.getApiClient().getAllocationsApi();
+
+            Job testJob = createTestJob();
+            testJob.getTaskGroups().get(0).getTasks().get(0).addConfig("run_for", "5s");
+            registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent, testJob).getId();
+
+            new ErrorResponseAssertion("Unknown allocation") {
+                @Override
+                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+                    allocationsApi.signal(UUID.randomUUID().toString(), "SIGUSR1", null);
+                    return null;
+                }
+            };
+
+            ServerQueryResponse<List<AllocationListStub>> response = allocationsApi.list();
+            assertThat("allocations", response.getValue(), not(empty()));
+            final String allocationId = response.getValue().get(0).getId();
+
+            new ErrorResponseAssertion("Task not found") {
+                @Override
+                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+                    allocationsApi.signal(allocationId, "SIGUSR1", "non-existent-task");
+                    return null;
+                }
+            };
+
+            allocationsApi.info(allocationId, QueryOptions.pollRepeatedlyUntil(
+                    NomadPredicates.responseValue(new Predicate<Allocation>() {
+                        @Override
+                        public boolean apply(@Nonnull Allocation allocation) {
+                            return allocation.getTaskStates() != null &&
+                                    allocation.getTaskStates().get("task1") != null &&
+                                    allocation.getTaskStates().get("task1").getState().equals("running");
+                        }
+                    }),
+                    waitStrategyForTest()
+            ));
+
+            allocationsApi.signal(allocationId, "SIGUSR1", null);
+
+            final Matcher<Iterable<? super TaskEvent>> hasSignalEvent = hasItem(new TypeSafeMatcher<TaskEvent>() {
+                @Override
+                public void describeTo(Description description) {
+                    description.appendText("signaling event");
+                }
+
+                @Override
+                protected boolean matchesSafely(TaskEvent taskEvent) {
+                    return taskEvent.getType().equals("Signaling") &&
+                            taskEvent.getDetails().get("signal").equals("SIGUSR1");
+                }
+            });
+
+            // this throws an exception if we time out waiting for the signal task event that we are expecting
+            ServerQueryResponse<Allocation> info = allocationsApi.info(allocationId, QueryOptions.pollRepeatedlyUntil(
+                    NomadPredicates.responseValue(new Predicate<Allocation>() {
+                        @Override
+                        public boolean apply(@Nonnull Allocation allocation) {
+                            return hasSignalEvent.matches(allocation.getTaskStates().get("task1").getEvents());
+                        }
+                    }),
+                    waitStrategyForTest()
+            ));
         }
     }
 

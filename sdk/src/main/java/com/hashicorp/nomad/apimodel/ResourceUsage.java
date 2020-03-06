@@ -15,6 +15,7 @@ import java.util.List;
 public final class ResourceUsage extends ApiObject {
     private MemoryStats memoryStats;
     private CpuStats cpuStats;
+    private List<DeviceGroupStats> deviceStats;
 
     @JsonProperty("MemoryStats")
     public MemoryStats getMemoryStats() {
@@ -33,6 +34,24 @@ public final class ResourceUsage extends ApiObject {
 
     public ResourceUsage setCpuStats(CpuStats cpuStats) {
         this.cpuStats = cpuStats;
+        return this;
+    }
+
+    @JsonProperty("DeviceStats")
+    public List<DeviceGroupStats> getDeviceStats() {
+        return deviceStats;
+    }
+
+    public ResourceUsage setDeviceStats(List<DeviceGroupStats> deviceStats) {
+        this.deviceStats = deviceStats;
+        return this;
+    }
+
+    public ResourceUsage addDeviceStats(DeviceGroupStats... deviceStats) {
+        if (this.deviceStats == null)
+            this.deviceStats = new java.util.ArrayList<>();
+        for (DeviceGroupStats item : deviceStats)
+            this.deviceStats.add(item);
         return this;
     }
 

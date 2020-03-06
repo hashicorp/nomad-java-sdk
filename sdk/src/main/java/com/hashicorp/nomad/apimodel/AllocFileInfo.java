@@ -19,6 +19,7 @@ public final class AllocFileInfo extends ApiObject {
     private long size;
     private String fileMode;
     private Date modTime;
+    private String contentType;
 
     @JsonProperty("Name")
     public String getName() {
@@ -67,6 +68,16 @@ public final class AllocFileInfo extends ApiObject {
 
     public AllocFileInfo setModTime(Date modTime) {
         this.modTime = modTime;
+        return this;
+    }
+
+    @JsonProperty("ContentType")
+    public String getContentType() {
+        return contentType;
+    }
+
+    public AllocFileInfo setContentType(String contentType) {
+        this.contentType = contentType;
         return this;
     }
 

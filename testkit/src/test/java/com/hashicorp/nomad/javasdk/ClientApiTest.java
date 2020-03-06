@@ -22,14 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.fail;
 
 public class ClientApiTest extends ApiTestBase {
@@ -48,12 +41,18 @@ public class ClientApiTest extends ApiTestBase {
 //
 //            NomadResponse<Void> gcResponse = clientApi.garbageCollect(allocation.getId());
 //
-//            new ErrorResponseAssertion("alloc not found") {
-//                @Override
-//                protected NomadResponse<?> performRequest() throws IOException, NomadException {
-//                    return apiClient.getAllocationsApi().info(allocation.getId());
+//            int numTries = 0;
+//            while (true) {
+//                assertThat("timed out waiting for evidence of gc", numTries, lessThan(5));
+//                try {
+//                    clientApi.ls(allocation.getId(), "/");
+//                } catch (ErrorResponseException e) {
+//                    assertThat(e.getServerErrorCode(), is(500));
+//                    break;
 //                }
-//            };
+//                Thread.sleep(1000l);
+//                numTries++;
+//            }
 //        }
 //    }
 
@@ -63,7 +62,9 @@ public class ClientApiTest extends ApiTestBase {
             ClientApi clientApi = agent.getApiClient().getClientApi(agent.getHttpAddress());
 
             NomadResponse<HostStats> response = clientApi.stats();
-            assertThat(response.getValue().getUptime(), greaterThan(BigInteger.ZERO));
+            HostStats stats = response.getValue();
+            assertThat(stats.getUptime(), greaterThan(BigInteger.ZERO));
+            assertThat(stats.getDeviceStats(), anyOf(empty(), nullValue()));
         }
     }
 
@@ -241,8 +242,9 @@ public class ClientApiTest extends ApiTestBase {
 
             NomadResponse<List<AllocFileInfo>> listResponse = clientApi.ls(allocation.getId(), "/");
             assertThat(listResponse.getValue(), hasSize(2));
-            assertThat(listResponse.getValue().get(0).getName(), is("alloc"));
-            assertThat(listResponse.getValue().get(0).getIsDir(), is(true));
+            AllocFileInfo fileInfo = listResponse.getValue().get(0);
+            assertThat(fileInfo.getName(), is("alloc"));
+            assertThat(fileInfo.getIsDir(), is(true));
         }
     }
 
@@ -254,8 +256,10 @@ public class ClientApiTest extends ApiTestBase {
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
             NomadResponse<AllocFileInfo> statResponse = clientApi.stat(allocation.getId(), "/alloc/a.txt");
-            assertThat(statResponse.getValue().getName(), is("a.txt"));
-            assertThat(statResponse.getValue().getIsDir(), is(false));
+            AllocFileInfo fileInfo = statResponse.getValue();
+            assertThat(fileInfo.getName(), is("a.txt"));
+            assertThat(fileInfo.getIsDir(), is(false));
+            assertThat(fileInfo.getContentType(), is("application/octet-stream"));
         }
     }
 
