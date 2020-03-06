@@ -7,7 +7,7 @@
     <groupId>com.hashicorp.nomad</groupId>
     <artifactId>nomad-sdk-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.9.0-SNAPSHOT</version>
+    <version>0.9.7.0</version>
     <name>Nomad SDK Parent POM</name>
     <description>A Java SDK for interacting with Nomad.</description>
     <url>https://github.com/hashicorp/nomad-java-sdk</url>
