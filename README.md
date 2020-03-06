@@ -95,7 +95,7 @@ as described below.
 ### Testing
 
 The tests make use of Nomad's
-[`mock_driver`](https://github.com/hashicorp/nomad/blob/master/client/driver/mock_driver.go),
+[`mock_driver`](https://github.com/hashicorp/nomad/blob/master/drivers/mock/driver.go),
 a driver for test purposes that isn't built into Nomad by default.
 To build Nomad with `mock_driver` support, you will need Go, a properly
 configured `GOPATH`, and the [Nomad source], which you can clone with
