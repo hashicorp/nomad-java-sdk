@@ -262,6 +262,39 @@ public class ClientApi extends ApiBase {
     }
 
     /**
+     * Streams a task's stdout or stderr log.
+     * <p>
+     * Note that if follow is true, then unless there is an error, the streaming connection to the client node will
+     * remain open until the stream's {@link FramedStream#close()} method is invoked, even if the allocation
+     * has completed.
+     *
+     * @param allocationId the ID of the allocation that produced the log
+     * @param taskName     the name of the task that produced the log
+     * @param follow       if true, the stream remains open even after the end of the log has been reached
+     * @param logType      "stdout" or "stderr"
+     * @param offset       Specifies the offset to start streaming from
+     * @return a StreamAborter that can be used to abort the stream before it finishes.
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/client-fs.html">{@code GET /v1/client/fs/logs/{Allocation-ID}}</a>
+     */
+    public FramedStream logsAsFrames(
+            final String allocationId,
+            final String taskName,
+            final boolean follow,
+            final String logType,
+            final long offset
+    ) throws IOException, NomadException {
+        return apiClient.executeFramedStream(get(
+                uri(address, "/v1/client/fs/logs/" + allocationId)
+                        .addParameter("task", taskName)
+                        .addParameter("follow", Boolean.toString(follow))
+                        .addParameter("type", logType)
+                        .addParameter("offset", Long.toString(offset))
+        ), null);
+    }
+
+    /**
      * Lists the files in an allocation directory.
      *
      * @param allocationId ID of the allocation that owns the directory
