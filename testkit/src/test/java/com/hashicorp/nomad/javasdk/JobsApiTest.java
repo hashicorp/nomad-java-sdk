@@ -110,7 +110,7 @@ public class JobsApiTest extends ApiTestBase {
             job.addMeta("foo", "bar");
             registerTestJobAndPollUntilEvaluationCompletesSuccessfully(agent, job);
 
-            // Fails at incorrect index
+            // Fails at incorrect version
             new ErrorResponseAssertion("enforcing version") {
                 @Override
                 protected NomadResponse<?> performRequest() throws IOException, NomadException {
@@ -119,8 +119,8 @@ public class JobsApiTest extends ApiTestBase {
             };
 
             final EvaluationResponse response = jobsApi.revert(job.getId(), new BigInteger("0"), new BigInteger("1"), null);
-
             assertThat(response.getValue(), nonEmptyString());
+            agent.getApiClient().getEvaluationsApi().pollForCompletion(response, waitStrategyForTest()).getValue();
         }
     }
 
