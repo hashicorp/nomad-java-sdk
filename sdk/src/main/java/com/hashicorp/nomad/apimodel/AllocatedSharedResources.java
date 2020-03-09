@@ -14,6 +14,7 @@ import java.util.List;
  */
 public final class AllocatedSharedResources extends ApiObject {
     private long diskMb;
+    private List<NetworkResource> networks;
 
     @JsonProperty("DiskMB")
     public long getDiskMb() {
@@ -22,6 +23,24 @@ public final class AllocatedSharedResources extends ApiObject {
 
     public AllocatedSharedResources setDiskMb(long diskMb) {
         this.diskMb = diskMb;
+        return this;
+    }
+
+    @JsonProperty("Networks")
+    public List<NetworkResource> getNetworks() {
+        return networks;
+    }
+
+    public AllocatedSharedResources setNetworks(List<NetworkResource> networks) {
+        this.networks = networks;
+        return this;
+    }
+
+    public AllocatedSharedResources addNetworks(NetworkResource... networks) {
+        if (this.networks == null)
+            this.networks = new java.util.ArrayList<>();
+        for (NetworkResource item : networks)
+            this.networks.add(item);
         return this;
     }
 

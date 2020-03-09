@@ -32,6 +32,7 @@ public final class ServiceCheck extends ApiObject {
     private CheckRestart checkRestart;
     private String grpcService;
     private boolean grpcUseTls;
+    private String taskName;
 
     @JsonProperty("Id")
     public String getId() {
@@ -225,6 +226,16 @@ public final class ServiceCheck extends ApiObject {
 
     public ServiceCheck setGrpcUseTls(boolean grpcUseTls) {
         this.grpcUseTls = grpcUseTls;
+        return this;
+    }
+
+    @JsonProperty("TaskName")
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public ServiceCheck setTaskName(String taskName) {
+        this.taskName = taskName;
         return this;
     }
 
