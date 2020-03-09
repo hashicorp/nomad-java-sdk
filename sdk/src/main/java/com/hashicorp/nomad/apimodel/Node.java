@@ -36,6 +36,7 @@ public final class Node extends ApiObject {
     private long statusUpdatedAt;
     private List<NodeEvent> events;
     private Map<String, DriverInfo> drivers;
+    private Map<String, HostVolumeInfo> hostVolumes;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
 
@@ -282,6 +283,23 @@ public final class Node extends ApiObject {
         if (this.drivers == null)
             this.drivers = new java.util.HashMap<>();
         this.drivers.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("HostVolumes")
+    public Map<String, HostVolumeInfo> getHostVolumes() {
+        return hostVolumes;
+    }
+
+    public Node setHostVolumes(Map<String, HostVolumeInfo> hostVolumes) {
+        this.hostVolumes = hostVolumes;
+        return this;
+    }
+
+    public Node addHostVolumes(String key, HostVolumeInfo value) {
+        if (this.hostVolumes == null)
+            this.hostVolumes = new java.util.HashMap<>();
+        this.hostVolumes.put(key, value);
         return this;
     }
 

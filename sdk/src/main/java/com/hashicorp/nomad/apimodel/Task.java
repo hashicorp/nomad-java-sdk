@@ -30,9 +30,11 @@ public final class Task extends ApiObject {
     private Vault vault;
     private List<Template> templates;
     private DispatchPayloadConfig dispatchPayload;
+    private List<VolumeMount> volumeMounts;
     private boolean leader;
     private long shutdownDelay;
     private String killSignal;
+    private String kind;
 
     @JsonProperty("Name")
     public String getName() {
@@ -255,6 +257,24 @@ public final class Task extends ApiObject {
         return this;
     }
 
+    @JsonProperty("VolumeMounts")
+    public List<VolumeMount> getVolumeMounts() {
+        return volumeMounts;
+    }
+
+    public Task setVolumeMounts(List<VolumeMount> volumeMounts) {
+        this.volumeMounts = volumeMounts;
+        return this;
+    }
+
+    public Task addVolumeMounts(VolumeMount... volumeMounts) {
+        if (this.volumeMounts == null)
+            this.volumeMounts = new java.util.ArrayList<>();
+        for (VolumeMount item : volumeMounts)
+            this.volumeMounts.add(item);
+        return this;
+    }
+
     @JsonProperty("Leader")
     public boolean getLeader() {
         return leader;
@@ -282,6 +302,16 @@ public final class Task extends ApiObject {
 
     public Task setKillSignal(String killSignal) {
         this.killSignal = killSignal;
+        return this;
+    }
+
+    @JsonProperty("Kind")
+    public String getKind() {
+        return kind;
+    }
+
+    public Task setKind(String kind) {
+        this.kind = kind;
         return this;
     }
 

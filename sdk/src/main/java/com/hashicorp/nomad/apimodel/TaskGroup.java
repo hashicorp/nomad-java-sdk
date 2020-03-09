@@ -20,12 +20,15 @@ public final class TaskGroup extends ApiObject {
     private List<Affinity> affinities;
     private List<Task> tasks;
     private List<Spread> spreads;
+    private Map<String, VolumeRequest> volumes;
     private RestartPolicy restartPolicy;
     private ReschedulePolicy reschedulePolicy;
     private EphemeralDisk ephemeralDisk;
     private UpdateStrategy update;
     private MigrateStrategy migrate;
+    private List<NetworkResource> networks;
     private Map<String, String> meta;
+    private List<Service> services;
 
     @JsonProperty("Name")
     public String getName() {
@@ -119,6 +122,23 @@ public final class TaskGroup extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Volumes")
+    public Map<String, VolumeRequest> getVolumes() {
+        return volumes;
+    }
+
+    public TaskGroup setVolumes(Map<String, VolumeRequest> volumes) {
+        this.volumes = volumes;
+        return this;
+    }
+
+    public TaskGroup addVolumes(String key, VolumeRequest value) {
+        if (this.volumes == null)
+            this.volumes = new java.util.HashMap<>();
+        this.volumes.put(key, value);
+        return this;
+    }
+
     @JsonProperty("RestartPolicy")
     public RestartPolicy getRestartPolicy() {
         return restartPolicy;
@@ -169,6 +189,24 @@ public final class TaskGroup extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Networks")
+    public List<NetworkResource> getNetworks() {
+        return networks;
+    }
+
+    public TaskGroup setNetworks(List<NetworkResource> networks) {
+        this.networks = networks;
+        return this;
+    }
+
+    public TaskGroup addNetworks(NetworkResource... networks) {
+        if (this.networks == null)
+            this.networks = new java.util.ArrayList<>();
+        for (NetworkResource item : networks)
+            this.networks.add(item);
+        return this;
+    }
+
     @JsonProperty("Meta")
     public Map<String, String> getMeta() {
         return meta;
@@ -183,6 +221,24 @@ public final class TaskGroup extends ApiObject {
         if (this.meta == null)
             this.meta = new java.util.HashMap<>();
         this.meta.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("Services")
+    public List<Service> getServices() {
+        return services;
+    }
+
+    public TaskGroup setServices(List<Service> services) {
+        this.services = services;
+        return this;
+    }
+
+    public TaskGroup addServices(Service... services) {
+        if (this.services == null)
+            this.services = new java.util.ArrayList<>();
+        for (Service item : services)
+            this.services.add(item);
         return this;
     }
 

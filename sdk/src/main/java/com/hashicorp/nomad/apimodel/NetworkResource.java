@@ -13,12 +13,23 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class NetworkResource extends ApiObject {
+    private String mode;
     private String device;
     private String cidr;
     private String ip;
     private Integer mBits;
     private List<Port> reservedPorts;
     private List<Port> dynamicPorts;
+
+    @JsonProperty("Mode")
+    public String getMode() {
+        return mode;
+    }
+
+    public NetworkResource setMode(String mode) {
+        this.mode = mode;
+        return this;
+    }
 
     @JsonProperty("Device")
     public String getDevice() {

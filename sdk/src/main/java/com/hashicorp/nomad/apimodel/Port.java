@@ -15,6 +15,7 @@ import java.util.List;
 public final class Port extends ApiObject {
     private String label;
     private int value;
+    private int to;
 
     @JsonProperty("Label")
     public String getLabel() {
@@ -33,6 +34,16 @@ public final class Port extends ApiObject {
 
     public Port setValue(int value) {
         this.value = value;
+        return this;
+    }
+
+    @JsonProperty("To")
+    public int getTo() {
+        return to;
+    }
+
+    public Port setTo(int to) {
+        this.to = to;
         return this;
     }
 

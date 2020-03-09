@@ -6,6 +6,7 @@ import com.hashicorp.nomad.javasdk.NomadJson;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This is a generated JavaBean representing a request or response structure.
@@ -21,6 +22,8 @@ public final class Service extends ApiObject {
     private String addressMode;
     private List<ServiceCheck> checks;
     private CheckRestart checkRestart;
+    private ConsulConnect connect;
+    private Map<String, String> meta;
 
     @JsonProperty("Id")
     public String getId() {
@@ -123,6 +126,33 @@ public final class Service extends ApiObject {
 
     public Service setCheckRestart(CheckRestart checkRestart) {
         this.checkRestart = checkRestart;
+        return this;
+    }
+
+    @JsonProperty("Connect")
+    public ConsulConnect getConnect() {
+        return connect;
+    }
+
+    public Service setConnect(ConsulConnect connect) {
+        this.connect = connect;
+        return this;
+    }
+
+    @JsonProperty("Meta")
+    public Map<String, String> getMeta() {
+        return meta;
+    }
+
+    public Service setMeta(Map<String, String> meta) {
+        this.meta = meta;
+        return this;
+    }
+
+    public Service addMeta(String key, String value) {
+        if (this.meta == null)
+            this.meta = new java.util.HashMap<>();
+        this.meta.put(key, value);
         return this;
     }
 
