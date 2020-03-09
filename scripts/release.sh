@@ -7,8 +7,9 @@ set -euo pipefail
   echo "E.g: $0 0.0.1 0.0.2-SNAPSHOT"
   exit 2
 } >&2
+
 release_version="$1"
-  next_working_version="$2"
+next_working_version="$2"
 
 [ -z "$(git status --porcelain)" ] || {
   echo "Your working directoy is not pristine"
@@ -26,7 +27,7 @@ git commit -m "Setting version to ${release_version}"
   echo
   git status
   exit 1
-} &>2
+} >&2
 git tag "v${release_version}" -m "Releasing ${release_version}"
 
 mvn versions:set -DgenerateBackupPoms=false -DnewVersion="${next_working_version}"
