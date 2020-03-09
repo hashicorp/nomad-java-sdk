@@ -13,8 +13,27 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class ConsulSidecarService extends ApiObject {
+    private List<String> tags;
     private String port;
     private ConsulProxy proxy;
+
+    @JsonProperty("Tags")
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public ConsulSidecarService setTags(List<String> tags) {
+        this.tags = tags;
+        return this;
+    }
+
+    public ConsulSidecarService addTags(String... tags) {
+        if (this.tags == null)
+            this.tags = new java.util.ArrayList<>();
+        for (String item : tags)
+            this.tags.add(item);
+        return this;
+    }
 
     @JsonProperty("Port")
     public String getPort() {

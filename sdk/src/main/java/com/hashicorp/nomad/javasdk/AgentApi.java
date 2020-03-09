@@ -7,6 +7,7 @@ import com.hashicorp.nomad.apimodel.ServerMembers;
 import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -166,4 +167,73 @@ public class AgentApi extends ApiBase {
             return joinResponse.numberJoined;
         }
     }
+
+    /**
+     * Streams logs from a specific Nomad client node.
+     * <p>
+     * Note that unless there is an error, the streaming connection to the client node will remain open until the
+     * stream's {@link FramedStream#close()} method is invoked.
+     * <p>
+     *
+     * @param nodeId the UUID of the node to target
+     * @param logLevel Log level to filter on. Values include "trace", "debug", "info", "warn", or "error"
+     * @param json Specifies if the log format for streamed logs should be JSON
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     */
+    public FramedStream monitorClient(final String nodeId,
+                                      @Nullable final String logLevel,
+                                      @Nullable final Boolean json) throws IOException, NomadException {
+        return monitorRaw(null, nodeId, logLevel, json);
+    }
+
+    /**
+     * Streams logs from a specific Nomad server node.
+     * <p>
+     * Note that unless there is an error, the streaming connection to the client node will remain open until the
+     * stream's {@link FramedStream#close()} method is invoked.
+     * <p>
+     *
+     * @param serverName the name of the server, or "leader" to target the Raft leader
+     * @param logLevel Log level to filter on. Values include "trace", "debug", "info", "warn", or "error"
+     * @param json Specifies if the log format for streamed logs should be JSON
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://nomadproject.io/api-docs/agent/#stream-logs">{@code GET /v1/agent/monitor}</a>
+     */
+    public FramedStream monitorServer(final String serverName,
+                                      @Nullable final String logLevel,
+                                      @Nullable final Boolean json) throws IOException, NomadException {
+        return monitorRaw(serverName, null, logLevel, json);
+    }
+
+    /**
+     * Streams logs from the connected Nomad agent.
+     * <p>
+     * Note that unless there is an error, the streaming connection to the client node will remain open until the
+     * stream's {@link FramedStream#close()} method is invoked.
+     * <p>
+     *
+     * @param logLevel Log level to filter on. Values include "trace", "debug", "info", "warn", or "error".
+     * @param json Specifies if the log format for streamed logs should be JSON.
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://nomadproject.io/api-docs/agent/#stream-logs">{@code GET /v1/agent/monitor}</a>
+     */
+    public FramedStream monitorLocalAgent(@Nullable final String logLevel,
+                                          @Nullable final Boolean json) throws IOException, NomadException {
+        return monitorRaw(null, null, logLevel, json);
+    }
+
+    private FramedStream monitorRaw(@Nullable final String serverId, @Nullable final String nodeId,
+                                    @Nullable final String logLevel,
+                                    @Nullable final Boolean json) throws IOException, NomadException {
+        final URIBuilder uri = uri("/v1/agent/monitor");
+        if (serverId != null) uri.addParameter("server_id", serverId);
+        if (nodeId != null) uri.addParameter("node_id", serverId);
+        if (logLevel != null) uri.addParameter("log_level", logLevel);
+        if (json != null) uri.addParameter("log_json", Boolean.toString(json));
+        return apiClient.executeFramedStream(get(uri), null);
+    }
+
 }

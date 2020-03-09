@@ -15,7 +15,8 @@ import java.util.List;
 public final class VolumeMount extends ApiObject {
     private String volume;
     private String destination;
-    private boolean readOnly;
+    private Boolean readOnly;
+    private String propagationMode;
 
     @JsonProperty("Volume")
     public String getVolume() {
@@ -38,12 +39,22 @@ public final class VolumeMount extends ApiObject {
     }
 
     @JsonProperty("ReadOnly")
-    public boolean getReadOnly() {
+    public Boolean getReadOnly() {
         return readOnly;
     }
 
-    public VolumeMount setReadOnly(boolean readOnly) {
+    public VolumeMount setReadOnly(Boolean readOnly) {
         this.readOnly = readOnly;
+        return this;
+    }
+
+    @JsonProperty("PropagationMode")
+    public String getPropagationMode() {
+        return propagationMode;
+    }
+
+    public VolumeMount setPropagationMode(String propagationMode) {
+        this.propagationMode = propagationMode;
         return this;
     }
 

@@ -16,6 +16,7 @@ import java.util.List;
 public final class DrainStrategy extends ApiObject {
     private DrainSpec drainSpec;
     private Date forceDeadline;
+    private Date startedAt;
 
     @JsonProperty("DrainSpec")
     public DrainSpec getDrainSpec() {
@@ -34,6 +35,16 @@ public final class DrainStrategy extends ApiObject {
 
     public DrainStrategy setForceDeadline(Date forceDeadline) {
         this.forceDeadline = forceDeadline;
+        return this;
+    }
+
+    @JsonProperty("StartedAt")
+    public Date getStartedAt() {
+        return startedAt;
+    }
+
+    public DrainStrategy setStartedAt(Date startedAt) {
+        this.startedAt = startedAt;
         return this;
     }
 
