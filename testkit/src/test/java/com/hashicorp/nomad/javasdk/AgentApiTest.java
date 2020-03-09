@@ -1,14 +1,13 @@
 package com.hashicorp.nomad.javasdk;
 
-import com.hashicorp.nomad.apimodel.AgentHealthResponse;
-import com.hashicorp.nomad.apimodel.AgentMember;
-import com.hashicorp.nomad.apimodel.AgentSelf;
-import com.hashicorp.nomad.apimodel.ServerMembers;
+import com.hashicorp.nomad.apimodel.*;
 import com.hashicorp.nomad.testutils.NomadAgentConfiguration;
 import com.hashicorp.nomad.testutils.TestAgent;
 import org.junit.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -114,6 +113,115 @@ public class AgentApiTest extends ApiTestBase {
 
             assertThat(health.getServer().getOk(), is(true));
             assertThat(health.getClient(), is(nullValue()));
+        }
+    }
+
+    private void assertStreamResultContains(final String expectedResult, final FramedStream stream) throws IOException {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+        try {
+            while (stream.hasNextFrame()) {
+                final byte[] data = stream.nextFrame().getData();
+                if (data != null)
+                    out.write(data);
+                else if (out.size() >= expectedResult.length())
+                    break;
+            }
+        } finally {
+            stream.close();
+        }
+        assertThat(out.toString("UTF-8"), is(expectedResult));
+    }
+
+    @Test
+    public void shouldSupportServerMonitor() throws Exception {
+        try (TestAgent agent = newServer()) {
+
+            AgentApi agentApi = agent.getApiClient().getAgentApi();
+
+            String serverName = agentApi.self().getValue().getMember().getName();
+
+            FramedStream monStream = agentApi.monitorServer(serverName, "debug", false);
+
+            Thread.sleep(1000);
+            agentApi.self();
+
+            int i = 20;
+            boolean found = false;
+            while (monStream.hasNextFrame()) {
+                final byte[] data = monStream.nextFrame().getData();
+                if (data != null) {
+                    String str = new String(data, Charset.forName("UTF-8"));
+                    if (str.contains("request complete: method=GET path=/v1/agent/self")) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (--i <= 0) break;
+            }
+            monStream.close();
+            assertThat("found expected log line", found, is(true));
+        }
+    }
+
+    @Test
+    public void shouldSupportClientMonitor() throws Exception {
+        try (TestAgent agent = newClientServer()) {
+
+            AgentApi agentApi = agent.getApiClient().getAgentApi();
+
+            List<NodeListStub> nodes = agent.getApiClient().getNodesApi().list().getValue();
+            assertThat(nodes, not(empty()));
+            String nodeId = nodes.get(0).getId();
+
+            FramedStream monStream = agentApi.monitorClient(nodeId, "debug", false);
+
+            Thread.sleep(1000);
+            agentApi.self();
+
+            int i = 20;
+            boolean found = false;
+            while (monStream.hasNextFrame()) {
+                final byte[] data = monStream.nextFrame().getData();
+                if (data != null) {
+                    String str = new String(data, Charset.forName("UTF-8"));
+                    if (str.contains("request complete: method=GET path=/v1/agent/self")) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (--i <= 0) break;
+            }
+            monStream.close();
+            assertThat("found expected log line", found, is(true));
+        }
+    }
+
+    @Test
+    public void shouldSupportLocalMonitor() throws Exception {
+        try (TestAgent agent = newServer()) {
+
+            AgentApi agentApi = agent.getApiClient().getAgentApi();
+
+            FramedStream monStream = agentApi.monitorLocalAgent("debug", false);
+
+            Thread.sleep(1000);
+            agentApi.self();
+
+            int i = 20;
+            boolean found = false;
+            while (monStream.hasNextFrame()) {
+                final byte[] data = monStream.nextFrame().getData();
+                if (data != null) {
+                    String str = new String(data, Charset.forName("UTF-8"));
+                    if (str.contains("request complete: method=GET path=/v1/agent/self")) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (--i <= 0) break;
+            }
+            monStream.close();
+            assertThat("found expected log line", found, is(true));
         }
     }
 
