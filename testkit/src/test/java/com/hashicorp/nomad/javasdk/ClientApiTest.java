@@ -86,6 +86,8 @@ public class ClientApiTest extends ApiTestBase {
         }
     }
 
+    Matcher<TaskState> isDead = hasProperty("state", is("dead"));
+
     private Allocation runAndPollForTaskState(TestAgent agent, String bashCommand, Matcher<? super TaskState> matcher) throws Exception {
         Job job = createBashJob(bashCommand);
 
@@ -118,7 +120,7 @@ public class ClientApiTest extends ApiTestBase {
     @Test
     public void shouldCatAFileCreatedByATask() throws Exception {
         try (TestAgent agent = newClientServer()) {
-            Allocation allocation = runAndPollForTaskState(agent, "echo hi > $NOMAD_ALLOC_DIR/out.txt", notNullValue());
+            Allocation allocation = runAndPollForTaskState(agent, "echo hi > $NOMAD_ALLOC_DIR/out.txt", isDead);
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
@@ -130,7 +132,7 @@ public class ClientApiTest extends ApiTestBase {
     @Test
     public void shouldReadPartOfAFileCreatedByATask() throws Exception {
         try (TestAgent agent = newClientServer()) {
-            Allocation allocation = runAndPollForTaskState(agent, "echo abcdefghijklmnopqrstuvwxyz > $NOMAD_ALLOC_DIR/out.txt", notNullValue());
+            Allocation allocation = runAndPollForTaskState(agent, "echo abcdefghijklmnopqrstuvwxyz > $NOMAD_ALLOC_DIR/out.txt", isDead);
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
@@ -142,7 +144,7 @@ public class ClientApiTest extends ApiTestBase {
     @Test
     public void shouldStreamAFileCreatedByATask() throws Exception {
         try (TestAgent agent = newClientServer()) {
-            Allocation allocation = runAndPollForTaskState(agent, "echo abcdefghijklmnopqrstuvwxyz > $NOMAD_ALLOC_DIR/out.txt", notNullValue());
+            Allocation allocation = runAndPollForTaskState(agent, "echo abcdefghijklmnopqrstuvwxyz > $NOMAD_ALLOC_DIR/out.txt", isDead);
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
@@ -161,7 +163,7 @@ public class ClientApiTest extends ApiTestBase {
     @Test
     public void shouldStreamFramesFromAFileCreatedByATask() throws Exception {
         try (TestAgent agent = newClientServer()) {
-            Allocation allocation = runAndPollForTaskState(agent, "echo abcdefghijklmnopqrstuvwxyz > $NOMAD_ALLOC_DIR/out.txt", notNullValue());
+            Allocation allocation = runAndPollForTaskState(agent, "echo abcdefghijklmnopqrstuvwxyz > $NOMAD_ALLOC_DIR/out.txt", isDead);
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
@@ -212,7 +214,7 @@ public class ClientApiTest extends ApiTestBase {
     @Test
     public void shouldStreamLogsFromAnAllocation() throws Exception {
         try (TestAgent agent = newClientServer()) {
-            final Allocation allocation = runAndPollForTaskState(agent, "echo hi", hasProperty("state", is("dead")));
+            final Allocation allocation = runAndPollForTaskState(agent, "echo hi", isDead);
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
@@ -224,7 +226,7 @@ public class ClientApiTest extends ApiTestBase {
     @Test
     public void shouldStreamLogsAsFramesFromAnAllocation() throws Exception {
         try (TestAgent agent = newClientServer()) {
-            final Allocation allocation = runAndPollForTaskState(agent, "echo hi", hasProperty("state", is("dead")));
+            final Allocation allocation = runAndPollForTaskState(agent, "echo hi", isDead);
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
@@ -236,7 +238,7 @@ public class ClientApiTest extends ApiTestBase {
     @Test
     public void shouldListFilesCreatedByTask() throws Exception {
         try (TestAgent agent = newClientServer()) {
-            Allocation allocation = runAndPollForTaskState(agent, "echo hi > $NOMAD_ALLOC_DIR/a.txt; echo bye > $NOMAD_ALLOC_DIR/b.txt", notNullValue());
+            Allocation allocation = runAndPollForTaskState(agent, "echo hi > $NOMAD_ALLOC_DIR/a.txt; echo bye > $NOMAD_ALLOC_DIR/b.txt", isDead);
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
@@ -251,7 +253,7 @@ public class ClientApiTest extends ApiTestBase {
     @Test
     public void shouldStatFileCreatedByTask() throws Exception {
         try (TestAgent agent = newClientServer()) {
-            Allocation allocation = runAndPollForTaskState(agent, "echo hi > $NOMAD_ALLOC_DIR/a.txt", notNullValue());
+            Allocation allocation = runAndPollForTaskState(agent, "echo hi > $NOMAD_ALLOC_DIR/a.txt", isDead);
 
             ClientApi clientApi = agent.getApiClient().lookupClientApiByNodeId(allocation.getNodeId());
 
