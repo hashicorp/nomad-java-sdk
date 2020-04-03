@@ -24,6 +24,7 @@ public final class Service extends ApiObject {
     private CheckRestart checkRestart;
     private ConsulConnect connect;
     private Map<String, String> meta;
+    private Map<String, String> canaryMeta;
 
     @JsonProperty("Id")
     public String getId() {
@@ -153,6 +154,23 @@ public final class Service extends ApiObject {
         if (this.meta == null)
             this.meta = new java.util.HashMap<>();
         this.meta.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("CanaryMeta")
+    public Map<String, String> getCanaryMeta() {
+        return canaryMeta;
+    }
+
+    public Service setCanaryMeta(Map<String, String> canaryMeta) {
+        this.canaryMeta = canaryMeta;
+        return this;
+    }
+
+    public Service addCanaryMeta(String key, String value) {
+        if (this.canaryMeta == null)
+            this.canaryMeta = new java.util.HashMap<>();
+        this.canaryMeta.put(key, value);
         return this;
     }
 
