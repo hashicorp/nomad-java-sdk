@@ -29,6 +29,7 @@ public final class TaskGroup extends ApiObject {
     private List<NetworkResource> networks;
     private Map<String, String> meta;
     private List<Service> services;
+    private Long shutdownDelay;
 
     @JsonProperty("Name")
     public String getName() {
@@ -239,6 +240,16 @@ public final class TaskGroup extends ApiObject {
             this.services = new java.util.ArrayList<>();
         for (Service item : services)
             this.services.add(item);
+        return this;
+    }
+
+    @JsonProperty("ShutdownDelay")
+    public Long getShutdownDelay() {
+        return shutdownDelay;
+    }
+
+    public TaskGroup setShutdownDelay(Long shutdownDelay) {
+        this.shutdownDelay = shutdownDelay;
         return this;
     }
 

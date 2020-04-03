@@ -37,6 +37,7 @@ public final class Job extends ApiObject {
     private ReschedulePolicy reschedule;
     private MigrateStrategy migrate;
     private Map<String, String> meta;
+    private String consulToken;
     private String vaultToken;
     private String status;
     private String statusDescription;
@@ -311,6 +312,16 @@ public final class Job extends ApiObject {
         if (this.meta == null)
             this.meta = new java.util.HashMap<>();
         this.meta.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("ConsulToken")
+    public String getConsulToken() {
+        return consulToken;
+    }
+
+    public Job setConsulToken(String consulToken) {
+        this.consulToken = consulToken;
         return this;
     }
 
