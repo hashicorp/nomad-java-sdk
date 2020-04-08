@@ -10,9 +10,13 @@ type BeanProperty struct {
 	Name             string
 	JavaType         JavaType
 	GetterAnnotation string
+	MethodSuffix     string
 }
 
 func (p *BeanProperty) methodSuffix() string {
+	if p.MethodSuffix != "" {
+		return p.MethodSuffix
+	}
 	return strings.ToUpper(p.Name[0:1]) + p.Name[1:]
 }
 
