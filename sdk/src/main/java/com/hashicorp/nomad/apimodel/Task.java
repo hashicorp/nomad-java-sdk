@@ -17,6 +17,7 @@ public final class Task extends ApiObject {
     private String name;
     private String driver;
     private String user;
+    private TaskLifecycle lifecycle;
     private Map<String, Object> config;
     private List<Constraint> constraints;
     private List<Affinity> affinities;
@@ -63,6 +64,16 @@ public final class Task extends ApiObject {
 
     public Task setUser(String user) {
         this.user = user;
+        return this;
+    }
+
+    @JsonProperty("Lifecycle")
+    public TaskLifecycle getLifecycle() {
+        return lifecycle;
+    }
+
+    public Task setLifecycle(TaskLifecycle lifecycle) {
+        this.lifecycle = lifecycle;
         return this;
     }
 
