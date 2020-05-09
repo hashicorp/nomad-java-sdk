@@ -21,8 +21,7 @@ public final class ServerHealth extends ApiObject {
     private String serfStatus;
     private String version;
     private boolean leader;
-    private String lastContact;  // NOTE: the API generator will try to convert this to long but
-                                 // the Nomad HTTP API emits it as a string; do not change
+    private String lastContact;
     private BigInteger lastTerm;
     private BigInteger lastIndex;
     private boolean healthy;

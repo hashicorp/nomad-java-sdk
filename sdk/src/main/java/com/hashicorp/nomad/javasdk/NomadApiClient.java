@@ -175,6 +175,20 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     }
 
     /**
+     * Returns an API for managing CSI plugins.
+     */
+    public CSIPluginsApi getCSIPlugins() {
+        return new CSIPluginsApi(this);
+    }
+
+    /**
+     * Returns an API for managing CSI volumes.
+     */
+    public CSIVolumesApi getCSIVolumesApi() {
+        return new CSIVolumesApi(this);
+    }
+
+    /**
      * Returns an API for managing deployments.
      */
     public DeploymentsApi getDeploymentsApi() {
@@ -228,6 +242,13 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
      */
     public RegionsApi getRegionsApi() {
         return new RegionsApi(this);
+    }
+
+    /**
+     * Returns an API for accessing scaling policies.
+     */
+    public ScalingApi getScalingApi() {
+        return new ScalingApi(this);
     }
 
     /**

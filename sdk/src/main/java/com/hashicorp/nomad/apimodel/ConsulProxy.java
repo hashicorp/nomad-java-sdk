@@ -16,6 +16,7 @@ import java.util.Map;
 public final class ConsulProxy extends ApiObject {
     private String localServiceAddress;
     private int localServicePort;
+    private ConsulExposeConfig exposeConfig;
     private List<ConsulUpstream> upstreams;
     private Map<String, Object> config;
 
@@ -36,6 +37,16 @@ public final class ConsulProxy extends ApiObject {
 
     public ConsulProxy setLocalServicePort(int localServicePort) {
         this.localServicePort = localServicePort;
+        return this;
+    }
+
+    @JsonProperty("ExposeConfig")
+    public ConsulExposeConfig getExposeConfig() {
+        return exposeConfig;
+    }
+
+    public ConsulProxy setExposeConfig(ConsulExposeConfig exposeConfig) {
+        this.exposeConfig = exposeConfig;
         return this;
     }
 

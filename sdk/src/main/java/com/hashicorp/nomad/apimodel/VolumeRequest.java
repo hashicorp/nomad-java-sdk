@@ -17,6 +17,7 @@ public final class VolumeRequest extends ApiObject {
     private String type;
     private String source;
     private boolean readOnly;
+    private CsiMountOptions mountOptions;
 
     @JsonProperty("Name")
     public String getName() {
@@ -55,6 +56,16 @@ public final class VolumeRequest extends ApiObject {
 
     public VolumeRequest setReadOnly(boolean readOnly) {
         this.readOnly = readOnly;
+        return this;
+    }
+
+    @JsonProperty("MountOptions")
+    public CsiMountOptions getMountOptions() {
+        return mountOptions;
+    }
+
+    public VolumeRequest setMountOptions(CsiMountOptions mountOptions) {
+        this.mountOptions = mountOptions;
         return this;
     }
 

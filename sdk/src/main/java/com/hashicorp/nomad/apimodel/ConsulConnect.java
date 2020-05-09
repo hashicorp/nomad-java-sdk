@@ -13,17 +13,17 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class ConsulConnect extends ApiObject {
-    private boolean connectNative;
+    private boolean Native;
     private ConsulSidecarService sidecarService;
     private SidecarTask sidecarTask;
 
     @JsonProperty("Native")
     public boolean getNative() {
-        return connectNative;
+        return Native;
     }
 
-    public ConsulConnect setNative(boolean connectNative) {
-        this.connectNative = connectNative;
+    public ConsulConnect setNative(boolean Native) {
+        this.Native = Native;
         return this;
     }
 

@@ -15,11 +15,10 @@ import java.util.List;
  */
 public final class AutopilotConfiguration extends ApiObject {
     private boolean cleanupDeadServers;
-    private String lastContactThreshold;    // NOTE: the API generator will try to convert this to long but
-                                            // the Nomad HTTP API emits it as a string; do not change
+    private String lastContactThreshold;
     private BigInteger maxTrailingLogs;
-    private String serverStabilizationTime; // NOTE: the API generator will try to convert this to long but
-                                            // the Nomad HTTP API emits it as a string; do not change
+    private long minQuorum;
+    private String serverStabilizationTime;
     private boolean enableRedundancyZones;
     private boolean disableUpgradeMigration;
     private boolean enableCustomUpgrades;
@@ -53,6 +52,16 @@ public final class AutopilotConfiguration extends ApiObject {
 
     public AutopilotConfiguration setMaxTrailingLogs(BigInteger maxTrailingLogs) {
         this.maxTrailingLogs = maxTrailingLogs;
+        return this;
+    }
+
+    @JsonProperty("MinQuorum")
+    public long getMinQuorum() {
+        return minQuorum;
+    }
+
+    public AutopilotConfiguration setMinQuorum(long minQuorum) {
+        this.minQuorum = minQuorum;
         return this;
     }
 

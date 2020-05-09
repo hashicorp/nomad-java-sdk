@@ -18,6 +18,7 @@ public final class Service extends ApiObject {
     private String name;
     private List<String> tags;
     private List<String> canaryTags;
+    private boolean enableTagOverride;
     private String portLabel;
     private String addressMode;
     private List<ServiceCheck> checks;
@@ -79,6 +80,16 @@ public final class Service extends ApiObject {
             this.canaryTags = new java.util.ArrayList<>();
         for (String item : canaryTags)
             this.canaryTags.add(item);
+        return this;
+    }
+
+    @JsonProperty("EnableTagOverride")
+    public boolean getEnableTagOverride() {
+        return enableTagOverride;
+    }
+
+    public Service setEnableTagOverride(boolean enableTagOverride) {
+        this.enableTagOverride = enableTagOverride;
         return this;
     }
 

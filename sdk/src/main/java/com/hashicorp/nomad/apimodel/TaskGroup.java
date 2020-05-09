@@ -30,6 +30,7 @@ public final class TaskGroup extends ApiObject {
     private Map<String, String> meta;
     private List<Service> services;
     private Long shutdownDelay;
+    private ScalingPolicy scaling;
 
     @JsonProperty("Name")
     public String getName() {
@@ -250,6 +251,16 @@ public final class TaskGroup extends ApiObject {
 
     public TaskGroup setShutdownDelay(Long shutdownDelay) {
         this.shutdownDelay = shutdownDelay;
+        return this;
+    }
+
+    @JsonProperty("Scaling")
+    public ScalingPolicy getScaling() {
+        return scaling;
+    }
+
+    public TaskGroup setScaling(ScalingPolicy scaling) {
+        this.scaling = scaling;
         return this;
     }
 

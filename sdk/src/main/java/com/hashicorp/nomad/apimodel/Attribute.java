@@ -13,10 +13,6 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class Attribute extends ApiObject {
-    /**
-     * The generator is going to make a mess of these, because the JSON names collide with Java types.
-     * This file will need to be manually restored.
-     */
     private double floatVal;
     private Long intVal;
     private String stringVal;

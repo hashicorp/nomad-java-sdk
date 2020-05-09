@@ -37,6 +37,8 @@ public final class Node extends ApiObject {
     private List<NodeEvent> events;
     private Map<String, DriverInfo> drivers;
     private Map<String, HostVolumeInfo> hostVolumes;
+    private Map<String, CsiInfo> csiControllerPlugins;
+    private Map<String, CsiInfo> csiNodePlugins;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
 
@@ -300,6 +302,40 @@ public final class Node extends ApiObject {
         if (this.hostVolumes == null)
             this.hostVolumes = new java.util.HashMap<>();
         this.hostVolumes.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("CSIControllerPlugins")
+    public Map<String, CsiInfo> getCsiControllerPlugins() {
+        return csiControllerPlugins;
+    }
+
+    public Node setCsiControllerPlugins(Map<String, CsiInfo> csiControllerPlugins) {
+        this.csiControllerPlugins = csiControllerPlugins;
+        return this;
+    }
+
+    public Node addCsiControllerPlugins(String key, CsiInfo value) {
+        if (this.csiControllerPlugins == null)
+            this.csiControllerPlugins = new java.util.HashMap<>();
+        this.csiControllerPlugins.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("CSINodePlugins")
+    public Map<String, CsiInfo> getCsiNodePlugins() {
+        return csiNodePlugins;
+    }
+
+    public Node setCsiNodePlugins(Map<String, CsiInfo> csiNodePlugins) {
+        this.csiNodePlugins = csiNodePlugins;
+        return this;
+    }
+
+    public Node addCsiNodePlugins(String key, CsiInfo value) {
+        if (this.csiNodePlugins == null)
+            this.csiNodePlugins = new java.util.HashMap<>();
+        this.csiNodePlugins.put(key, value);
         return this;
     }
 
