@@ -2,6 +2,8 @@ package com.hashicorp.nomad.javasdk;
 
 import com.hashicorp.nomad.apimodel.CsiPlugin;
 import com.hashicorp.nomad.apimodel.CsiPluginListStub;
+import com.hashicorp.nomad.apimodel.CsiVolumeListStub;
+import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -30,9 +32,9 @@ public class CSIPluginsApi extends ApiBase {
             @Nullable final QueryOptions<List<CsiPluginListStub>> options
     ) throws IOException, NomadException {
 
-        return executeServerQuery(
-                "/v1/plugins?type=csi",
-                options,
+        final URIBuilder uri = uri("/v1/plugins");
+        uri.addParameter("type", "csi");
+        return executeServerQuery(uri, options,
                 NomadJson.parserForListOf(CsiPluginListStub.class));
     }
 

@@ -177,7 +177,7 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
     /**
      * Returns an API for managing CSI plugins.
      */
-    public CSIPluginsApi getCSIPlugins() {
+    public CSIPluginsApi getCSIPluginsApi() {
         return new CSIPluginsApi(this);
     }
 

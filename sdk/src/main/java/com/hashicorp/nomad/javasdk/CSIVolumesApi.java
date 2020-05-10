@@ -2,6 +2,7 @@ package com.hashicorp.nomad.javasdk;
 
 import com.hashicorp.nomad.apimodel.CsiVolume;
 import com.hashicorp.nomad.apimodel.CsiVolumeListStub;
+import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -32,10 +33,12 @@ public class CSIVolumesApi extends ApiBase {
             @Nullable final QueryOptions<List<CsiVolumeListStub>> options
     ) throws IOException, NomadException {
 
-        return executeServerQueryForPrefixFilteredList(
-                "/v1/volumes?type=csi",
-                pluginId,
-                options,
+        final URIBuilder uri = uri("/v1/volumes");
+        uri.addParameter("type", "csi");
+        if (pluginId != null) {
+            uri.addParameter("prefix", pluginId);
+        }
+        return executeServerQuery(uri, options,
                 NomadJson.parserForListOf(CsiVolumeListStub.class));
     }
 
