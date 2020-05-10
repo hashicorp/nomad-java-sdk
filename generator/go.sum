@@ -10,8 +10,8 @@ github.com/hashicorp/go-cleanhttp v0.5.1 h1:dH3aiDG9Jvb5r5+bYHsikaOUIpcM0xvgMXVo
 github.com/hashicorp/go-cleanhttp v0.5.1/go.mod h1:JpRdi6/HCYpAwUzNwuwqhbovhLtngrth3wmdIIUrZ80=
 github.com/hashicorp/go-rootcerts v1.0.2 h1:jzhAVGtqPKbwpyCPELlgNWhE1znq+qwJtW5Oi2viEzc=
 github.com/hashicorp/go-rootcerts v1.0.2/go.mod h1:pqUvnprVnM5bf7AOirdbb01K4ccR319Vf4pU3K5EGc8=
-github.com/hashicorp/nomad/api v0.0.0-20200407142900-e7d563e9e04f h1:QosWOGkgR0wqmmcC4toVmsz4vAuiHxJo7NxG8fuLi+U=
-github.com/hashicorp/nomad/api v0.0.0-20200407142900-e7d563e9e04f/go.mod h1:WKCL+tLVhN1D+APwH3JiTRZoxcdwRk86bWu1LVCUPaE=
+github.com/hashicorp/nomad/api v0.0.0-20200408154219-ca5cd15eeffd h1:ynjioitc+6kMZZnvolY0q7wQ7Lrs+bJjm4yE/WsUDNY=
+github.com/hashicorp/nomad/api v0.0.0-20200408154219-ca5cd15eeffd/go.mod h1:WKCL+tLVhN1D+APwH3JiTRZoxcdwRk86bWu1LVCUPaE=
 github.com/kr/pretty v0.1.0 h1:L/CwN0zerZDmRFUapSPitk6f+Q3+0za1rQkzVuMiMFI=
 github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORNo=
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
