@@ -2,7 +2,6 @@ package com.hashicorp.nomad.javasdk;
 
 import com.hashicorp.nomad.apimodel.CsiPlugin;
 import com.hashicorp.nomad.apimodel.CsiPluginListStub;
-import com.hashicorp.nomad.apimodel.CsiVolumeListStub;
 import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.Nullable;
