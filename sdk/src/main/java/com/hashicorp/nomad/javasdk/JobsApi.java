@@ -883,7 +883,7 @@ public class JobsApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/job.html">{@code PUT /v1/job/<ID>/evaluate}</a>
      */
-    public EvaluationResponse scaleGroup(
+    public ServerResponse<JobRegisterResponse> scaleGroup(
             final String jobId,
             final String group,
             final Integer count,
@@ -891,7 +891,7 @@ public class JobsApi extends ApiBase {
             @Nullable final Map<String,Object> meta,
             @Nullable final WriteOptions options) throws IOException, NomadException {
 
-        return registerGroupScalingEvent(jobId, group, count, false, message, meta, options);
+        return scalingAction(jobId, group, count, false, message, meta, options);
     }
 
     /**
@@ -907,7 +907,7 @@ public class JobsApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/docs/http/job.html">{@code PUT /v1/job/<ID>/evaluate}</a>
      */
-    public EvaluationResponse scaleGroup(
+    public ServerResponse<JobRegisterResponse> registerGroupScalingInfo(
             final String jobId,
             final String group,
             @Nullable final String message,
@@ -915,7 +915,7 @@ public class JobsApi extends ApiBase {
             @Nullable final Map<String,Object> meta,
             @Nullable final WriteOptions options) throws IOException, NomadException {
 
-        return registerGroupScalingEvent(jobId, group, null, error, message, meta, options);
+        return scalingAction(jobId, group, null, error, message, meta, options);
     }
 
     /** Low-level method for scaling events against a task group.
@@ -931,7 +931,7 @@ public class JobsApi extends ApiBase {
      * @throws NomadException if the response signals an error or cannot be deserialized
      * @see <a href="https://www.nomadproject.io/api-docs/jobs/#scale-task-group-beta">{@code PUT /v1/job/<ID>/scale}</a>
      */
-    protected EvaluationResponse registerGroupScalingEvent(
+    protected ServerResponse<JobRegisterResponse> scalingAction(
             final String jobId,
             final String group,
             final Integer count,
@@ -942,32 +942,33 @@ public class JobsApi extends ApiBase {
 
         Map<String,String> target = new HashMap<String,String>();
         target.put("Group", group);
-        return executeEvaluationCreatingRequest(put(
-                "/v1/job/" + jobId + "/scale",
-                new ScalingRequest(count, target, message, error, meta),
-                options));
+        return executeServerAction(
+                put( "/v1/job/" + jobId + "/scale",
+                        new ScalingRequest(count, target, message, error, meta),
+                        options),
+                NomadJson.parserFor(JobRegisterResponse.class));
     }
 
     /**
      * Class matching the JSON request entity for a job scaling event
      */
     private static class ScalingRequest {
-        @Nullable Integer Count;
-        Map<String,String> Target;
-        @Nullable String Message;
-        @Nullable Boolean Error;
-        @Nullable Map<String,Object> Meta;
+        @Nullable public final Integer count;
+        public final Map<String,String> target;
+        @Nullable public final String message;
+        @Nullable public final Boolean error;
+        @Nullable public final Map<String,Object> meta;
 
         public ScalingRequest(@Nullable Integer count,
                               Map<String, String> target,
                               @Nullable String message,
                               @Nullable Boolean error,
                               @Nullable Map<String, Object> meta) {
-            Count = count;
-            Target = target;
-            Message = message;
-            Error = error;
-            Meta = meta;
+            this.count = count;
+            this.target = target;
+            this.message = message;
+            this.error = error;
+            this.meta = meta;
         }
     }
 
