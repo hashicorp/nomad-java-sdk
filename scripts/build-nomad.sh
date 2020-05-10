@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-nomad_version=v0.11.0-rc1
+nomad_version=v0.11.1
 go_version=1.14
 
 cd "$(dirname "$0")/.."
