@@ -19,7 +19,7 @@ public class CSIPluginsApi extends ApiBase {
     }
 
     /**
-     * Lists CSI plugins
+     * Lists CSI plugins.
      *
      * @param options         options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
@@ -37,7 +37,7 @@ public class CSIPluginsApi extends ApiBase {
     }
 
     /**
-     * Lists CSI plugins
+     * Lists CSI plugins.
      *
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized

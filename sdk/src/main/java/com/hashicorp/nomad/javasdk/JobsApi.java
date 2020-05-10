@@ -1,7 +1,17 @@
 package com.hashicorp.nomad.javasdk;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hashicorp.nomad.apimodel.*;
+import com.hashicorp.nomad.apimodel.AllocationListStub;
+import com.hashicorp.nomad.apimodel.Deployment;
+import com.hashicorp.nomad.apimodel.Evaluation;
+import com.hashicorp.nomad.apimodel.Job;
+import com.hashicorp.nomad.apimodel.JobDispatchResponse;
+import com.hashicorp.nomad.apimodel.JobListStub;
+import com.hashicorp.nomad.apimodel.JobPlanResponse;
+import com.hashicorp.nomad.apimodel.JobRegisterResponse;
+import com.hashicorp.nomad.apimodel.JobScaleStatusResponse;
+import com.hashicorp.nomad.apimodel.JobSummary;
+import com.hashicorp.nomad.apimodel.JobValidateResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.RequestBuilder;
 
@@ -888,7 +898,7 @@ public class JobsApi extends ApiBase {
             final String group,
             final Integer count,
             @Nullable final String message,
-            @Nullable final Map<String,Object> meta,
+            @Nullable final Map<String, Object> meta,
             @Nullable final WriteOptions options) throws IOException, NomadException {
 
         return scalingAction(jobId, group, count, false, message, meta, options);
@@ -912,7 +922,7 @@ public class JobsApi extends ApiBase {
             final String group,
             @Nullable final String message,
             @Nullable final Boolean error,
-            @Nullable final Map<String,Object> meta,
+            @Nullable final Map<String, Object> meta,
             @Nullable final WriteOptions options) throws IOException, NomadException {
 
         return scalingAction(jobId, group, null, error, message, meta, options);
@@ -934,32 +944,32 @@ public class JobsApi extends ApiBase {
     protected ServerResponse<JobRegisterResponse> scalingAction(
             final String jobId,
             final String group,
-            final Integer count,
+            @Nullable final Integer count,
             @Nullable final Boolean error,
             @Nullable final String message,
-            @Nullable final Map<String,Object> meta,
+            @Nullable final Map<String, Object> meta,
             @Nullable final WriteOptions options) throws IOException, NomadException {
 
-        Map<String,String> target = new HashMap<String,String>();
+        Map<String, String> target = new HashMap<>();
         target.put("Group", group);
         return executeServerAction(
-                put( "/v1/job/" + jobId + "/scale",
+                put("/v1/job/" + jobId + "/scale",
                         new ScalingRequest(count, target, message, error, meta),
                         options),
                 NomadJson.parserFor(JobRegisterResponse.class));
     }
 
     /**
-     * Class matching the JSON request entity for a job scaling event
+     * Class matching the JSON request entity for a job scaling event.
      */
     private static class ScalingRequest {
-        @Nullable public final Integer count;
-        public final Map<String,String> target;
-        @Nullable public final String message;
-        @Nullable public final Boolean error;
-        @Nullable public final Map<String,Object> meta;
+        @Nullable public final Integer count; // Checkstyle suppress VisibilityModifier
+        public final Map<String, String> target; // Checkstyle suppress VisibilityModifier
+        @Nullable public final String message; // Checkstyle suppress VisibilityModifier
+        @Nullable public final Boolean error; // Checkstyle suppress VisibilityModifier
+        @Nullable public final Map<String, Object> meta; // Checkstyle suppress VisibilityModifier
 
-        public ScalingRequest(@Nullable Integer count,
+        ScalingRequest(@Nullable Integer count,
                               Map<String, String> target,
                               @Nullable String message,
                               @Nullable Boolean error,

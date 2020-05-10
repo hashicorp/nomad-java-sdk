@@ -19,7 +19,7 @@ public class CSIVolumesApi extends ApiBase {
     }
 
     /**
-     * Lists CSI volumes
+     * Lists CSI volumes.
      *
      * @param pluginId the results to only volumes from the specified pluginID
      * @param options     options controlling how the request is performed
@@ -40,7 +40,7 @@ public class CSIVolumesApi extends ApiBase {
     }
 
     /**
-     * Lists CSI volumes
+     * Lists CSI volumes.
      *
      * @param pluginId the results to only volumes from the specified pluginID
      * @throws IOException    if there is an HTTP or lower-level problem
@@ -55,7 +55,7 @@ public class CSIVolumesApi extends ApiBase {
     }
 
     /**
-     * Lists CSI volumes
+     * Lists CSI volumes.
      *
      * @param options     options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
@@ -70,7 +70,7 @@ public class CSIVolumesApi extends ApiBase {
     }
 
     /**
-     * Lists CSI volumes
+     * Lists CSI volumes.
      *
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
