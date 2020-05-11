@@ -22,7 +22,7 @@ public class CSIVolumesApi extends ApiBase {
     /**
      * Lists CSI volumes.
      *
-     * @param pluginId the results to only volumes from the specified pluginID
+     * @param pluginId filter the results to only volumes from the specified pluginID
      * @param options     options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
