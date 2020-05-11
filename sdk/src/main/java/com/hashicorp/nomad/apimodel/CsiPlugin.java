@@ -23,7 +23,9 @@ public final class CsiPlugin extends ApiObject {
     private Map<String, CsiInfo> nodes;
     private List<AllocationListStub> allocations;
     private int controllersHealthy;
+    private int controllersExpected;
     private int nodesHealthy;
+    private int nodesExpected;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
 
@@ -129,6 +131,16 @@ public final class CsiPlugin extends ApiObject {
         return this;
     }
 
+    @JsonProperty("ControllersExpected")
+    public int getControllersExpected() {
+        return controllersExpected;
+    }
+
+    public CsiPlugin setControllersExpected(int controllersExpected) {
+        this.controllersExpected = controllersExpected;
+        return this;
+    }
+
     @JsonProperty("NodesHealthy")
     public int getNodesHealthy() {
         return nodesHealthy;
@@ -136,6 +148,16 @@ public final class CsiPlugin extends ApiObject {
 
     public CsiPlugin setNodesHealthy(int nodesHealthy) {
         this.nodesHealthy = nodesHealthy;
+        return this;
+    }
+
+    @JsonProperty("NodesExpected")
+    public int getNodesExpected() {
+        return nodesExpected;
+    }
+
+    public CsiPlugin setNodesExpected(int nodesExpected) {
+        this.nodesExpected = nodesExpected;
         return this;
     }
 

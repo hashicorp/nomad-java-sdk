@@ -14,9 +14,20 @@ import java.util.List;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class SchedulerConfiguration extends ApiObject {
+    private String schedulerAlgorithm;
     private PreemptionConfig preemptionConfig;
     private BigInteger createIndex;
     private BigInteger modifyIndex;
+
+    @JsonProperty("SchedulerAlgorithm")
+    public String getSchedulerAlgorithm() {
+        return schedulerAlgorithm;
+    }
+
+    public SchedulerConfiguration setSchedulerAlgorithm(String schedulerAlgorithm) {
+        this.schedulerAlgorithm = schedulerAlgorithm;
+        return this;
+    }
 
     @JsonProperty("PreemptionConfig")
     public PreemptionConfig getPreemptionConfig() {
