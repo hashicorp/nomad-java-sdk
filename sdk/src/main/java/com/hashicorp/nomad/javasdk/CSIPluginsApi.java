@@ -25,7 +25,7 @@ public class CSIPluginsApi extends ApiBase {
      * @param options         options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/api-docs/plugins/#list-plugins">{@code GET /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api-docs/plugins/#list-plugins">{@code GET /v1/plugins}</a>
      */
     public ServerQueryResponse<List<CsiPluginListStub>> list(
             @Nullable final QueryOptions<List<CsiPluginListStub>> options
@@ -42,7 +42,7 @@ public class CSIPluginsApi extends ApiBase {
      *
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/api-docs/plugins/#list-plugins">{@code GET /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api-docs/plugins/#list-plugins">{@code GET /v1/plugins}</a>
      */
     public ServerQueryResponse<List<CsiPluginListStub>> list() throws IOException, NomadException {
 
@@ -56,7 +56,7 @@ public class CSIPluginsApi extends ApiBase {
      * @param options         options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/api-docs/plugins/#read-plugin">{@code GET /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api-docs/plugins/#read-plugin">{@code GET /v1/plugin/csi/{ID}}</a>
      */
     public ServerQueryResponse<CsiPlugin> info(
             @Nullable final String pluginId,
@@ -75,7 +75,7 @@ public class CSIPluginsApi extends ApiBase {
      * @param pluginId        the plugin ID
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/api-docs/plugins/#read-plugin">{@code GET /v1/jobs}</a>
+     * @see <a href="https://www.nomadproject.io/api-docs/plugins/#read-plugin">{@code GET /v1/plugin/csi/{ID}}</a>
      */
     public ServerQueryResponse<CsiPlugin> info(
             @Nullable final String pluginId

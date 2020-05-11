@@ -24,7 +24,7 @@ public class ScalingApi extends ApiBase {
      * @param id ID of the scaling policy.
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/api-docs/scaling-policies/#read-scaling-policy-beta">{@code GET /v1/scaling/policy/:id}</a>
+     * @see <a href="https://www.nomadproject.io/api-docs/scaling-policies/#read-scaling-policy-beta">{@code GET /v1/scaling/policy/{ID}}</a>
      */
     public ServerQueryResponse<ScalingPolicy> info(final String id) throws IOException, NomadException {
         return info(id, null);
@@ -37,7 +37,7 @@ public class ScalingApi extends ApiBase {
      * @param options options controlling how the request is performed
      * @throws IOException    if there is an HTTP or lower-level problem
      * @throws NomadException if the response signals an error or cannot be deserialized
-     * @see <a href="https://www.nomadproject.io/api-docs/scaling-policies/#read-scaling-policy-beta">{@code GET /v1/scaling/policy/:id}</a>
+     * @see <a href="https://www.nomadproject.io/api-docs/scaling-policies/#read-scaling-policy-beta">{@code GET /v1/scaling/policy/{ID}}</a>
      */
     public ServerQueryResponse<ScalingPolicy> info(
             final String id,
