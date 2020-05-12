@@ -22,7 +22,6 @@ public final class CsiVolumeListStub extends ApiObject {
     private List<CsiTopology> topologies;
     private String accessMode;
     private String attachmentMode;
-    private CsiMountOptions mountOptions;
     private boolean schedulable;
     private String pluginId;
     private String provider;
@@ -110,16 +109,6 @@ public final class CsiVolumeListStub extends ApiObject {
 
     public CsiVolumeListStub setAttachmentMode(String attachmentMode) {
         this.attachmentMode = attachmentMode;
-        return this;
-    }
-
-    @JsonProperty("MountOptions")
-    public CsiMountOptions getMountOptions() {
-        return mountOptions;
-    }
-
-    public CsiVolumeListStub setMountOptions(CsiMountOptions mountOptions) {
-        this.mountOptions = mountOptions;
         return this;
     }
 

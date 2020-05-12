@@ -15,89 +15,89 @@ import java.util.Map;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class License extends ApiObject {
-    private String license_id;
-    private String customer_id;
-    private String installation_id;
-    private Date issue_time;
-    private Date start_time;
-    private Date expiration_time;
-    private Date termination_time;
+    private String licenseId;
+    private String customerId;
+    private String installationId;
+    private Date issueTime;
+    private Date startTime;
+    private Date expirationTime;
+    private Date terminationTime;
     private String product;
     private Map<String, Object> flags;
     private List<String> modules;
     private List<String> features;
 
-    @JsonProperty("license_id")
-    public String getLicense_id() {
-        return license_id;
+    @JsonProperty("LicenseID")
+    public String getLicenseId() {
+        return licenseId;
     }
 
-    public License setLicense_id(String license_id) {
-        this.license_id = license_id;
+    public License setLicenseId(String licenseId) {
+        this.licenseId = licenseId;
         return this;
     }
 
-    @JsonProperty("customer_id")
-    public String getCustomer_id() {
-        return customer_id;
+    @JsonProperty("CustomerID")
+    public String getCustomerId() {
+        return customerId;
     }
 
-    public License setCustomer_id(String customer_id) {
-        this.customer_id = customer_id;
+    public License setCustomerId(String customerId) {
+        this.customerId = customerId;
         return this;
     }
 
-    @JsonProperty("installation_id")
-    public String getInstallation_id() {
-        return installation_id;
+    @JsonProperty("InstallationID")
+    public String getInstallationId() {
+        return installationId;
     }
 
-    public License setInstallation_id(String installation_id) {
-        this.installation_id = installation_id;
+    public License setInstallationId(String installationId) {
+        this.installationId = installationId;
         return this;
     }
 
-    @JsonProperty("issue_time")
-    public Date getIssue_time() {
-        return issue_time;
+    @JsonProperty("IssueTime")
+    public Date getIssueTime() {
+        return issueTime;
     }
 
-    public License setIssue_time(Date issue_time) {
-        this.issue_time = issue_time;
+    public License setIssueTime(Date issueTime) {
+        this.issueTime = issueTime;
         return this;
     }
 
-    @JsonProperty("start_time")
-    public Date getStart_time() {
-        return start_time;
+    @JsonProperty("StartTime")
+    public Date getStartTime() {
+        return startTime;
     }
 
-    public License setStart_time(Date start_time) {
-        this.start_time = start_time;
+    public License setStartTime(Date startTime) {
+        this.startTime = startTime;
         return this;
     }
 
-    @JsonProperty("expiration_time")
-    public Date getExpiration_time() {
-        return expiration_time;
+    @JsonProperty("ExpirationTime")
+    public Date getExpirationTime() {
+        return expirationTime;
     }
 
-    public License setExpiration_time(Date expiration_time) {
-        this.expiration_time = expiration_time;
+    public License setExpirationTime(Date expirationTime) {
+        this.expirationTime = expirationTime;
         return this;
     }
 
-    @JsonProperty("termination_time")
-    public Date getTermination_time() {
-        return termination_time;
+    @JsonProperty("TerminationTime")
+    public Date getTerminationTime() {
+        return terminationTime;
     }
 
-    public License setTermination_time(Date termination_time) {
-        this.termination_time = termination_time;
+    public License setTerminationTime(Date terminationTime) {
+        this.terminationTime = terminationTime;
         return this;
     }
 
-    @JsonProperty("product")
+    @JsonProperty("Product")
     public String getProduct() {
         return product;
     }
@@ -107,7 +107,7 @@ public final class License extends ApiObject {
         return this;
     }
 
-    @JsonProperty("flags")
+    @JsonProperty("Flags")
     public Map<String, Object> getFlags() {
         return flags;
     }
@@ -124,7 +124,7 @@ public final class License extends ApiObject {
         return this;
     }
 
-    @JsonProperty("modules")
+    @JsonProperty("Modules")
     public List<String> getModules() {
         return modules;
     }
@@ -142,7 +142,7 @@ public final class License extends ApiObject {
         return this;
     }
 
-    @JsonProperty("features")
+    @JsonProperty("Features")
     public List<String> getFeatures() {
         return features;
     }
