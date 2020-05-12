@@ -7,7 +7,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -143,6 +145,93 @@ public class JobsApiTest extends ApiTestBase {
             ServerQueryResponse<Job> infoResponse = jobsApi.info(job.getId());
             assertUpdatedServerQueryResponse(infoResponse);
             assertThat("id", infoResponse.getValue().getId(), is(job.getId()));
+        }
+    }
+
+    @Test
+    public void shouldGetJobScaleStatus() throws Exception {
+        try (TestAgent agent = newServer()) {
+            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
+
+            final Job job = createTestJob();
+
+            new ErrorResponseAssertion("not found") {
+                @Override
+                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+                    return jobsApi.info(job.getId());
+                }
+            };
+
+            jobsApi.register(job);
+
+            ServerQueryResponse<JobScaleStatusResponse> scaleStatus = jobsApi.scaleStatus(job.getId());
+            assertUpdatedServerQueryResponse(scaleStatus);
+            TaskGroupScaleStatus tgStatus = scaleStatus.getValue().getTaskGroups().get(job.getTaskGroups().get(0).getName());
+            assertThat(tgStatus.getDesired(), is(1));
+            assertThat(tgStatus.getPlaced(), is(0));
+            assertThat(tgStatus.getEvents(), nullValue());
+        }
+    }
+
+    @Test
+    public void shouldRegisterScalingEvent() throws Exception {
+        try (TestAgent agent = newServer()) {
+            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
+
+            final Job job = createTestJob();
+
+            new ErrorResponseAssertion("not found") {
+                @Override
+                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+                    return jobsApi.info(job.getId());
+                }
+            };
+
+            jobsApi.register(job);
+
+            String groupName = job.getTaskGroups().get(0).getName();
+
+            Map<String,Object> meta = new HashMap<>();
+            meta.put("a", 10);
+            ServerResponse<JobRegisterResponse> response = jobsApi.registerGroupScalingInfo(job.getId(), groupName,
+                    "hello", false, meta, null);
+
+            assertThat(response.getValue().getEvalId(), emptyOrNullString());
+
+            ServerQueryResponse<JobScaleStatusResponse> scaleStatus = jobsApi.scaleStatus(job.getId());
+            TaskGroupScaleStatus tgStatus = scaleStatus.getValue().getTaskGroups().get(job.getTaskGroups().get(0).getName());
+            assertThat(tgStatus.getEvents(), hasSize(1));
+            assertThat(tgStatus.getEvents().get(0).getMessage(), is("hello"));
+        }
+    }
+
+    @Test
+    public void shouldScaleTaskGroup() throws Exception {
+        try (TestAgent agent = newServer()) {
+            final JobsApi jobsApi = agent.getApiClient().getJobsApi();
+
+            final Job job = createTestJob();
+
+            new ErrorResponseAssertion("not found") {
+                @Override
+                protected NomadResponse<?> performRequest() throws IOException, NomadException {
+                    return jobsApi.info(job.getId());
+                }
+            };
+
+            jobsApi.register(job);
+
+            String groupName = job.getTaskGroups().get(0).getName();
+
+            ServerResponse<JobRegisterResponse> response = jobsApi.scaleGroup(job.getId(), groupName,
+                    10, "hello", null, null);
+
+            assertThat(response.getValue().getEvalId(), nonEmptyString());
+
+            ServerQueryResponse<JobScaleStatusResponse> scaleStatus = jobsApi.scaleStatus(job.getId());
+            TaskGroupScaleStatus tgStatus = scaleStatus.getValue().getTaskGroups().get(job.getTaskGroups().get(0).getName());
+            assertThat(tgStatus.getDesired(), is(10));
+//            assertThat(tgStatus.getEvents().get(0).getCount(), is("hello"));
         }
     }
 

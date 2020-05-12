@@ -17,12 +17,14 @@ public final class Task extends ApiObject {
     private String name;
     private String driver;
     private String user;
+    private TaskLifecycle lifecycle;
     private Map<String, Object> config;
     private List<Constraint> constraints;
     private List<Affinity> affinities;
     private Map<String, String> env;
     private List<Service> services;
     private Resources resources;
+    private RestartPolicy restartPolicy;
     private Map<String, String> meta;
     private Long killTimeout;
     private LogConfig logConfig;
@@ -31,6 +33,7 @@ public final class Task extends ApiObject {
     private List<Template> templates;
     private DispatchPayloadConfig dispatchPayload;
     private List<VolumeMount> volumeMounts;
+    private TaskCsiPluginConfig csiPluginConfig;
     private boolean leader;
     private long shutdownDelay;
     private String killSignal;
@@ -63,6 +66,16 @@ public final class Task extends ApiObject {
 
     public Task setUser(String user) {
         this.user = user;
+        return this;
+    }
+
+    @JsonProperty("Lifecycle")
+    public TaskLifecycle getLifecycle() {
+        return lifecycle;
+    }
+
+    public Task setLifecycle(TaskLifecycle lifecycle) {
+        this.lifecycle = lifecycle;
         return this;
     }
 
@@ -161,6 +174,16 @@ public final class Task extends ApiObject {
 
     public Task setResources(Resources resources) {
         this.resources = resources;
+        return this;
+    }
+
+    @JsonProperty("RestartPolicy")
+    public RestartPolicy getRestartPolicy() {
+        return restartPolicy;
+    }
+
+    public Task setRestartPolicy(RestartPolicy restartPolicy) {
+        this.restartPolicy = restartPolicy;
         return this;
     }
 
@@ -272,6 +295,16 @@ public final class Task extends ApiObject {
             this.volumeMounts = new java.util.ArrayList<>();
         for (VolumeMount item : volumeMounts)
             this.volumeMounts.add(item);
+        return this;
+    }
+
+    @JsonProperty("CSIPluginConfig")
+    public TaskCsiPluginConfig getCsiPluginConfig() {
+        return csiPluginConfig;
+    }
+
+    public Task setCsiPluginConfig(TaskCsiPluginConfig csiPluginConfig) {
+        this.csiPluginConfig = csiPluginConfig;
         return this;
     }
 

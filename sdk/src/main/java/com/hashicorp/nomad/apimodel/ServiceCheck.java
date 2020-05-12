@@ -22,6 +22,7 @@ public final class ServiceCheck extends ApiObject {
     private String path;
     private String protocol;
     private String portLabel;
+    private boolean expose;
     private String addressMode;
     private long interval;
     private long timeout;
@@ -119,6 +120,16 @@ public final class ServiceCheck extends ApiObject {
 
     public ServiceCheck setPortLabel(String portLabel) {
         this.portLabel = portLabel;
+        return this;
+    }
+
+    @JsonProperty("Expose")
+    public boolean getExpose() {
+        return expose;
+    }
+
+    public ServiceCheck setExpose(boolean expose) {
+        this.expose = expose;
         return this;
     }
 

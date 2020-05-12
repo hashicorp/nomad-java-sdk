@@ -8,6 +8,8 @@ import com.hashicorp.nomad.apimodel.Job;
 import com.hashicorp.nomad.apimodel.JobDispatchResponse;
 import com.hashicorp.nomad.apimodel.JobListStub;
 import com.hashicorp.nomad.apimodel.JobPlanResponse;
+import com.hashicorp.nomad.apimodel.JobRegisterResponse;
+import com.hashicorp.nomad.apimodel.JobScaleStatusResponse;
 import com.hashicorp.nomad.apimodel.JobSummary;
 import com.hashicorp.nomad.apimodel.JobValidateResponse;
 import org.apache.http.HttpResponse;
@@ -17,6 +19,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -841,6 +844,142 @@ public class JobsApi extends ApiBase {
                 "/v1/job/" + jobId + "/deployments",
                 options,
                 NomadJson.parserForListOf(Deployment.class));
+    }
+
+    /**
+     * Reads scale information about a job.
+     *
+     * @param jobId   the ID of the job to list deployments for
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api-docs/jobs/#read-job-scale-status-beta">{@code GET /v1/job/<id>/scale}</a>
+     */
+    public ServerQueryResponse<JobScaleStatusResponse> scaleStatus(
+            final String jobId
+    ) throws IOException, NomadException {
+        return scaleStatus(jobId, null);
+    }
+
+    /**
+     * Reads scale information about a job.
+     *
+     * @param jobId   the ID of the job to list deployments for
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api-docs/jobs/#read-job-scale-status-beta">{@code GET /v1/job/<id>/scale}</a>
+     */
+    public ServerQueryResponse<JobScaleStatusResponse> scaleStatus(
+            final String jobId,
+            @Nullable final QueryOptions<JobScaleStatusResponse> options
+    ) throws IOException, NomadException {
+
+        return executeServerQuery(
+                "/v1/job/" + jobId + "/scale",
+                options,
+                NomadJson.parserFor(JobScaleStatusResponse.class));
+    }
+
+    /**
+     * Scale task group count.
+     *
+     * @param jobId   the ID of the job to evaluate
+     * @param group   the name of the target group
+     * @param count   the new task group count
+     * @param message a message describing the scaling event
+     * @param meta    metadata to store with the scaling event
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/job.html">{@code PUT /v1/job/<ID>/evaluate}</a>
+     */
+    public ServerResponse<JobRegisterResponse> scaleGroup(
+            final String jobId,
+            final String group,
+            final Integer count,
+            @Nullable final String message,
+            @Nullable final Map<String, Object> meta,
+            @Nullable final WriteOptions options) throws IOException, NomadException {
+
+        return scalingAction(jobId, group, count, false, message, meta, options);
+    }
+
+    /**
+     * Register informational scaling event.
+     *
+     * @param jobId   the ID of the job to evaluate
+     * @param group   the name of the target group
+     * @param message a message describing the scaling event
+     * @param error   desginates an error state
+     * @param meta    metadata to store with the scaling event
+     * @param options options controlling how the request is performed
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/docs/http/job.html">{@code PUT /v1/job/<ID>/evaluate}</a>
+     */
+    public ServerResponse<JobRegisterResponse> registerGroupScalingInfo(
+            final String jobId,
+            final String group,
+            @Nullable final String message,
+            @Nullable final Boolean error,
+            @Nullable final Map<String, Object> meta,
+            @Nullable final WriteOptions options) throws IOException, NomadException {
+
+        return scalingAction(jobId, group, null, error, message, meta, options);
+    }
+
+    /** Low-level method for scaling events against a task group.
+     * @param jobId the ID of the job
+     * @param group the name of the targeted task gropu
+     * @param count the count (optional)
+     * @param error whether this is an error state or not (defaults false, cannot be true if count == null)
+     * @param message description of the scaling event (optional)
+     * @param meta metadata for the scaling event (optional)
+     * @param options options controlling how the request is performed
+     *
+     * @throws IOException    if there is an HTTP or lower-level problem
+     * @throws NomadException if the response signals an error or cannot be deserialized
+     * @see <a href="https://www.nomadproject.io/api-docs/jobs/#scale-task-group-beta">{@code PUT /v1/job/<ID>/scale}</a>
+     */
+    protected ServerResponse<JobRegisterResponse> scalingAction(
+            final String jobId,
+            final String group,
+            @Nullable final Integer count,
+            @Nullable final Boolean error,
+            @Nullable final String message,
+            @Nullable final Map<String, Object> meta,
+            @Nullable final WriteOptions options) throws IOException, NomadException {
+
+        Map<String, String> target = new HashMap<>();
+        target.put("Group", group);
+        return executeServerAction(
+                put("/v1/job/" + jobId + "/scale",
+                        new ScalingRequest(count, target, message, error, meta),
+                        options),
+                NomadJson.parserFor(JobRegisterResponse.class));
+    }
+
+    /**
+     * Class matching the JSON request entity for a job scaling event.
+     */
+    private static class ScalingRequest {
+        @Nullable public final Integer count; // Checkstyle suppress VisibilityModifier
+        public final Map<String, String> target; // Checkstyle suppress VisibilityModifier
+        @Nullable public final String message; // Checkstyle suppress VisibilityModifier
+        @Nullable public final Boolean error; // Checkstyle suppress VisibilityModifier
+        @Nullable public final Map<String, Object> meta; // Checkstyle suppress VisibilityModifier
+
+        ScalingRequest(@Nullable Integer count,
+                              Map<String, String> target,
+                              @Nullable String message,
+                              @Nullable Boolean error,
+                              @Nullable Map<String, Object> meta) {
+            this.count = count;
+            this.target = target;
+            this.message = message;
+            this.error = error;
+            this.meta = meta;
+        }
     }
 
     /**

@@ -152,9 +152,10 @@ func (generator *Generator) generateClass(t reflect.Type) error {
 		if t.Field(i).Name == "WriteMeta" || t.Field(i).Name == "QueryMeta" {
 			continue
 		}
-		property := generator.javaBeanProperty(t.Field(i))
-		properties = append(properties, property)
-		collectTypes(property.JavaType)
+		if property, ok := generator.javaBeanProperty(className, t.Field(i)); ok {
+			properties = append(properties, property)
+			collectTypes(property.JavaType)
+		}
 	}
 
 	out, err := os.Create(className + ".java")
@@ -216,19 +217,24 @@ func (generator *Generator) generateClass(t reflect.Type) error {
 	return nil
 }
 
-func (g *Generator) javaBeanProperty(f reflect.StructField) java.BeanProperty {
+func (g *Generator) javaBeanProperty(className string, f reflect.StructField) (java.BeanProperty,bool) {
 	nameInJson := f.Tag.Get("json")
 	if i := strings.IndexByte(nameInJson, ','); i >= 0 {
 		nameInJson = nameInJson[0:i]
 	}
+	if nameInJson == "-" {
+		return java.BeanProperty{}, false
+	}
 	if nameInJson == "" {
 		nameInJson = f.Name
 	}
+	propName := propertyName(nameInJson)
 	return java.BeanProperty{
-		Name:             propertyName(nameInJson),
-		JavaType:         g.javaType(f.Type),
+		Name:             propName,
+		MethodSuffix:     methodSuffix(nameInJson),
+		JavaType:         g.javaType(className, propName, f.Type),
 		GetterAnnotation: "@JsonProperty(\"" + nameInJson + "\")",
-	}
+	}, true
 }
 
 func className(t reflect.Type) string {
@@ -238,7 +244,17 @@ func className(t reflect.Type) string {
 // To meet JavaBean conventions, lowercase the first letter of the name
 // and lowercase the non-first letters of multi-letter acronyms
 func propertyName(nameInJson string) string {
-	return javaName(nameInJson, false)
+	raw := javaName(nameInJson, false)
+	if java.IsTypeName(raw) {
+		raw += "Val"
+	}
+	return raw
+}
+
+// methodSuffix is prefixed by get- and set- in the getter and the setter
+// it is therefore less restrictive than propertyName
+func methodSuffix(nameInJson string) string {
+	return javaName(nameInJson, true)
 }
 
 func javaName(nameInJson string, firstCharacterUppercase bool) string {
@@ -267,7 +283,11 @@ func javaName(nameInJson string, firstCharacterUppercase bool) string {
 	}
 }
 
-func (generator *Generator) javaType(t reflect.Type) java.JavaType {
+func (generator *Generator) javaType(class, property string, t reflect.Type) java.JavaType {
+	if typ, ok := typeHack(class, property); ok {
+		return typ
+	}
+
 	if t.PkgPath() == "" {
 		switch t.Kind() {
 		case reflect.Bool:
@@ -311,7 +331,9 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 				panic("Unknown interface to convert to Java" + t.String())
 			}
 		case reflect.Map:
-			return java.NewMapType(generator.javaType(t.Key()), generator.javaType(t.Elem()))
+			return java.NewMapType(
+				generator.javaType(class, property, t.Key()),
+				generator.javaType(class, property, t.Elem()))
 		case reflect.Ptr:
 			switch t.Elem().Kind() {
 			case reflect.Bool:
@@ -328,7 +350,7 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 			case reflect.String:
 				return java.String
 			case reflect.Struct:
-				return generator.javaType(t.Elem())
+				return generator.javaType(class, property, t.Elem())
 			case reflect.Uint64:
 				// the only unsigned type in Java is byte, use wider type
 				return java.BigInteger
@@ -339,7 +361,7 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 			if t.Elem().Kind() == reflect.Uint8 {
 				return java.NewReferenceType("byte[]")
 			} else {
-				return java.NewListType(generator.javaType(t.Elem()))
+				return java.NewListType(generator.javaType(class, property, t.Elem()))
 			}
 		case reflect.String:
 			return java.String
@@ -364,8 +386,25 @@ func (generator *Generator) javaType(t reflect.Type) java.JavaType {
 			return java.String
 		case reflect.Int:
 			return java.Integer
+		case reflect.Map:
+			return java.NewMapType(
+				generator.javaType(class, property, t.Key()),
+				generator.javaType(class, property, t.Elem()))
 		default:
 			panic("Unknown kind " + t.Kind().String() + " for " + t.String() + " in package " + t.PkgPath())
 		}
 	}
+}
+
+func typeHack(className, propertyName string) (java.JavaType, bool) {
+	// these are timestamps from Consul's autopilot code, which encode times differently than the rest of Nomad's API
+	if className == "ServerHealth" && propertyName == "lastContact" {
+		return java.String, true
+	} else if className == "AutopilotConfiguration" {
+		if propertyName == "lastContactThreshold" || propertyName == "serverStabilizationTime" {
+			return java.String, true
+		}
+	}
+
+	return nil, false
 }
