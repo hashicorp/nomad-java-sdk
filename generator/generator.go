@@ -386,6 +386,10 @@ func (generator *Generator) javaType(class, property string, t reflect.Type) jav
 			return java.String
 		case reflect.Int:
 			return java.Integer
+		case reflect.Map:
+			return java.NewMapType(
+				generator.javaType(class, property, t.Key()),
+				generator.javaType(class, property, t.Elem()))
 		default:
 			panic("Unknown kind " + t.Kind().String() + " for " + t.String() + " in package " + t.PkgPath())
 		}
