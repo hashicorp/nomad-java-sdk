@@ -15,12 +15,23 @@ import java.util.Map;
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
 public final class ScalingEvent extends ApiObject {
+    private Long count;
     private boolean error;
     private String message;
     private Map<String, Object> meta;
     private String evalId;
     private BigInteger time;
     private BigInteger createIndex;
+
+    @JsonProperty("Count")
+    public Long getCount() {
+        return count;
+    }
+
+    public ScalingEvent setCount(Long count) {
+        this.count = count;
+        return this;
+    }
 
     @JsonProperty("Error")
     public boolean getError() {
