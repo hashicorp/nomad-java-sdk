@@ -30,6 +30,7 @@ public final class TaskGroup extends ApiObject {
     private Map<String, String> meta;
     private List<Service> services;
     private Long shutdownDelay;
+    private Long stopAfterClientDisconnect;
     private ScalingPolicy scaling;
 
     @JsonProperty("Name")
@@ -251,6 +252,16 @@ public final class TaskGroup extends ApiObject {
 
     public TaskGroup setShutdownDelay(Long shutdownDelay) {
         this.shutdownDelay = shutdownDelay;
+        return this;
+    }
+
+    @JsonProperty("StopAfterClientDisconnect")
+    public Long getStopAfterClientDisconnect() {
+        return stopAfterClientDisconnect;
+    }
+
+    public TaskGroup setStopAfterClientDisconnect(Long stopAfterClientDisconnect) {
+        this.stopAfterClientDisconnect = stopAfterClientDisconnect;
         return this;
     }
 
