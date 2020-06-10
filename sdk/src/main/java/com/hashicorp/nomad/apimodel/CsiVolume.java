@@ -25,6 +25,8 @@ public final class CsiVolume extends ApiObject {
     private String attachmentMode;
     private CsiMountOptions mountOptions;
     private Map<String, String> secrets;
+    private Map<String, String> parameters;
+    private Map<String, String> context;
     private Map<String, Allocation> readAllocs;
     private Map<String, Allocation> writeAllocs;
     private List<AllocationListStub> allocations;
@@ -143,6 +145,40 @@ public final class CsiVolume extends ApiObject {
         if (this.secrets == null)
             this.secrets = new java.util.HashMap<>();
         this.secrets.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("Parameters")
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
+    public CsiVolume setParameters(Map<String, String> parameters) {
+        this.parameters = parameters;
+        return this;
+    }
+
+    public CsiVolume addParameters(String key, String value) {
+        if (this.parameters == null)
+            this.parameters = new java.util.HashMap<>();
+        this.parameters.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("Context")
+    public Map<String, String> getContext() {
+        return context;
+    }
+
+    public CsiVolume setContext(Map<String, String> context) {
+        this.context = context;
+        return this;
+    }
+
+    public CsiVolume addContext(String key, String value) {
+        if (this.context == null)
+            this.context = new java.util.HashMap<>();
+        this.context.put(key, value);
         return this;
     }
 
