@@ -29,6 +29,7 @@ public final class Job extends ApiObject {
     private List<Affinity> affinities;
     private List<TaskGroup> taskGroups;
     private UpdateStrategy update;
+    private Multiregion multiregion;
     private List<Spread> spreads;
     private PeriodicConfig periodic;
     private ParameterizedJobConfig parameterizedJob;
@@ -39,6 +40,7 @@ public final class Job extends ApiObject {
     private Map<String, String> meta;
     private String consulToken;
     private String vaultToken;
+    private String nomadTokenId;
     private String status;
     private String statusDescription;
     private Boolean stable;
@@ -220,6 +222,16 @@ public final class Job extends ApiObject {
         return this;
     }
 
+    @JsonProperty("Multiregion")
+    public Multiregion getMultiregion() {
+        return multiregion;
+    }
+
+    public Job setMultiregion(Multiregion multiregion) {
+        this.multiregion = multiregion;
+        return this;
+    }
+
     @JsonProperty("Spreads")
     public List<Spread> getSpreads() {
         return spreads;
@@ -332,6 +344,16 @@ public final class Job extends ApiObject {
 
     public Job setVaultToken(String vaultToken) {
         this.vaultToken = vaultToken;
+        return this;
+    }
+
+    @JsonProperty("NomadTokenID")
+    public String getNomadTokenId() {
+        return nomadTokenId;
+    }
+
+    public Job setNomadTokenId(String nomadTokenId) {
+        this.nomadTokenId = nomadTokenId;
         return this;
     }
 

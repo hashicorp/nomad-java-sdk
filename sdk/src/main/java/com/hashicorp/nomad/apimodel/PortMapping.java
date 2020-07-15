@@ -12,18 +12,18 @@ import java.util.List;
  *
  * @see <a href="https://www.nomadproject.io/docs/http/index.html">Nomad HTTP API</a> documentation associated with the endpoint you are using.
  */
-public final class Port extends ApiObject {
+public final class PortMapping extends ApiObject {
     private String label;
     private int value;
     private int to;
-    private String hostNetwork;
+    private String hostIp;
 
     @JsonProperty("Label")
     public String getLabel() {
         return label;
     }
 
-    public Port setLabel(String label) {
+    public PortMapping setLabel(String label) {
         this.label = label;
         return this;
     }
@@ -33,7 +33,7 @@ public final class Port extends ApiObject {
         return value;
     }
 
-    public Port setValue(int value) {
+    public PortMapping setValue(int value) {
         this.value = value;
         return this;
     }
@@ -43,18 +43,18 @@ public final class Port extends ApiObject {
         return to;
     }
 
-    public Port setTo(int to) {
+    public PortMapping setTo(int to) {
         this.to = to;
         return this;
     }
 
-    @JsonProperty("HostNetwork")
-    public String getHostNetwork() {
-        return hostNetwork;
+    @JsonProperty("HostIP")
+    public String getHostIp() {
+        return hostIp;
     }
 
-    public Port setHostNetwork(String hostNetwork) {
-        this.hostNetwork = hostNetwork;
+    public PortMapping setHostIp(String hostIp) {
+        this.hostIp = hostIp;
         return this;
     }
 
@@ -63,11 +63,11 @@ public final class Port extends ApiObject {
         return NomadJson.serialize(this);
     }
 
-    public static Port fromJson(String json) throws IOException {
-        return NomadJson.deserialize(json, Port.class);
+    public static PortMapping fromJson(String json) throws IOException {
+        return NomadJson.deserialize(json, PortMapping.class);
     }
 
-    public static List<Port> fromJsonArray(String json) throws IOException {
-        return NomadJson.deserializeList(json, Port.class);
+    public static List<PortMapping> fromJsonArray(String json) throws IOException {
+        return NomadJson.deserializeList(json, PortMapping.class);
     }
 }

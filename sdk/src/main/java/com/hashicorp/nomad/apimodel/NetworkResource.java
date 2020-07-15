@@ -18,6 +18,7 @@ public final class NetworkResource extends ApiObject {
     private String cidr;
     private String ip;
     private Integer mBits;
+    private DnsConfig dns;
     private List<Port> reservedPorts;
     private List<Port> dynamicPorts;
 
@@ -68,6 +69,16 @@ public final class NetworkResource extends ApiObject {
 
     public NetworkResource setMBits(Integer mBits) {
         this.mBits = mBits;
+        return this;
+    }
+
+    @JsonProperty("DNS")
+    public DnsConfig getDns() {
+        return dns;
+    }
+
+    public NetworkResource setDns(DnsConfig dns) {
+        this.dns = dns;
         return this;
     }
 

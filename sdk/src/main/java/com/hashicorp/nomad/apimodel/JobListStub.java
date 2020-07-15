@@ -17,6 +17,7 @@ public final class JobListStub extends ApiObject {
     private String id;
     private String parentId;
     private String name;
+    private String namespace;
     private List<String> datacenters;
     private String type;
     private int priority;
@@ -58,6 +59,16 @@ public final class JobListStub extends ApiObject {
 
     public JobListStub setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    @JsonProperty("Namespace")
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public JobListStub setNamespace(String namespace) {
+        this.namespace = namespace;
         return this;
     }
 

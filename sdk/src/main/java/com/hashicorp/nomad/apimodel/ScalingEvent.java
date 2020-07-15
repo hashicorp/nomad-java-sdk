@@ -16,6 +16,7 @@ import java.util.Map;
  */
 public final class ScalingEvent extends ApiObject {
     private Long count;
+    private long previousCount;
     private boolean error;
     private String message;
     private Map<String, Object> meta;
@@ -30,6 +31,16 @@ public final class ScalingEvent extends ApiObject {
 
     public ScalingEvent setCount(Long count) {
         this.count = count;
+        return this;
+    }
+
+    @JsonProperty("PreviousCount")
+    public long getPreviousCount() {
+        return previousCount;
+    }
+
+    public ScalingEvent setPreviousCount(long previousCount) {
+        this.previousCount = previousCount;
         return this;
     }
 

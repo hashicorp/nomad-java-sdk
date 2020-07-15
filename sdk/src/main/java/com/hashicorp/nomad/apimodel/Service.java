@@ -26,6 +26,7 @@ public final class Service extends ApiObject {
     private ConsulConnect connect;
     private Map<String, String> meta;
     private Map<String, String> canaryMeta;
+    private String taskName;
 
     @JsonProperty("Id")
     public String getId() {
@@ -182,6 +183,16 @@ public final class Service extends ApiObject {
         if (this.canaryMeta == null)
             this.canaryMeta = new java.util.HashMap<>();
         this.canaryMeta.put(key, value);
+        return this;
+    }
+
+    @JsonProperty("TaskName")
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public Service setTaskName(String taskName) {
+        this.taskName = taskName;
         return this;
     }
 

@@ -19,7 +19,7 @@ public final class ScalingPolicy extends ApiObject {
     private String namespace;
     private Map<String, String> target;
     private Long min;
-    private long max;
+    private Long max;
     private Map<String, Object> policy;
     private Boolean enabled;
     private BigInteger createIndex;
@@ -73,11 +73,11 @@ public final class ScalingPolicy extends ApiObject {
     }
 
     @JsonProperty("Max")
-    public long getMax() {
+    public Long getMax() {
         return max;
     }
 
-    public ScalingPolicy setMax(long max) {
+    public ScalingPolicy setMax(Long max) {
         this.max = max;
         return this;
     }

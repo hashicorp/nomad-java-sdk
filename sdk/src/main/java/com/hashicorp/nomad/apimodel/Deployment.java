@@ -22,6 +22,7 @@ public final class Deployment extends ApiObject {
     private BigInteger jobModifyIndex;
     private BigInteger jobSpecModifyIndex;
     private BigInteger jobCreateIndex;
+    private boolean isMultiregion;
     private Map<String, DeploymentState> taskGroups;
     private String status;
     private String statusDescription;
@@ -95,6 +96,16 @@ public final class Deployment extends ApiObject {
 
     public Deployment setJobCreateIndex(BigInteger jobCreateIndex) {
         this.jobCreateIndex = jobCreateIndex;
+        return this;
+    }
+
+    @JsonProperty("IsMultiregion")
+    public boolean getIsMultiregion() {
+        return isMultiregion;
+    }
+
+    public Deployment setIsMultiregion(boolean isMultiregion) {
+        this.isMultiregion = isMultiregion;
         return this;
     }
 
