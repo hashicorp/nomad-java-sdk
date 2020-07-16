@@ -1,8 +1,6 @@
 package com.hashicorp.nomad.javasdk;
 
-import com.hashicorp.nomad.apimodel.Namespace;
-import com.hashicorp.nomad.apimodel.QuotaSpec;
-import com.hashicorp.nomad.apimodel.QuotaUsage;
+import com.hashicorp.nomad.apimodel.*;
 import com.hashicorp.nomad.testutils.TestAgent;
 import org.junit.Test;
 
@@ -15,13 +13,20 @@ import static org.junit.Assert.assertThat;
 
 public class QuotasApiTest extends ApiTestBase {
 
+    protected QuotaSpec testQuotaSpec() {
+        return new QuotaSpec()
+                .addLimits(new QuotaLimit()
+                        .setRegion("default")
+                        .setRegionLimit(new Resources().setCpu(100)));
+    }
+
     @Test
     @RequiresNomadEnterprise
     public void shouldBeAbleToRegisterAQuotaSpecification() throws Exception {
         try (TestAgent agent = newServer()) {
             QuotasApi quotasApi = agent.getApiClient().getQuotasApi();
 
-            final QuotaSpec quota = new QuotaSpec()
+            final QuotaSpec quota = testQuotaSpec()
                     .setName("alpha")
                     .setDescription("Quota Alpha");
 
@@ -32,9 +37,8 @@ public class QuotasApiTest extends ApiTestBase {
             assertUpdatedServerResponse(quotasResponse);
 
             final List<QuotaSpec> quotas = quotasResponse.getValue();
-            assertThat(quotas, hasSize(2));
+            assertThat(quotas, hasSize(1));
             assertThat(quotas.get(0).getName(), is(quota.getName()));
-            assertThat(quotas.get(1).getName(), is("default"));
         }
     }
 
@@ -47,7 +51,7 @@ public class QuotasApiTest extends ApiTestBase {
             new ErrorResponseAssertion("Invalid quota") {
                 @Override
                 protected NomadResponse<?> performRequest() throws IOException, NomadException {
-                    return quotasApi.register(new QuotaSpec().setName("*"));
+                    return quotasApi.register(testQuotaSpec().setName("*"));
                 }
             };
         }
@@ -66,7 +70,7 @@ public class QuotasApiTest extends ApiTestBase {
                 }
             };
 
-            final QuotaSpec quota = new QuotaSpec()
+            final QuotaSpec quota = testQuotaSpec()
                     .setName("alpha")
                     .setDescription("Quota Alpha");
 
@@ -93,7 +97,7 @@ public class QuotasApiTest extends ApiTestBase {
                 }
             };
 
-            final QuotaSpec quota = new QuotaSpec()
+            final QuotaSpec quota = testQuotaSpec()
                     .setName("alpha")
                     .setDescription("Quota Alpha");
 
@@ -113,10 +117,9 @@ public class QuotasApiTest extends ApiTestBase {
         try (TestAgent agent = newServer()) {
             final QuotasApi quotasApi = agent.getApiClient().getQuotasApi();
 
-            quotasApi.register(new QuotaSpec()
+            quotasApi.register(testQuotaSpec()
                     .setName("alpha")
-                    .setDescription("Quota Alpha")
-            );
+                    .setDescription("Quota Alpha"));
 
             final QuotaSpec quota = quotasApi.info("alpha").getValue();
             assertThat(quota.getDescription(), is("Quota Alpha"));
@@ -140,16 +143,15 @@ public class QuotasApiTest extends ApiTestBase {
         try (TestAgent agent = newServer()) {
             QuotasApi quotasApi = agent.getApiClient().getQuotasApi();
 
-            quotasApi.register(new QuotaSpec().setName("fooaaa"));
-            quotasApi.register(new QuotaSpec().setName("foobbb"));
+            quotasApi.register(testQuotaSpec().setName("fooaaa"));
+            quotasApi.register(testQuotaSpec().setName("foobbb"));
 
             final ServerQueryResponse<List<QuotaSpec>> quotasResponse = quotasApi.list();
             assertUpdatedServerResponse(quotasResponse);
             final List<QuotaSpec> quotas = quotasResponse.getValue();
-            assertThat(quotas, hasSize(3));
+            assertThat(quotas, hasSize(2));
             assertThat(quotas.get(0).getName(), is("foobbb"));
             assertThat(quotas.get(1).getName(), is("fooaaa"));
-            assertThat(quotas.get(2).getName(), is("default"));
 
             final List<QuotaSpec> fooPrefixQuotas = quotasApi.list("foo").getValue();
             assertThat(fooPrefixQuotas, hasSize(2));
@@ -168,16 +170,15 @@ public class QuotasApiTest extends ApiTestBase {
         try (TestAgent agent = newServer()) {
             QuotasApi quotasApi = agent.getApiClient().getQuotasApi();
 
-            quotasApi.register(new QuotaSpec().setName("fooaaa"));
-            quotasApi.register(new QuotaSpec().setName("foobbb"));
+            quotasApi.register(testQuotaSpec().setName("fooaaa"));
+            quotasApi.register(testQuotaSpec().setName("foobbb"));
 
             final ServerQueryResponse<List<QuotaUsage>> quotasResponse = quotasApi.listUsage();
             assertUpdatedServerResponse(quotasResponse);
             final List<QuotaUsage> quotas = quotasResponse.getValue();
-            assertThat(quotas, hasSize(3));
+            assertThat(quotas, hasSize(2));
             assertThat(quotas.get(0).getName(), is("foobbb"));
             assertThat(quotas.get(1).getName(), is("fooaaa"));
-            assertThat(quotas.get(2).getName(), is("default"));
 
             final List<QuotaUsage> fooPrefixQuotas = quotasApi.listUsage("foo").getValue();
             assertThat(fooPrefixQuotas, hasSize(2));

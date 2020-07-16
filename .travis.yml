@@ -14,11 +14,14 @@ before_script:
 
     go version
 
-    scripts/build-nomad.sh
+    scripts/get-nomad.sh
 
     nomad -version
 
     set +euo pipefail  # restore options to work around https://github.com/travis-ci/travis-ci/issues/5434
+
+script:
+- mvn test -DNomadEnterprise
 
 cache:
   directories:
