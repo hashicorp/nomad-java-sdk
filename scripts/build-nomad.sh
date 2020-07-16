@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-nomad_version="0.12.0+ent"
+nomad_version=v0.12.0
 go_version=1.14.5
 
 cd "$(dirname "$0")/.."
@@ -10,9 +10,6 @@ cd "$(dirname "$0")/.."
     echo "$0: error: GOPATH must be set" >&2
     exit 1
 }
-
-echo "Getting Go ${go_version}…"
-eval "$(curl -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme | GIMME_GO_VERSION="${go_version}" bash)"
 
 function expected_nomad_is_available {
     hash nomad 2>/dev/null && [[ "$(nomad version)" == Nomad\ *"${nomad_version}"* ]]
@@ -23,11 +20,19 @@ if expected_nomad_is_available; then
     exit
 fi
 
-echo "Downloading Nomad ${nomad_version}"
-curl -sL https://releases.hashicorp.com/nomad/${nomad_version}/nomad_${nomad_version}_linux_amd64.zip -o nomad.zip
-sudo unzip -o nomad.zip -d /usr/local/bin
-sudo chmod 0755 /usr/local/bin/nomad
-sudo chown root:root /usr/local/bin/nomad
+echo "Will clone Nomad ${nomad_version} and build it with Go ${go_version}"
+
+echo "Cloning Nomad ${nomad_version}…"
+import_path=github.com/hashicorp/nomad
+worktree="$GOPATH/src/${import_path}"
+rm -rf "${worktree}"
+git clone --depth 1 --branch "${nomad_version}" "https://${import_path}" "${worktree}"
+
+echo "Getting Go ${go_version}…"
+eval "$(curl -sL https://raw.githubusercontent.com/travis-ci/gimme/master/gimme | GIMME_GO_VERSION="${go_version}" bash)"
+
+echo "Building Nomad…"
+go install -tags nomad_test "${import_path}"
 
 expected_nomad_is_available || {
     echo "$0: error: Nomad ${nomad_version} is not available even after provisioning" >&2
