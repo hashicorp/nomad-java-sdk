@@ -389,7 +389,7 @@ public final class NomadApiClient implements Closeable, AutoCloseable {
             @Nullable final RequestOptions requestOptions
     ) throws IOException, NomadException {
         final HttpUriRequest request = buildRequest(requestBuilder, requestOptions);
-        try (final CloseableHttpResponse response = httpClient.execute(request)) {
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 throw ErrorResponseException.signaledInStatus(request, response);
             }

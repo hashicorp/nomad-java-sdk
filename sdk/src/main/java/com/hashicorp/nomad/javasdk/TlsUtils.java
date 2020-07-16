@@ -53,8 +53,8 @@ final class TlsUtils {
     }
 
     private static PrivateKey loadPemKey(final String path) throws IOException {
-        try (final FileInputStream in = new FileInputStream(path)) {
-            try (final InputStreamReader reader = new InputStreamReader(in, US_ASCII)) {
+        try (FileInputStream in = new FileInputStream(path)) {
+            try (InputStreamReader reader = new InputStreamReader(in, US_ASCII)) {
                 try (PEMParser parser = new PEMParser(reader)) {
                     Object key = parser.readObject();
                     if (key instanceof PEMKeyPair) {

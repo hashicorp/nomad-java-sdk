@@ -39,22 +39,6 @@
         <property name="basedir" value="${basedir}"/>
     -->
 
-    <module name="SuppressionCommentFilter">
-        <property name="offCommentFormat" value="This is a generated JavaBean"/>
-        <property name="checkFormat" value="JavadocMethod|MemberName"/>
-    </module>
-    <module name="SuppressWithNearbyCommentFilter">
-        <property name="commentFormat" value="Checkstyle suppress (\w+)"/>
-        <property name="checkFormat" value="$1"/>
-        <property name="influenceFormat" value="0"/>
-    </module>
-
-    <!-- Allow auto-generated bean properties named things like "new" and "public" -->
-    <module name="SuppressionCommentFilter">
-        <property name="offCommentFormat" value="This is a generated JavaBean"/>
-        <property name="checkFormat" value="ParameterName"/>
-    </module>
-
     <property name="fileExtensions" value="java, properties, xml"/>
 
     <!-- Checks that a package-info.java file exists for each package.     -->
@@ -93,9 +77,32 @@
     <!--   <property name="fileExtensions" value="java"/> -->
     <!-- </module> -->
 
+    <!-- Checks for Size Violations.                    -->
+    <!-- See http://checkstyle.sf.net/config_sizes.html -->
+    <module name="LineLength">
+        <property name="max" value="120"/>
+        <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+    </module>
+
     <module name="TreeWalker">
 
-        <module name="FileContentsHolder"/>
+        <module name="MethodLength"/>
+
+        <module name="SuppressionCommentFilter">
+            <property name="offCommentFormat" value="This is a generated JavaBean"/>
+            <property name="checkFormat" value="JavadocMethod|MemberName"/>
+        </module>
+        <module name="SuppressWithNearbyCommentFilter">
+            <property name="commentFormat" value="Checkstyle suppress (\w+)"/>
+            <property name="checkFormat" value="$1"/>
+            <property name="influenceFormat" value="0"/>
+        </module>
+    
+        <!-- Allow auto-generated bean properties named things like "new" and "public" -->
+        <module name="SuppressionCommentFilter">
+            <property name="offCommentFormat" value="This is a generated JavaBean"/>
+            <property name="checkFormat" value="ParameterName"/>
+        </module>
 
         <!-- Checks for Javadoc comments.                     -->
         <!-- See http://checkstyle.sf.net/config_javadoc.html -->
@@ -128,14 +135,6 @@
         <module name="UnusedImports">
             <property name="processJavadoc" value="false"/>
         </module>
-
-        <!-- Checks for Size Violations.                    -->
-        <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength">
-            <property name="max" value="120"/>
-            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
-        </module>
-        <module name="MethodLength"/>
 
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->

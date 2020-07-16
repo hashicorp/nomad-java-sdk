@@ -138,7 +138,7 @@ public class OperatorApiTest extends ApiTestBase {
 
             schedulerConfiguration.getPreemptionConfig().setSystemSchedulerEnabled(false);
             NomadResponse<SchedulerSetConfigurationResponse> response = operatorApi.updateSchedulerConfiguration(schedulerConfiguration);
-            assertThat(response.getValue().getUpdated(), is(false)); // no check-and-set, so updated is always marked false
+            assertThat(response.getValue().getUpdated(), is(true));
 
             SchedulerConfiguration updatedSchedulerConfiguration = operatorApi.getSchedulerConfiguration(null).getValue().getSchedulerConfig();
             assertThat(updatedSchedulerConfiguration.getPreemptionConfig().getSystemSchedulerEnabled(), is(false));
