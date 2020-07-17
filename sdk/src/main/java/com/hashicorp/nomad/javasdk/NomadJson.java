@@ -6,12 +6,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.hashicorp.nomad.apimodel.Job;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import static com.fasterxml.jackson.databind.PropertyNamingStrategy.UPPER_CAMEL_CASE;
@@ -29,6 +31,11 @@ public abstract class NomadJson {
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
     static {
+        // Use customize module to deserialize Date.class in iso8601 format.
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addDeserializer(Date.class, new CustomDateDeserializer());
+        OBJECT_MAPPER.registerModule(simpleModule);
+
         OBJECT_MAPPER.setConfig(
                 OBJECT_MAPPER.getSerializationConfig()
                         .with(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))
