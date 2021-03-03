@@ -33,7 +33,7 @@
     </modules>
 
     <properties>
-        <jackson.version>2.10.3</jackson.version>
+        <jackson.version>2.12.1</jackson.version>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
